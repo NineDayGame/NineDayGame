@@ -1,8 +1,9 @@
 redo-ifchange $1.cpp
 
 CFLAGS=""
+INCLUDE="-I./libtcod-1.5.0/include"
 
-g++ $CFLAGS -MD -MF $3.deps.tmp -c -o $3 $1.cpp
+g++ $CFLAGS $INCLUDE -MD -MF $3.deps.tmp -c -o $3 $1.cpp
 
 # Checks implicit dependencies
 DEPS=$(sed -e "s/^$3://" -e 's/\\//g' <$3.deps.tmp)
