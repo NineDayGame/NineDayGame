@@ -3,3 +3,5 @@ Use `redo` to build.
 The build scripts assume that libtcod v1.5.0 is available in ./libtcod-1.5.0
 
 To run, you might need to add LD_LIBRARY_PATH=./libtcod-1.5.0 to the command.
+
+libtcod is available at: http://doryen.eptalys.net/libtcod/download/
