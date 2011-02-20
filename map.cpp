@@ -30,6 +30,10 @@ void Map::draw(TCODConsole* console)
 			console->setFore(x,y,color);
 		}
 	}
+	for(std::vector<Entity::ShPtr>::iterator i = entities.begin(); i != entities.end(); ++i)
+	{
+		(*i)->draw(console);
+	}
 }
 
 void Map::set_data(int x, int y, char c, TCODColor color, bool transparent, bool walkable)
@@ -135,4 +139,19 @@ void Map::randomize(int num_rooms)
 		set_data(0,y,'#',TCOD_grey,false,false);
 		set_data(width-1,y,'#',TCOD_grey,false,false);
 	}
+}
+
+void Map::random_free_spot(int* x, int* y)
+{
+	TCODRandom* rand = TCODRandom::getInstance();
+	do
+	{
+		*x = rand->getInt(0,width-1);
+		*y = rand->getInt(0,height-1);
+	} while(!data->isWalkable(*x,*y));
+}
+
+void Map::add_entity(Entity::ShPtr e)
+{
+	entities.push_back(e);
 }

@@ -1,7 +1,10 @@
 #ifndef MAP_HPP
 #define MAP_HPP
 
+#include <boost/shared_ptr.hpp>
+#include <vector>
 #include <libtcod.hpp>
+#include "entity.hpp"
 
 class Map
 {
@@ -23,10 +26,13 @@ private:
 	void set_room_data(Map::Room r, char c, TCODColor color, bool transparent, bool walkable);
 
 public:
+	typedef boost::shared_ptr<Map> ShPtr;
+	
 	int width;
 	int height;
 	TCODMap* data;
 	ConsoleDisplay* display;
+	std::vector<Entity::ShPtr> entities;
 	
 	Map(int width, int height);
 	~Map();
@@ -37,6 +43,9 @@ public:
 	void clear();
 
 	void randomize(int num_rooms);
+	void random_free_spot(int* x, int* y);
+
+	void add_entity(Entity::ShPtr e);
 };
 
 #endif
