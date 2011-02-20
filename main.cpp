@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
 		bool quit = false;
 
 		GlRenderer::ShPtr glr (new GlRenderer());
-		glr->load_map(m);
+		glr->load_map(*m);
 		
 		float r = 0.0f;
 
