@@ -42,19 +42,17 @@ void GlRenderer::init() {
 
 void GlRenderer::init_gl() {
 	glShadeModel(GL_SMOOTH);
-    glClearColor( 0, 0, 0, 0 );
-	glClearDepth(1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClearDepth(2.0f);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
 
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
-	gluPerspective(45.0f,(GLfloat)SCREEN_WIDTH/(GLfloat)SCREEN_HEIGHT,1.0f,100.0f);
+	gluPerspective(45.0f, (GLfloat)SCREEN_WIDTH/(GLfloat)SCREEN_HEIGHT, 1.0f, 200.0f);
 
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
-    
-    glEnableClientState(GL_VERTEX_ARRAY);
 
     if( glGetError() != GL_NO_ERROR )
     {
@@ -69,6 +67,17 @@ void GlRenderer::load_map(const Map& map) {
 				Block::ShPtr blk (new Block());
 				blk->set_position((float)x, (float)y, 0.0f);
 				movables_.push_back(blk);
+			} else if ((x > 0) && (y > 0)) { 
+				if (map.display[x+y*map.width].c == '#'
+			            && (map.display[(x-1)+y*map.width].c == '.'
+			            || map.display[x+(y-1)*map.width].c == '.')) {
+				
+					for (int i = 0; i < 3; ++i) {
+						Block::ShPtr blk (new Block());
+						blk->set_position((float)x, (float)y, (float)i);
+						movables_.push_back(blk);
+					}
+				}
 			}
 		}
 	}

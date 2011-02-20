@@ -11,7 +11,7 @@ Movable::Movable()
 
 void Movable::draw() {
 	glPushMatrix();
-	glTranslatef(x_, y_, 0.0f);
+	glTranslatef(x_, y_, z_);
 	//glRotatef(a_, 3.0f, 1.0f, d_);
 	glScalef(sx_, sy_, sz_);
 	
