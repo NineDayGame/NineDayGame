@@ -2,7 +2,7 @@
 #define MAP_HPP
 
 #include <boost/shared_ptr.hpp>
-#include <vector>
+#include <list>
 #include <libtcod.hpp>
 
 class Entity;
@@ -28,12 +28,13 @@ private:
 
 public:
 	typedef boost::shared_ptr<Map> ShPtr;
+	typedef boost::weak_ptr<Map> WkPtr;
 	
 	int width;
 	int height;
 	TCODMap* data;
 	ConsoleDisplay* display;
-	std::vector<boost::shared_ptr<Entity> > entities;
+	std::list<boost::shared_ptr<Entity> > entities;
 	
 	Map(int width, int height);
 	~Map();
@@ -48,6 +49,7 @@ public:
 	void random_free_spot(int* x, int* y);
 
 	void add_entity(boost::shared_ptr<Entity> e);
+	void remove_entity(boost::shared_ptr<Entity> e);
 };
 
 #endif

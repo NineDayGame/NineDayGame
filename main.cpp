@@ -1,11 +1,11 @@
 #include <libtcod.hpp>
-#include <vector>
 
 #include "SDL/SDL.h"
 #include "SDL/SDL_opengl.h"
 
 #include "block.hpp"
 #include "entity.hpp"
+#include "living.hpp"
 #include "glrenderer.hpp"
 #include "map.hpp"
 #include "vertex.hpp"
@@ -23,22 +23,21 @@ int main(int argc, char* argv[])
 	int width = 120;
 	int height = 80;
 
-	Map m(width,height);
-	m.clear();
-	m.randomize(10);
+	Map::ShPtr m(new Map(width,height));
+	m->clear();
+	m->randomize(10);
 
 	for(int i = 0; i < 5; ++i)
 	{
 		int x,y;
-		m.random_free_spot(&x,&y);
-		Entity::ShPtr e(new Entity(&m,x,y,'0'+i,TCOD_red));
-		m.add_entity(e);
+		m->random_free_spot(&x,&y);
+		Living::ShPtr e(new Living(Map::WkPtr(m),x,y,'0'+i,TCOD_red,1));
+		m->add_entity(e);
 	}
 
-	Entity::ShPtr e = m.entities[0];
+	Entity::ShPtr e = m->entities.front();
 	
-	if (argc==1) {
-		
+	if (argc==1) {		
 		bool quit = false;
 
 		GlRenderer::ShPtr glr (new GlRenderer());
@@ -67,11 +66,11 @@ int main(int argc, char* argv[])
 		while(!TCODConsole::isWindowClosed())
 		{
 			e->look();
-			e->known_map->draw(TCODConsole::root);
+			e->draw_map(TCODConsole::root);
 			TCODConsole::flush();
 			TCOD_key_t key=TCODConsole::waitForKeypress(true);
 			if(key.vk == TCODK_ESCAPE) { break; }
-			if(key.vk == TCODK_SPACE) { m.randomize(10); }
+			if(key.vk == TCODK_SPACE) { m->randomize(10); }
 			
 			if(key.vk == TCODK_KP8) { e->move(e->x,e->y-1); }
 			if(key.vk == TCODK_KP2) { e->move(e->x,e->y+1); }
