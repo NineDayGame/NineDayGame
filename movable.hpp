@@ -22,7 +22,7 @@ public:
 	void set_rotation(float a, float b, float c);
 
 protected:
-	Cube::ShPtr mesh_;
+	Mesh::ShPtr mesh_;
 	std::vector<Vertex> colors_;
 	float scale_;
 	float x_, y_, z_;

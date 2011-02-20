@@ -1,8 +1,10 @@
 #include <libtcod.hpp>
 #include <vector>
 
+#include "block.hpp"
 #include "entity.hpp"
 #include "map.hpp"
+#include "vertex.hpp"
 
 int main(int argc, char* argv[])
 {
