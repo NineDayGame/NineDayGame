@@ -1,2 +1,2 @@
 #!/bin/bash
-redo && LD_LIBRARY_PATH=./libtcod-1.5.0 ./ndg
+redo && LD_LIBRARY_PATH=./libtcod-1.5.0 ./ndg $*
