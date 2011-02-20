@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "basetypes.hpp"
+#include "map.hpp"
 #include "movable.hpp"
 #include "timer.hpp"
 
@@ -15,6 +16,7 @@ public:
 	GlRenderer();
 	void init();
 	void init_gl();
+	void load_map(const Map &map);
 	void update();
 	void render();
 

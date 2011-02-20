@@ -2,6 +2,7 @@
 #include "SDL/SDL_opengl.h"
 
 #include "block.hpp"
+#include "player.hpp"
 #include "glrenderer.hpp"
 
 //Screen attributes
@@ -37,14 +38,6 @@ void GlRenderer::init() {
     SDL_WM_SetCaption( "Nine Day Game", NULL );
     
     fps_.reset(new Timer());
-    
-	for (int i = 0; i < 10; ++i) {
-		for (int j = 0; j < 10; ++j) {
-			Block::ShPtr blk (new Block());
-			blk->set_position((float)i, (float)j, 0.0f);
-			movables_.push_back(blk);
-		}
-	}
 }
 
 void GlRenderer::init_gl() {
@@ -69,6 +62,30 @@ void GlRenderer::init_gl() {
     }
 }
 
+void GlRenderer::load_map(const Map& map) {
+	for (int x = 0; x < map.width; ++x) {
+		for (int y = 0; y < map.height; ++y) {
+			if (map.display[x+y*map.width].c == '.') {
+				Block::ShPtr blk (new Block());
+				blk->set_position((float)x, (float)y, 0.0f);
+				movables_.push_back(blk);
+			}
+		}
+	}
+	/*for (int i = 0; i < 10; ++i) {
+		for (int j = 0; j < 10; ++j) {
+			Block::ShPtr blk (new Block());
+			blk->set_position((float)i, (float)j, 0.0f);
+			movables_.push_back(blk);
+		}
+	}*/
+	
+	/*Player::ShPtr p (new Player());
+	p->set_position(3.0f, 3.0f, 1.0f);
+	p->set_scale3f(1.0f, 1.0f, 1.5f);
+	movables_.push_back(p);*/
+}
+
 void GlRenderer::render() {
 	fps_->start();
 
@@ -79,7 +96,7 @@ void GlRenderer::render() {
 	glPolygonMode(GL_FRONT, GL_LINE);
 	glPolygonMode(GL_BACK, GL_LINE);
 
-	glTranslatef(0.0f, -3.0f, -15.0f);
+	glTranslatef(0.0f, -40.0f, -40.0f);
 	glRotatef(45.0f, 0.0f, 0.0f, 1.0f);
 	glRotatef(45.0f, -1.0f, 1.0f, 0.0f);
 
