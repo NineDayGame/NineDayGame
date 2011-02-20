@@ -41,6 +41,7 @@ public:
 
 	void draw(TCODConsole* console);
 
+	void get_data(int x, int y, char* c, TCODColor* color, bool* transparent, bool* walkable);
 	void set_data(int x, int y, char c, TCODColor color, bool transparent, bool walkable);
 	void copy_data(Map::ShPtr m, int x, int y);
 	void clear();

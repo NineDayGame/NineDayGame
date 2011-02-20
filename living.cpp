@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <cmath>
 #include "living.hpp"
 
 Living::Living(Map::WkPtr host_map, int x, int y, int c, TCODColor color, int _health) : Entity(host_map,x,y,c,color), health(_health)
@@ -31,13 +32,34 @@ bool Living::attack(Living::ShPtr e)
 	e->health--;
 	if(e->health <= 0)
 	{
-		e->die();
+		e->die(this->shared_from_this());
 	}
 }
 
-void Living::die()
+void Living::die(Entity::ShPtr killer)
 {
 	Map::ShPtr m = host_map.lock();
-	m->data->setProperties(x,y,true,true);
+
+	double angle = atan2((y-killer->y),(x-killer->x));
+	int radius = 5;
+
+	char c;
+	TCODColor color;
+	bool trans;
+	bool walk;
+	
+	for(double a = -3.14/4+angle; a < 3.14/4+angle; a += 0.1)
+	{
+		for(int i = 0; i < radius; ++i)
+		{
+			int sx = x+i*cos(a);
+			int sy = y+i*sin(a);
+			m->get_data(sx,sy,&c,&color,&trans,&walk);
+			m->set_data(sx,sy,c,TCOD_red,trans,walk);
+		}
+	}
+
+	m->get_data(x,y,&c,&color,&trans,&walk);
+	m->set_data(x,y,c,TCOD_red,true,true);
 	m->remove_entity(this->shared_from_this());
 }
