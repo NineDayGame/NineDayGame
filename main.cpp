@@ -29,10 +29,14 @@ int main(int argc, char* argv[])
 		if(key.vk == TCODK_ESCAPE) { break; }
 		if(key.vk == TCODK_SPACE) { m.randomize(10); }
 		
-		if(key.vk == TCODK_UP) { e->move(e->x,e->y-1); }
-		if(key.vk == TCODK_DOWN) { e->move(e->x,e->y+1); }
-		if(key.vk == TCODK_LEFT) { e->move(e->x-1,e->y); }
-		if(key.vk == TCODK_RIGHT) { e->move(e->x+1,e->y); }
+		if(key.vk == TCODK_KP8) { e->move(e->x,e->y-1); }
+		if(key.vk == TCODK_KP2) { e->move(e->x,e->y+1); }
+		if(key.vk == TCODK_KP4) { e->move(e->x-1,e->y); }
+		if(key.vk == TCODK_KP6) { e->move(e->x+1,e->y); }
+		if(key.vk == TCODK_KP7) { e->move(e->x-1,e->y-1); }
+		if(key.vk == TCODK_KP9) { e->move(e->x+1,e->y-1); }
+		if(key.vk == TCODK_KP1) { e->move(e->x-1,e->y+1); }
+		if(key.vk == TCODK_KP3) { e->move(e->x+1,e->y+1); }
 	}
 
 	return 0;
