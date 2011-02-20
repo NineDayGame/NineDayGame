@@ -2,6 +2,8 @@
 #define ENTITY_HPP
 
 #include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
+#include <list>
 #include <libtcod.h>
 
 class Map;
@@ -10,6 +12,7 @@ class Entity
 {
 public:
 	typedef boost::shared_ptr<Entity> ShPtr;
+	typedef boost::weak_ptr<Entity> WkPtr;
 	
 	int x;
 	int y;
@@ -17,17 +20,19 @@ public:
 	TCODColor color;
 
 	int sight_range;
+	std::list<Entity::WkPtr> seen;
 
-	Map* host_map;
+	boost::weak_ptr<Map> host_map;
 	boost::shared_ptr<Map> known_map;
 
-	Entity(Map* host_map, int x, int y, int c, TCODColor color);
-	~Entity();
+	Entity(boost::weak_ptr<Map> host_map, int x, int y, int c, TCODColor color);
+	virtual ~Entity();
 
-	bool move(int x, int y);
-	void look();
-
-	void draw(TCODConsole* console);
+	virtual bool move(int x, int y);
+	virtual void look();
+	
+	virtual void draw(TCODConsole* console);
+	virtual void draw_map(TCODConsole* console);
 	
 };
 

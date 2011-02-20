@@ -1,4 +1,4 @@
-DEPS="main.o map.o block.o cube.o entity.o movable.o mesh.o vertex.o"
+DEPS="main.o map.o block.o cube.o entity.o movable.o mesh.o vertex.o living.o"
 
 redo-ifchange $DEPS
 

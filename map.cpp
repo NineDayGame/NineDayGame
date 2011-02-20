@@ -31,7 +31,7 @@ void Map::draw(TCODConsole* console)
 			console->setFore(x,y,color);
 		}
 	}
-	for(std::vector<Entity::ShPtr>::iterator i = entities.begin(); i != entities.end(); ++i)
+	for(std::list<Entity::ShPtr>::iterator i = entities.begin(); i != entities.end(); ++i)
 	{
 		(*i)->draw(console);
 	}
@@ -163,4 +163,9 @@ void Map::random_free_spot(int* x, int* y)
 void Map::add_entity(Entity::ShPtr e)
 {
 	entities.push_back(e);
+}
+
+void Map::remove_entity(Entity::ShPtr e)
+{
+	entities.remove(e);
 }
