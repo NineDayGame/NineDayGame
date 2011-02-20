@@ -29,9 +29,15 @@ bool Living::move(int x, int y)
 bool Living::attack(Living::ShPtr e)
 {
 	e->health--;
-	printf("Attacked!\n");
 	if(e->health <= 0)
 	{
-		host_map.lock()->remove_entity(e);
+		e->die();
 	}
+}
+
+void Living::die()
+{
+	Map::ShPtr m = host_map.lock();
+	m->data->setProperties(x,y,true,true);
+	m->remove_entity(this->shared_from_this());
 }

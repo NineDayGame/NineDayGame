@@ -3,12 +3,13 @@
 
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
+#include <boost/enable_shared_from_this.hpp>
 #include <list>
 #include <libtcod.h>
 
 class Map;
 
-class Entity
+class Entity : public boost::enable_shared_from_this<Entity>
 {
 public:
 	typedef boost::shared_ptr<Entity> ShPtr;
