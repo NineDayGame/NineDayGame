@@ -14,15 +14,21 @@ public:
 	int x;
 	int y;
 	char c;
-	Map* host_map;
 	TCODColor color;
+
+	int sight_range;
+
+	Map* host_map;
+	boost::shared_ptr<Map> known_map;
 
 	Entity(Map* host_map, int x, int y, int c, TCODColor color);
 	~Entity();
 
 	bool move(int x, int y);
+	void look();
 
 	void draw(TCODConsole* console);
+	
 };
 
 #endif

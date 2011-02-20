@@ -1,5 +1,6 @@
 #include <libtcod.hpp>
 #include "map.hpp"
+#include "entity.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -23,7 +24,8 @@ int main(int argc, char* argv[])
 	
 	while(!TCODConsole::isWindowClosed())
 	{
-		m.draw(TCODConsole::root);
+		e->look();
+		e->known_map->draw(TCODConsole::root);
 		TCODConsole::flush();
 		TCOD_key_t key=TCODConsole::waitForKeypress(true);
 		if(key.vk == TCODK_ESCAPE) { break; }

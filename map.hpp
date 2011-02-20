@@ -4,7 +4,8 @@
 #include <boost/shared_ptr.hpp>
 #include <vector>
 #include <libtcod.hpp>
-#include "entity.hpp"
+
+class Entity;
 
 class Map
 {
@@ -32,7 +33,7 @@ public:
 	int height;
 	TCODMap* data;
 	ConsoleDisplay* display;
-	std::vector<Entity::ShPtr> entities;
+	std::vector<boost::shared_ptr<Entity> > entities;
 	
 	Map(int width, int height);
 	~Map();
@@ -40,12 +41,13 @@ public:
 	void draw(TCODConsole* console);
 
 	void set_data(int x, int y, char c, TCODColor color, bool transparent, bool walkable);
+	void copy_data(Map::ShPtr m, int x, int y);
 	void clear();
 
 	void randomize(int num_rooms);
 	void random_free_spot(int* x, int* y);
 
-	void add_entity(Entity::ShPtr e);
+	void add_entity(boost::shared_ptr<Entity> e);
 };
 
 #endif

@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <stdio.h>
 #include "map.hpp"
+#include "entity.hpp"
 
 Map::Map(int w, int h)
 {
@@ -41,6 +42,14 @@ void Map::set_data(int x, int y, char c, TCODColor color, bool transparent, bool
 	display[x+y*width].c = c;
 	display[x+y*width].color = color;
 	data->setProperties(x,y,transparent,walkable);
+}
+
+void Map::copy_data(Map::ShPtr m, int x, int y)
+{
+	ConsoleDisplay cd = display[x+y*width];
+	bool t = data->isTransparent(x,y);
+	bool w = data->isWalkable(x,y);
+	m->set_data(x,y,cd.c,cd.color,t,w);
 }
 
 void Map::clear()
