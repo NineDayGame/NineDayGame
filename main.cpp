@@ -1,4 +1,5 @@
 #include <libtcod.hpp>
+#include <list>
 
 #include "SDL/SDL.h"
 #include "SDL/SDL_opengl.h"
@@ -10,6 +11,9 @@
 #include "map.hpp"
 #include "vertex.hpp"
 #include "camera.hpp"
+
+#include <boost/foreach.hpp>
+#define foreach BOOST_FOREACH
 
 //Event handler
 SDL_Event event;
@@ -37,6 +41,7 @@ int main(int argc, char* argv[])
 	}
 
 	Entity::ShPtr e = m->entities.front();
+	Entity::ShPtr e2 = m->entities.back();
 	
 	if (argc==1) {		
 		bool quit = false;
@@ -76,15 +81,22 @@ int main(int argc, char* argv[])
 
 		TCODConsole::initRoot(width,height,"Test",false);
 
-		Camera c(m,e,0,0,20,20);
-		Camera c2(m,e,40,0,20,20);
+		std::list<Camera::ShPtr> cameras;
+		Camera::ShPtr c;
+		c = Camera::ShPtr(new Camera(m,e,0,0,20,20));
+		cameras.push_back(c);
+		c = Camera::ShPtr(new Camera(e2->known_map,e2,20,0,20,20));
+		cameras.push_back(c);
+		c = Camera::ShPtr(new Camera(e->known_map,e,0,20,100,80));
+		cameras.push_back(c);
 
 		while(!TCODConsole::isWindowClosed())
 		{
-			e->look();
-			//e->draw_map(TCODConsole::root);
-			c.draw(TCODConsole::root);
-			c2.draw(TCODConsole::root);
+			foreach(Camera::ShPtr c, cameras)
+			{
+				c->draw(TCODConsole::root);
+			}
+
 			TCODConsole::flush();
 			TCOD_key_t key=TCODConsole::waitForKeypress(true);
 			if(key.vk == TCODK_ESCAPE) { break; }

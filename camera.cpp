@@ -1,7 +1,7 @@
 #include <libtcod.hpp>
 #include "camera.hpp"
 
-Camera::Camera(Map::WkPtr m, Entity::WkPtr e, int sx, int sy, int w, int h) : map(m), target(e), screen_x(sx), screen_y(sy), width(w), height(h)
+Camera::Camera(Map::WkPtr m, Entity::ShPtr e, int sx, int sy, int w, int h) : map(m), target(e), screen_x(sx), screen_y(sy), width(w), height(h)
 {
 
 }
@@ -13,7 +13,8 @@ Camera::~Camera()
 
 void Camera::draw(TCODConsole* console)
 {
-	Entity::ShPtr t = target.lock();
+	Entity::ShPtr t = target;
+	t->look();
 	Map::ShPtr m = map.lock();
 	for(int y = -height/2; y < height/2; ++y)
 	{
