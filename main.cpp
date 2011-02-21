@@ -36,9 +36,11 @@ int main(int argc, char* argv[])
 
 	for(int i = 0; i < 50; ++i)
 	{
+		char buf[32];
 		int x,y;
 		m->random_free_spot(&x,&y);
-		Living::ShPtr e(new Living(Map::WkPtr(m),x,y,'0'+i,TCOD_red,3));
+		sprintf(buf,"Entity %d",i);
+		Living::ShPtr e(new Living(Map::WkPtr(m),buf,x,y,'0'+i,TCOD_red,3));
 		m->add_entity(e);
 	}
 
@@ -85,13 +87,9 @@ int main(int argc, char* argv[])
 
 		std::list<Camera::ShPtr> cameras;
 		Camera::ShPtr c;
-		c = EntityCamera::ShPtr(new EntityCamera(m,e,0,0,20,20));
-		cameras.push_back(c);
-		c = EntityCamera::ShPtr(new EntityCamera(e2->known_map,e2,20,0,20,20));
-		cameras.push_back(c);
 		c = EntityCamera::ShPtr(new EntityCamera(e->known_map,e,0,20,100,80));
 		cameras.push_back(c);
-		c = TextCamera::ShPtr(new TextCamera(40,0,20,20));
+		c = TextCamera::ShPtr(new TextCamera(0,0,100,20));
 		cameras.push_back(c);
 
 		TextCamera::ShPtr tc = boost::static_pointer_cast<TextCamera,Camera>(c);

@@ -72,6 +72,7 @@ TextCamera::~TextCamera()
 
 void TextCamera::draw(TCODConsole* console)
 {
+	console->rect(screen_x,screen_y,width,height,true);
 	int i = 0;
 	foreach(std::string s, text)
 	{

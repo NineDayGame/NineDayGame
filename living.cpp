@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <cmath>
 #include "living.hpp"
+#include "util.hpp"
 
-Living::Living(Map::WkPtr host_map, int x, int y, int c, TCODColor color, int _health) : Entity(host_map,x,y,c,color), health(_health)
+Living::Living(Map::WkPtr host_map, std::string n, int x, int y, int c, TCODColor color, int _health) : Entity(host_map,x,y,c,color), health(_health), name(n)
 {
 
 }
@@ -29,6 +30,7 @@ bool Living::move(int x, int y)
 
 bool Living::attack(Living::ShPtr e)
 {
+	cprintf("%s attacks %s!",name.c_str(),e->name.c_str());
 	e->health--;
 	if(e->health <= 0)
 	{
@@ -38,6 +40,8 @@ bool Living::attack(Living::ShPtr e)
 
 void Living::die(Entity::ShPtr killer)
 {
+	cprintf("%s dies in a splatter of gore!",name.c_str());
+	
 	Map::ShPtr m = host_map.lock();
 
 	double angle = atan2((y-killer->y),(x-killer->x));
