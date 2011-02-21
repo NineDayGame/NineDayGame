@@ -7,6 +7,7 @@ Entity::Entity(boost::weak_ptr<Map> _host_map, int _x, int _y, int _c, TCODColor
 	host_map = _host_map;
 	x = _x;
 	y = _y;
+	z = 0;
 	c = _c;
 	color = _color;
 	sight_range = 7;

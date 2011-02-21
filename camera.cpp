@@ -1,5 +1,6 @@
 #include <libtcod.hpp>
 #include "camera.hpp"
+#include "util.hpp"
 
 #include <boost/foreach.hpp>
 #define foreach BOOST_FOREACH
@@ -30,6 +31,11 @@ EntityCamera::~EntityCamera()
 
 }
 
+static bool compare_entities(Entity::WkPtr first, Entity::WkPtr second)
+{
+	return first.lock()->z < second.lock()->z;
+}
+
 void EntityCamera::draw(TCODConsole* console)
 {
 	Entity::ShPtr t = target;
@@ -47,6 +53,7 @@ void EntityCamera::draw(TCODConsole* console)
 			console->setFore(x+screen_x+width/2,y+screen_y+height/2,color);
 		}
 	}
+	t->seen.sort(compare_entities);
 	for(std::list<Entity::WkPtr>::iterator i = t->seen.begin(); i != t->seen.end(); ++i)
 	{
 		Entity::ShPtr e = (*i).lock();

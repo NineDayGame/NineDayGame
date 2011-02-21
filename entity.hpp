@@ -17,6 +17,7 @@ public:
 	
 	int x;
 	int y;
+	int z;
 	char c;
 	TCODColor color;
 
@@ -34,7 +35,6 @@ public:
 	
 	virtual void draw(TCODConsole* console);
 	virtual void draw_map(TCODConsole* console);
-	
 };
 
 #endif

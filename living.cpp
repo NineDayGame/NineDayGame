@@ -5,7 +5,7 @@
 
 Living::Living(Map::WkPtr host_map, std::string n, int x, int y, int c, TCODColor color, int _health) : Entity(host_map,x,y,c,color), health(_health), name(n)
 {
-
+	z = 1;
 }
 
 Living::~Living()
@@ -19,8 +19,8 @@ bool Living::move(int x, int y)
 	{
 		for(std::list<Entity::WkPtr>::iterator i = seen.begin(); i != seen.end(); ++i)
 		{
-			Living::ShPtr e = boost::static_pointer_cast<Living,Entity>((*i).lock());
-			if(e->x == x && e->y == y)
+			Living::ShPtr e = boost::dynamic_pointer_cast<Living,Entity>((*i).lock());
+			if(e != NULL && e->x == x && e->y == y)
 			{
 				attack(e);
 			}
