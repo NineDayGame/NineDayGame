@@ -13,7 +13,7 @@ Camera::~Camera()
 }
 void Camera::draw(TCODConsole* console)
 {
-
+	console->rect(screen_x,screen_y,width,height,true);
 }
 
 
@@ -35,6 +35,7 @@ static bool compare_entities(Entity::WkPtr first, Entity::WkPtr second)
 
 void EntityCamera::draw(TCODConsole* console)
 {
+	Camera::draw(console);
 	Entity::ShPtr t = target;
 	t->look();
 	Map::ShPtr m = map.lock();
@@ -76,7 +77,7 @@ TextCamera::~TextCamera()
 
 void TextCamera::draw(TCODConsole* console)
 {
-	console->rect(screen_x,screen_y,width,height,true);
+	Camera::draw(console);
 	int i = 0;
 	foreach(std::string s, text)
 	{
