@@ -16,6 +16,7 @@ public:
 
 	Mesh();
 	void draw();
+	virtual int triangle_count() = 0;
 
 protected:
 	std::vector<Vertex> verticies_;

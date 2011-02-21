@@ -1,4 +1,4 @@
-DEPS="main.o map.o block.o cube.o entity.o glrenderer.o living.o movable.o mesh.o player.o timer.o vertex.o"
+DEPS="main.o map.o block.o character.o cube.o entity.o glrenderer.o living.o movable.o mesh.o player.o timer.o vertex.o"
 
 redo-ifchange $DEPS
 

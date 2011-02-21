@@ -18,6 +18,7 @@ public:
 	//virtual void init();
 	void draw();
 	void update();
+	void set_color(Vertex color);
 	void set_position(float x, float y, float z);
 	void set_rotation(float a, float b, float c);
 	void set_scale3f(float x, float y, float z);

@@ -42,8 +42,7 @@ int main(int argc, char* argv[])
 
 		GlRenderer::ShPtr glr (new GlRenderer());
 		//glr->load_map(*(e->known_map));
-		
-		float r = 0.0f;
+		e->look();
 
 		while( quit == false )
 		{
@@ -55,6 +54,7 @@ int main(int argc, char* argv[])
 						case SDLK_DOWN: e->move(e->x, e->y-1); e->look(); break;
 						case SDLK_LEFT: e->move(e->x-1, e->y); e->look(); break;
 						case SDLK_RIGHT: e->move(e->x+1, e->y); e->look(); break;
+						case SDLK_F12: glr->take_screenshot(std::string("screenshot.bmp")); break;
 					}
 				}
 				
@@ -64,6 +64,7 @@ int main(int argc, char* argv[])
 			}
 			
 			glr->load_map(*(e->known_map));
+			glr->load_mobs(e->seen);
 			//glr->load_map(*m);
 			glr->set_player((float)e->x, (float)e->y);
 			glr->render();

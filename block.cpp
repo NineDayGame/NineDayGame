@@ -7,8 +7,5 @@ Block::Block() {
 
 void Block::init() {
 	mesh_.reset(new Cube());
-	
-	for (int i = 0; i < (12 * 3); ++i) {
-		colors_.push_back(Vertex(0.5f, 0.5f, 0.5f));
-	}
+	set_color(Vertex(0.5f, 0.5f, 0.5f));
 }

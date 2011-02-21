@@ -59,6 +59,9 @@ void Cube::init() {
 	
 	verticies_.push_back(Vertex(0.5f, -0.5f, 0.5f));
 	verticies_.push_back(Vertex(0.5f, 0.5f, -0.5f));
-	verticies_.push_back(Vertex(0.5f, 0.5f, 0.5f));
-	
+	verticies_.push_back(Vertex(0.5f, 0.5f, 0.5f));	
+}
+
+int Cube::triangle_count() {
+	return 12;
 }
