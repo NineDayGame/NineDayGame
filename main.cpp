@@ -9,6 +9,7 @@
 #include "glrenderer.hpp"
 #include "map.hpp"
 #include "vertex.hpp"
+#include "camera.hpp"
 
 //Event handler
 SDL_Event event;
@@ -31,7 +32,7 @@ int main(int argc, char* argv[])
 	{
 		int x,y;
 		m->random_free_spot(&x,&y);
-		Living::ShPtr e(new Living(Map::WkPtr(m),x,y,'0'+i,TCOD_red,1));
+		Living::ShPtr e(new Living(Map::WkPtr(m),x,y,'0'+i,TCOD_red,3));
 		m->add_entity(e);
 	}
 
@@ -63,10 +64,15 @@ int main(int argc, char* argv[])
 
 		TCODConsole::initRoot(width,height,"Test",false);
 
+		Camera c(m,e,0,0,20,20);
+		Camera c2(m,e,40,0,20,20);
+
 		while(!TCODConsole::isWindowClosed())
 		{
 			e->look();
-			e->draw_map(TCODConsole::root);
+			//e->draw_map(TCODConsole::root);
+			c.draw(TCODConsole::root);
+			c2.draw(TCODConsole::root);
 			TCODConsole::flush();
 			TCOD_key_t key=TCODConsole::waitForKeypress(true);
 			if(key.vk == TCODK_ESCAPE) { break; }
