@@ -3,6 +3,8 @@
 
 #include <boost/shared_ptr.hpp>
 #include <libtcod.hpp>
+#include <list>
+#include <string>
 #include "map.hpp"
 #include "entity.hpp"
 
@@ -16,13 +18,38 @@ public:
 	int width;
 	int height;
 
+	Camera(int sx, int sy, int w, int h);
+	virtual ~Camera();
+
+	virtual void draw(TCODConsole* console);
+};
+
+class EntityCamera : public Camera
+{
+public:
+	typedef boost::shared_ptr<EntityCamera> ShPtr;
+	
 	Map::WkPtr map;
 	Entity::ShPtr target;
 
-	Camera(Map::WkPtr map, Entity::ShPtr target, int sx, int sy, int w, int h);
-	virtual ~Camera();
+	EntityCamera(Map::WkPtr map, Entity::ShPtr target, int sx, int sy, int w, int h);
+	~EntityCamera();
 
-	void draw(TCODConsole* console);
+	virtual void draw(TCODConsole* console);
+};
+
+class TextCamera : public Camera
+{
+public:
+	typedef boost::shared_ptr<TextCamera> ShPtr;
+
+	std::list<std::string> text;
+
+	TextCamera(int sx, int sy, int w, int h);
+	virtual ~TextCamera();
+
+	virtual void draw(TCODConsole* console);
+	virtual void print(const std::string s);
 };
 
 #endif

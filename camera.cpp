@@ -1,7 +1,10 @@
 #include <libtcod.hpp>
 #include "camera.hpp"
 
-Camera::Camera(Map::WkPtr m, Entity::ShPtr e, int sx, int sy, int w, int h) : map(m), target(e), screen_x(sx), screen_y(sy), width(w), height(h)
+#include <boost/foreach.hpp>
+#define foreach BOOST_FOREACH
+
+Camera::Camera(int sx, int sy, int w, int h) : screen_x(sx), screen_y(sy), width(w), height(h)
 {
 
 }
@@ -10,8 +13,24 @@ Camera::~Camera()
 {
 
 }
-
 void Camera::draw(TCODConsole* console)
+{
+
+}
+
+
+
+EntityCamera::EntityCamera(Map::WkPtr m, Entity::ShPtr t, int sx, int sy, int w, int h) : map(m), target(t), Camera(sx,sy,w,h)
+{
+
+}
+
+EntityCamera::~EntityCamera()
+{
+
+}
+
+void EntityCamera::draw(TCODConsole* console)
 {
 	Entity::ShPtr t = target;
 	t->look();
@@ -37,5 +56,35 @@ void Camera::draw(TCODConsole* console)
 		TCODColor color = e->color;
 		console->setChar(screen_x+width/2+tx,screen_y+height/2+ty,c);
 		console->setFore(screen_x+width/2+tx,screen_y+height/2+ty,color);
+	}
+}
+
+
+TextCamera::TextCamera(int sx, int sy, int w, int h) : Camera(sx,sy,w,h)
+{
+
+}
+
+TextCamera::~TextCamera()
+{
+
+}
+
+void TextCamera::draw(TCODConsole* console)
+{
+	int i = 0;
+	foreach(std::string s, text)
+	{
+		console->printLeft(screen_x,screen_y+i,TCOD_BKGND_NONE,s.c_str());
+		++i;
+	}
+}
+
+void TextCamera::print(const std::string s)
+{
+	text.push_back(s);
+	if(text.size() > height)
+	{
+		text.pop_front();
 	}
 }

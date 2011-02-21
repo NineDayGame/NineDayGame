@@ -12,6 +12,8 @@
 #include "vertex.hpp"
 #include "camera.hpp"
 
+#include "util.hpp"
+
 #include <boost/foreach.hpp>
 #define foreach BOOST_FOREACH
 
@@ -83,12 +85,17 @@ int main(int argc, char* argv[])
 
 		std::list<Camera::ShPtr> cameras;
 		Camera::ShPtr c;
-		c = Camera::ShPtr(new Camera(m,e,0,0,20,20));
+		c = EntityCamera::ShPtr(new EntityCamera(m,e,0,0,20,20));
 		cameras.push_back(c);
-		c = Camera::ShPtr(new Camera(e2->known_map,e2,20,0,20,20));
+		c = EntityCamera::ShPtr(new EntityCamera(e2->known_map,e2,20,0,20,20));
 		cameras.push_back(c);
-		c = Camera::ShPtr(new Camera(e->known_map,e,0,20,100,80));
+		c = EntityCamera::ShPtr(new EntityCamera(e->known_map,e,0,20,100,80));
 		cameras.push_back(c);
+		c = TextCamera::ShPtr(new TextCamera(40,0,20,20));
+		cameras.push_back(c);
+
+		TextCamera::ShPtr tc = boost::static_pointer_cast<TextCamera,Camera>(c);
+		print_to = tc;
 
 		while(!TCODConsole::isWindowClosed())
 		{
