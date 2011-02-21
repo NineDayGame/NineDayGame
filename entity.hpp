@@ -6,10 +6,11 @@
 #include <boost/enable_shared_from_this.hpp>
 #include <list>
 #include <libtcod.hpp>
+#include "container.hpp"
 
 class Map;
 
-class Entity : public boost::enable_shared_from_this<Entity>
+class Entity : public Container
 {
 public:
 	typedef boost::shared_ptr<Entity> ShPtr;
@@ -17,6 +18,7 @@ public:
 	
 	int x;
 	int y;
+	int z;
 	char c;
 	TCODColor color;
 
@@ -34,7 +36,6 @@ public:
 	
 	virtual void draw(TCODConsole* console);
 	virtual void draw_map(TCODConsole* console);
-	
 };
 
 #endif

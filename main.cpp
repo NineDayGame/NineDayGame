@@ -11,12 +11,10 @@
 #include "map.hpp"
 #include "vector3f.hpp"
 #include "camera.hpp"
+#include "item.hpp"
 
 #include "util.hpp"
-
 #include <boost/lexical_cast.hpp>
-#include <boost/foreach.hpp>
-#define foreach BOOST_FOREACH
 
 //Event handler
 SDL_Event event;
@@ -45,16 +43,30 @@ int main(int argc, char* argv[])
 
 		TCODColor color(rand->getInt(0,255),rand->getInt(0,255),rand->getInt(0,255));
 		Living::ShPtr e(new Living(Map::WkPtr(m),buf,x,y,'0'+i,color,3));
-		m->add_entity(e);
+		m->get(e);
 	}
 
-	Entity::ShPtr e = m->entities.front();
+	for(int i = 0; i < 50; ++i)
+	{
+		char name[32];
+		char desc[32];
+		int x,y;
+		m->random_free_spot(&x,&y);
+		sprintf(name,"Item %d",i);
+		sprintf(desc,"A shiny item.");
+
+		//TCODColor color(rand->getInt(0,255),rand->getInt(0,255),rand->getInt(0,255));
+		Item::ShPtr e(new Item(Map::WkPtr(m),name,desc,x,y,'I',TCOD_green));
+		m->get(e);
+	}
+
+	Entity::ShPtr e = SCONVERT(Entity,Container,m->inventory.front());
 	
-	std::list<Entity::ShPtr>::iterator i = m->entities.begin();
+	std::list<Container::ShPtr>::iterator i = m->inventory.begin();
 	std::list<Entity::ShPtr> follow;
 	for(int j = 0; j < 0; ++j)
 	{
-		follow.push_back(*(++i));
+		follow.push_back(SCONVERT(Entity,Container,*(++i)));
 	}
 	follow.push_front(e);
 
@@ -120,7 +132,7 @@ int main(int argc, char* argv[])
 
 		c = TextCamera::ShPtr(new TextCamera(0,0,width,20));
 		cameras.push_back(c);
-		TextCamera::ShPtr tc = boost::static_pointer_cast<TextCamera,Camera>(c);
+		TextCamera::ShPtr tc = SCONVERT(TextCamera,Camera,c);
 		print_to = tc;
 
 		while(!TCODConsole::isWindowClosed())
@@ -144,6 +156,7 @@ int main(int argc, char* argv[])
 			if(key.vk == TCODK_KP9) { e->move(e->x+1,e->y-1); }
 			if(key.vk == TCODK_KP1) { e->move(e->x-1,e->y+1); }
 			if(key.vk == TCODK_KP3) { e->move(e->x+1,e->y+1); }
+			if(key.c == 'l') { foreach(Container::ShPtr c, e->inventory) { Item::ShPtr i = SCONVERT(Item,Container,c); cprintf("%s",i->name.c_str()); } }
 		}
 	}
 

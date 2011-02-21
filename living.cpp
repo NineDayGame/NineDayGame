@@ -2,10 +2,11 @@
 #include <cmath>
 #include "living.hpp"
 #include "util.hpp"
+#include "item.hpp"
 
 Living::Living(Map::WkPtr host_map, std::string n, int x, int y, int c, TCODColor color, int _health) : Entity(host_map,x,y,c,color), health(_health), name(n)
 {
-
+	z = 1;
 }
 
 Living::~Living()
@@ -17,12 +18,25 @@ bool Living::move(int x, int y)
 {	
 	if(!Entity::move(x,y))
 	{
-		for(std::list<Entity::WkPtr>::iterator i = seen.begin(); i != seen.end(); ++i)
+		foreach(Entity::WkPtr w, seen)
 		{
-			Living::ShPtr e = boost::static_pointer_cast<Living,Entity>((*i).lock());
-			if(e->x == x && e->y == y)
+			Living::ShPtr e = DCONVERT(Living,Entity,w.lock());
+			if(e != NULL && e->x == x && e->y == y)
 			{
 				attack(e);
+			}
+		}
+	}
+	else
+	{
+		foreach(Entity::WkPtr w, seen)
+		{
+			Item::ShPtr e = DCONVERT(Item,Entity,w.lock());
+			if(e != NULL && e->x == x && e->y == y)
+			{
+				get(e);
+				e->host_map.lock()->remove(e);
+				cprintf("%s gets %s.",name.c_str(),e->name.c_str());
 			}
 		}
 	}
@@ -34,11 +48,11 @@ bool Living::attack(Living::ShPtr e)
 	e->health--;
 	if(e->health <= 0)
 	{
-		e->die(this->shared_from_this());
+		e->die(this);
 	}
 }
 
-void Living::die(Entity::ShPtr killer)
+void Living::die(Entity* killer)
 {
 	cprintf("%s dies in a splatter of gore!",name.c_str());
 	
@@ -65,5 +79,5 @@ void Living::die(Entity::ShPtr killer)
 
 	m->get_data(x,y,&c,&color,&trans,&walk);
 	m->set_data(x,y,c,TCOD_red,true,true);
-	m->remove_entity(this->shared_from_this());
+	m->remove(this->shared_from_this());
 }

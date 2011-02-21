@@ -19,7 +19,7 @@ public:
 	virtual bool move(int x, int y);
 	virtual bool attack(boost::shared_ptr<Living> e);
 
-	virtual void die(Entity::ShPtr killer);
+	virtual void die(Entity* killer);
 };
 
 #endif

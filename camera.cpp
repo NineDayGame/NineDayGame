@@ -1,8 +1,6 @@
 #include <libtcod.hpp>
 #include "camera.hpp"
-
-#include <boost/foreach.hpp>
-#define foreach BOOST_FOREACH
+#include "util.hpp"
 
 Camera::Camera(int sx, int sy, int w, int h) : screen_x(sx), screen_y(sy), width(w), height(h)
 {
@@ -30,6 +28,11 @@ EntityCamera::~EntityCamera()
 
 }
 
+static bool compare_entities(Entity::WkPtr first, Entity::WkPtr second)
+{
+	return first.lock()->z < second.lock()->z;
+}
+
 void EntityCamera::draw(TCODConsole* console)
 {
 	Entity::ShPtr t = target;
@@ -47,9 +50,10 @@ void EntityCamera::draw(TCODConsole* console)
 			console->setFore(x+screen_x+width/2,y+screen_y+height/2,color);
 		}
 	}
-	for(std::list<Entity::WkPtr>::iterator i = t->seen.begin(); i != t->seen.end(); ++i)
+	t->seen.sort(compare_entities);
+	foreach(Entity::WkPtr i, t->seen)
 	{
-		Entity::ShPtr e = (*i).lock();
+		Entity::ShPtr e = i.lock();
 		int tx = e->x-t->x;
 		int ty = e->y-t->y;
 		char c = e->c;
