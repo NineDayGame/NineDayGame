@@ -49,8 +49,15 @@ int main(int argc, char* argv[])
 	}
 
 	Entity::ShPtr e = m->entities.front();
-	Entity::ShPtr e2 = m->entities.back();
 	
+	std::list<Entity::ShPtr>::iterator i = m->entities.begin();
+	std::list<Entity::ShPtr> follow;
+	for(int j = 0; j < 0; ++j)
+	{
+		follow.push_back(*(++i));
+	}
+	follow.push_front(e);
+
 	if (argc==1) {		
 		int ssc = 0;
 		bool quit = false;
@@ -97,11 +104,17 @@ int main(int argc, char* argv[])
 
 		std::list<Camera::ShPtr> cameras;
 		Camera::ShPtr c;
-		c = EntityCamera::ShPtr(new EntityCamera(e->known_map,e,0,20,100,80));
-		cameras.push_back(c);
-		c = TextCamera::ShPtr(new TextCamera(0,0,100,20));
-		cameras.push_back(c);
+		int q = 0;
+		foreach(Entity::ShPtr e, follow)
+		{
+			int size = width/follow.size();
+			c = EntityCamera::ShPtr(new EntityCamera(e->known_map,e,q*size,20,size,60));
+			cameras.push_back(c);
+			++q;
+		}
 
+		c = TextCamera::ShPtr(new TextCamera(0,0,width,20));
+		cameras.push_back(c);
 		TextCamera::ShPtr tc = boost::static_pointer_cast<TextCamera,Camera>(c);
 		print_to = tc;
 
@@ -112,6 +125,7 @@ int main(int argc, char* argv[])
 				c->draw(TCODConsole::root);
 			}
 
+			//TCODSystem::saveScreenshot(NULL);
 			TCODConsole::flush();
 			TCOD_key_t key=TCODConsole::waitForKeypress(true);
 			if(key.vk == TCODK_ESCAPE) { break; }
