@@ -58,9 +58,12 @@ void GlRenderer::init_gl() {
     {
         //error
     }
+    
+    player_.reset(new Player());
 }
 
 void GlRenderer::load_map(const Map& map) {
+	movables_.clear();
 	for (int x = 0; x < map.width; ++x) {
 		for (int y = 0; y < map.height; ++y) {
 			if (map.display[x+y*map.width].c == '.') {
@@ -81,18 +84,6 @@ void GlRenderer::load_map(const Map& map) {
 			}
 		}
 	}
-	/*for (int i = 0; i < 10; ++i) {
-		for (int j = 0; j < 10; ++j) {
-			Block::ShPtr blk (new Block());
-			blk->set_position((float)i, (float)j, 0.0f);
-			movables_.push_back(blk);
-		}
-	}*/
-	
-	/*Player::ShPtr p (new Player());
-	p->set_position(3.0f, 3.0f, 1.0f);
-	p->set_scale3f(1.0f, 1.0f, 1.5f);
-	movables_.push_back(p);*/
 }
 
 void GlRenderer::render() {
@@ -113,6 +104,8 @@ void GlRenderer::render() {
 		movables_.at(i)->draw();
 	}
 	
+	player_->draw();
+	
 	//Update screen
 	SDL_GL_SwapBuffers();
 
@@ -127,4 +120,12 @@ void GlRenderer::render() {
 }
 
 void GlRenderer::update() {
+}
+
+void GlRenderer::set_player(float x, float y) {
+	player_->set_position(x, y, 1.0f);
+}
+
+void GlRenderer::update_player(float x, float y) {
+	player_->update_position(x, y);
 }

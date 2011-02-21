@@ -12,3 +12,7 @@ void Player::init() {
 		colors_.push_back(Vertex(0.5f, 0.0f, 0.0f));
 	}
 }
+
+void Player::update_position(float x, float y) {
+	set_position(x + x_, y + y_, z_);
+}

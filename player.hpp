@@ -12,6 +12,7 @@ public:
 
 	Player();
 	void init();
+	void update_position(float x, float y);
 
 private:
 	DISALLOW_COPY_AND_ASSIGN(Player);
