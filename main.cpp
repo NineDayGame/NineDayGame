@@ -34,13 +34,16 @@ int main(int argc, char* argv[])
 	m->clear();
 	m->randomize(10);
 
+	TCODRandom* rand = TCODRandom::getInstance();
 	for(int i = 0; i < 50; ++i)
 	{
 		char buf[32];
 		int x,y;
 		m->random_free_spot(&x,&y);
 		sprintf(buf,"Entity %d",i);
-		Living::ShPtr e(new Living(Map::WkPtr(m),buf,x,y,'0'+i,TCOD_red,3));
+
+		TCODColor color(rand->getInt(0,255),rand->getInt(0,255),rand->getInt(0,255));
+		Living::ShPtr e(new Living(Map::WkPtr(m),buf,x,y,'0'+i,color,3));
 		m->add_entity(e);
 	}
 
