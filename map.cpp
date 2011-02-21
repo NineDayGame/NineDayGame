@@ -37,6 +37,14 @@ void Map::draw(TCODConsole* console)
 	}
 }
 
+void Map::get_data(int x, int y, char* c, TCODColor* color, bool* transparent, bool* walkable)
+{
+	*c = display[x+y*width].c;
+	*color = display[x+y*width].color;
+	*transparent = data->isTransparent(x,y);
+	*walkable = data->isWalkable(x,y);
+}
+
 void Map::set_data(int x, int y, char c, TCODColor color, bool transparent, bool walkable)
 {
 	display[x+y*width].c = c;

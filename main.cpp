@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
 	m->clear();
 	m->randomize(10);
 
-	for(int i = 0; i < 5; ++i)
+	for(int i = 0; i < 50; ++i)
 	{
 		int x,y;
 		m->random_free_spot(&x,&y);
