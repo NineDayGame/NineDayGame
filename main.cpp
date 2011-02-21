@@ -41,19 +41,31 @@ int main(int argc, char* argv[])
 		bool quit = false;
 
 		GlRenderer::ShPtr glr (new GlRenderer());
-		glr->load_map(*m);
+		//glr->load_map(*(e->known_map));
 		
 		float r = 0.0f;
 
-		//Wait for user exit
 		while( quit == false )
 		{
 			while ( SDL_PollEvent( &event ) ) {
+				if( event.type == SDL_KEYDOWN ) {
+					switch( event.key.keysym.sym )
+					{
+						case SDLK_UP: e->move(e->x, e->y+1); e->look(); break;
+						case SDLK_DOWN: e->move(e->x, e->y-1); e->look(); break;
+						case SDLK_LEFT: e->move(e->x-1, e->y); e->look(); break;
+						case SDLK_RIGHT: e->move(e->x+1, e->y); e->look(); break;
+					}
+				}
+				
 				if ( event.type == SDL_QUIT ) {
 					quit = true;
 				}
 			}
 			
+			glr->load_map(*(e->known_map));
+			//glr->load_map(*m);
+			glr->set_player((float)e->x, (float)e->y);
 			glr->render();
 		}
 
