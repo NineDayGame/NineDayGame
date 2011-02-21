@@ -1,6 +1,7 @@
 #include <libtcod.hpp>
 #include "map.hpp"
 #include "entity.hpp"
+#include "util.hpp"
 
 Entity::Entity(boost::weak_ptr<Map> _host_map, int _x, int _y, int _c, TCODColor _color)
 {
@@ -52,11 +53,11 @@ void Entity::look()
 		}
 	}
 	seen.clear();
-	for(std::list<Entity::ShPtr>::iterator i = host_map.lock()->entities.begin(); i != host_map.lock()->entities.end(); ++i)
+	foreach(Entity::ShPtr i, host_map.lock()->entities)
 	{
-		if(host_map.lock()->data->isInFov((*i)->x,(*i)->y))
+		if(host_map.lock()->data->isInFov(i->x,i->y))
 		{
-			seen.push_back(Entity::WkPtr(*i));
+			seen.push_back(i);
 		}
 	}
 }
@@ -70,8 +71,8 @@ void Entity::draw(TCODConsole* console)
 void Entity::draw_map(TCODConsole* console)
 {
 	known_map->draw(console);
-	for(std::list<Entity::WkPtr>::iterator i = seen.begin(); i != seen.end(); ++i)
+	foreach(Entity::WkPtr i, seen)
 	{
-		(*i).lock()->draw(console);
+		i.lock()->draw(console);
 	}
 }

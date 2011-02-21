@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include "map.hpp"
 #include "entity.hpp"
+#include "util.hpp"
 
 Map::Map(int w, int h)
 {
@@ -31,9 +32,9 @@ void Map::draw(TCODConsole* console)
 			console->setFore(x,y,color);
 		}
 	}
-	for(std::list<Entity::ShPtr>::iterator i = entities.begin(); i != entities.end(); ++i)
+	foreach(Entity::ShPtr i,entities)
 	{
-		(*i)->draw(console);
+		i->draw(console);
 	}
 }
 
@@ -170,12 +171,12 @@ void Map::random_free_spot(int* x, int* y)
 
 void Map::add_entity(Entity* e)
 {
-	Entity::ShPtr p = boost::static_pointer_cast<Entity,Container>(e->shared_from_this());
+	Entity::ShPtr p = SCONVERT(Entity,Container,e->shared_from_this());
 	entities.push_back(p);
 }
 
 void Map::remove_entity(Entity* e)
 {
-	Entity::ShPtr p = boost::static_pointer_cast<Entity,Container>(e->shared_from_this());
+	Entity::ShPtr p = SCONVERT(Entity,Container,e->shared_from_this());
 	entities.remove(p);
 }

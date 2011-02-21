@@ -2,9 +2,6 @@
 #include "camera.hpp"
 #include "util.hpp"
 
-#include <boost/foreach.hpp>
-#define foreach BOOST_FOREACH
-
 Camera::Camera(int sx, int sy, int w, int h) : screen_x(sx), screen_y(sy), width(w), height(h)
 {
 
@@ -54,9 +51,9 @@ void EntityCamera::draw(TCODConsole* console)
 		}
 	}
 	t->seen.sort(compare_entities);
-	for(std::list<Entity::WkPtr>::iterator i = t->seen.begin(); i != t->seen.end(); ++i)
+	foreach(Entity::WkPtr i, t->seen)
 	{
-		Entity::ShPtr e = (*i).lock();
+		Entity::ShPtr e = i.lock();
 		int tx = e->x-t->x;
 		int ty = e->y-t->y;
 		char c = e->c;
