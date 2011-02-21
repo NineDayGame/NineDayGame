@@ -12,8 +12,10 @@
 #include "vertex.hpp"
 #include "camera.hpp"
 #include "item.hpp"
-
+#include "menu.hpp"
 #include "util.hpp"
+
+#include "main_gamestate.hpp"
 
 //Event handler
 SDL_Event event;
@@ -61,14 +63,6 @@ int main(int argc, char* argv[])
 
 	Entity::ShPtr e = SCONVERT(Entity,Container,m->inventory.front());
 	
-	std::list<Container::ShPtr>::iterator i = m->inventory.begin();
-	std::list<Entity::ShPtr> follow;
-	for(int j = 0; j < 0; ++j)
-	{
-		follow.push_back(SCONVERT(Entity,Container,*(++i)));
-	}
-	follow.push_front(e);
-
 	if (argc==1) {		
 		bool quit = false;
 
@@ -108,44 +102,40 @@ int main(int argc, char* argv[])
 
 		TCODConsole::initRoot(width,height,"Test",false);
 
-		std::list<Camera::ShPtr> cameras;
+		std::list<Container::ShPtr>::iterator i = m->inventory.begin();
+		std::list<Entity::ShPtr> follow;
+		for(int j = 0; j < 0; ++j)
+		{
+			follow.push_back(SCONVERT(Entity,Container,*(++i)));
+		}
+		follow.push_front(e);
+
+		MainGameState::ShPtr mgs(new MainGameState(GameState::ShPtr(),e));
+		GameState::state = mgs;
+		
 		Camera::ShPtr c;
 		int q = 0;
 		foreach(Entity::ShPtr e, follow)
 		{
 			int size = width/follow.size();
 			c = EntityCamera::ShPtr(new EntityCamera(e->known_map,e,q*size,20,size,60));
-			cameras.push_back(c);
+			mgs->cameras.push_back(c);
 			++q;
 		}
 
 		c = TextCamera::ShPtr(new TextCamera(0,0,width,20));
-		cameras.push_back(c);
+		mgs->cameras.push_back(c);
 		TextCamera::ShPtr tc = SCONVERT(TextCamera,Camera,c);
 		print_to = tc;
 
 		while(!TCODConsole::isWindowClosed())
 		{
-			foreach(Camera::ShPtr c, cameras)
-			{
-				c->draw(TCODConsole::root);
-			}
+			GameState::state->draw(TCODConsole::root);
 
 			//TCODSystem::saveScreenshot(NULL);
 			TCODConsole::flush();
 			TCOD_key_t key=TCODConsole::waitForKeypress(true);
-			if(key.vk == TCODK_ESCAPE) { break; }
-			if(key.vk == TCODK_SPACE) { m->randomize(10); }
-			
-			if(key.vk == TCODK_KP8) { e->move(e->x,e->y-1); }
-			if(key.vk == TCODK_KP2) { e->move(e->x,e->y+1); }
-			if(key.vk == TCODK_KP4) { e->move(e->x-1,e->y); }
-			if(key.vk == TCODK_KP6) { e->move(e->x+1,e->y); }
-			if(key.vk == TCODK_KP7) { e->move(e->x-1,e->y-1); }
-			if(key.vk == TCODK_KP9) { e->move(e->x+1,e->y-1); }
-			if(key.vk == TCODK_KP1) { e->move(e->x-1,e->y+1); }
-			if(key.vk == TCODK_KP3) { e->move(e->x+1,e->y+1); }
-			if(key.c == 'l') { foreach(Container::ShPtr c, e->inventory) { Item::ShPtr i = SCONVERT(Item,Container,c); cprintf("%s",i->name.c_str()); } }
+			GameState::state->handle_key_press(key);
 		}
 	}
 
