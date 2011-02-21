@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <libtcod.hpp>
 #include <boost/foreach.hpp>
 #define foreach BOOST_FOREACH
 
@@ -75,6 +76,8 @@ void GlRenderer::load_map(const Map& map) {
 			if (map.display[x+y*map.width].c == '.') {
 				Block::ShPtr blk (new Block());
 				blk->set_position((float)x, (float)y, 0.0f);
+				TCODColor c = map.display[x+y*map.width].color;
+				blk->set_color(Vertex((float)(c.r/255), (float)(c.g/255), (float)(c.b/255)));
 				movables_.push_back(blk);
 			} else if ((x > 0) && (y > 0)) { 
 				if (map.display[x+y*map.width].c == '#'
