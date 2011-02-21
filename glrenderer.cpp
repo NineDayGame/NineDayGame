@@ -77,7 +77,7 @@ void GlRenderer::load_map(const Map& map) {
 				Block::ShPtr blk (new Block());
 				blk->set_position((float)x, (float)y, 0.0f);
 				TCODColor c = map.display[x+y*map.width].color;
-				blk->set_color(Vertex((float)(c.r/255), (float)(c.g/255), (float)(c.b/255)));
+				blk->set_color(Vertex((c.r/255.0f), (c.g/255.0f), (c.b/255.0f)));
 				movables_.push_back(blk);
 			} else if ((x > 0) && (y > 0)) { 
 				if (map.display[x+y*map.width].c == '#'
@@ -87,6 +87,10 @@ void GlRenderer::load_map(const Map& map) {
 					for (int i = 0; i < 3; ++i) {
 						Block::ShPtr blk (new Block());
 						blk->set_position((float)x, (float)y, (float)i);
+						if (i < 2) {
+							TCODColor c = map.display[x+y*map.width].color;
+							blk->set_color(Vertex((c.r/255.0f), (c.g/255.0f), (c.b/255.0f)));
+						}
 						movables_.push_back(blk);
 					}
 				}
@@ -101,6 +105,8 @@ void GlRenderer::load_mobs(std::list<Entity::WkPtr> mobs) {
 		Character::ShPtr chr (new Character());
 		Entity::ShPtr m = e.lock();
 		chr->set_position(m->x, m->y, 1.0f);
+		TCODColor c = m->color;
+		chr->set_color(Vertex((c.r/255.0f), (c.g/255.0f), (c.b/255.0f)));
 		movables_.push_back(chr);
 	}
 }
@@ -112,8 +118,8 @@ void GlRenderer::render() {
 	glLoadIdentity();
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
-	glPolygonMode(GL_FRONT, GL_LINE);
-	glPolygonMode(GL_BACK, GL_LINE);
+	//glPolygonMode(GL_FRONT, GL_LINE);
+	//glPolygonMode(GL_BACK, GL_LINE);
 
 	glTranslatef(0.0f, -40.0f, -40.0f);
 	glRotatef(45.0f, 0.0f, 0.0f, 1.0f);
