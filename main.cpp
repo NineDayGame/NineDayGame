@@ -15,9 +15,6 @@
 
 #include "util.hpp"
 
-#include <boost/foreach.hpp>
-#define foreach BOOST_FOREACH
-
 //Event handler
 SDL_Event event;
 
@@ -124,7 +121,7 @@ int main(int argc, char* argv[])
 
 		c = TextCamera::ShPtr(new TextCamera(0,0,width,20));
 		cameras.push_back(c);
-		TextCamera::ShPtr tc = boost::static_pointer_cast<TextCamera,Camera>(c);
+		TextCamera::ShPtr tc = SCONVERT(TextCamera,Camera,c);
 		print_to = tc;
 
 		while(!TCODConsole::isWindowClosed())
@@ -148,6 +145,7 @@ int main(int argc, char* argv[])
 			if(key.vk == TCODK_KP9) { e->move(e->x+1,e->y-1); }
 			if(key.vk == TCODK_KP1) { e->move(e->x-1,e->y+1); }
 			if(key.vk == TCODK_KP3) { e->move(e->x+1,e->y+1); }
+			if(key.c == 'l') { foreach(Container::ShPtr c, e->inventory) { Item::ShPtr i = SCONVERT(Item,Container,c); cprintf("%s",i->name.c_str()); } }
 		}
 	}
 

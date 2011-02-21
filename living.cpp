@@ -2,6 +2,7 @@
 #include <cmath>
 #include "living.hpp"
 #include "util.hpp"
+#include "item.hpp"
 
 Living::Living(Map::WkPtr host_map, std::string n, int x, int y, int c, TCODColor color, int _health) : Entity(host_map,x,y,c,color), health(_health), name(n)
 {
@@ -17,12 +18,25 @@ bool Living::move(int x, int y)
 {	
 	if(!Entity::move(x,y))
 	{
-		for(std::list<Entity::WkPtr>::iterator i = seen.begin(); i != seen.end(); ++i)
+		foreach(Entity::WkPtr w, seen)
 		{
-			Living::ShPtr e = boost::dynamic_pointer_cast<Living,Entity>((*i).lock());
+			Living::ShPtr e = DCONVERT(Living,Entity,w.lock());
 			if(e != NULL && e->x == x && e->y == y)
 			{
 				attack(e);
+			}
+		}
+	}
+	else
+	{
+		foreach(Entity::WkPtr w, seen)
+		{
+			Item::ShPtr e = DCONVERT(Item,Entity,w.lock());
+			if(e != NULL && e->x == x && e->y == y)
+			{
+				get(e);
+				e->host_map.lock()->remove_entity(e.get());
+				cprintf("%s gets %s.",name.c_str(),e->name.c_str());
 			}
 		}
 	}
