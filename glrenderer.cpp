@@ -1,3 +1,8 @@
+#include <stdlib.h>
+#include <libtcod.hpp>
+#include <boost/foreach.hpp>
+#define foreach BOOST_FOREACH
+
 #include "SDL/SDL.h"
 #include "SDL/SDL_opengl.h"
 
@@ -24,10 +29,11 @@ void GlRenderer::init() {
         //error
     }
 
-    if( SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_OPENGL ) == NULL )
+	sdlSurface_ = SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_OPENGL );
+    /*if( SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_OPENGL ) == NULL )
     {
         //error
-    }
+    }*/
 
 	init_gl();
     /*if( init_gl() == false )
@@ -63,12 +69,15 @@ void GlRenderer::init_gl() {
 }
 
 void GlRenderer::load_map(const Map& map) {
+	
 	movables_.clear();
 	for (int x = 0; x < map.width; ++x) {
 		for (int y = 0; y < map.height; ++y) {
 			if (map.display[x+y*map.width].c == '.') {
 				Block::ShPtr blk (new Block());
 				blk->set_position((float)x, (float)y, 0.0f);
+				TCODColor c = map.display[x+y*map.width].color;
+				blk->set_color(Vertex((float)(c.r/255), (float)(c.g/255), (float)(c.b/255)));
 				movables_.push_back(blk);
 			} else if ((x > 0) && (y > 0)) { 
 				if (map.display[x+y*map.width].c == '#'
@@ -83,6 +92,16 @@ void GlRenderer::load_map(const Map& map) {
 				}
 			}
 		}
+	}
+}
+
+void GlRenderer::load_mobs(std::list<Entity::WkPtr> mobs) {
+	//for (int i = 0; i < mobs.size(); ++i) {
+	foreach (Entity::WkPtr e, mobs) {
+		Character::ShPtr chr (new Character());
+		Entity::ShPtr m = e.lock();
+		chr->set_position(m->x, m->y, 1.0f);
+		movables_.push_back(chr);
 	}
 }
 
@@ -119,13 +138,48 @@ void GlRenderer::render() {
 	glDisableClientState(GL_COLOR_ARRAY);
 }
 
+void GlRenderer::take_screenshot(std::string filename) {
+
+	SDL_Surface *temp;
+	unsigned char *pixels;
+	int i;
+	
+	if (!(sdlSurface_->flags & SDL_OPENGL)) {
+			SDL_SaveBMP(temp, filename.c_str());
+			return;
+	}
+			
+	temp = SDL_CreateRGBSurface(SDL_SWSURFACE, sdlSurface_->w, sdlSurface_->h, 24,
+#if SDL_BYTEORDER == SDL_LIL_ENDIAN
+	0x000000FF, 0x0000FF00, 0x00FF0000, 0
+#else
+	0x00FF0000, 0x0000FF00, 0x000000FF, 0
+#endif
+	);
+	if (temp == NULL) { return; }
+
+	pixels = (unsigned char *)malloc(3 * sdlSurface_->w * sdlSurface_->h);
+	if (pixels == NULL) {
+		SDL_FreeSurface(temp);
+		return;
+	}
+
+	glReadPixels(0, 0, sdlSurface_->w, sdlSurface_->h, GL_RGB, GL_UNSIGNED_BYTE, pixels);
+
+	for (i=0; i<sdlSurface_->h; i++) {
+		memcpy(((char *) temp->pixels) + temp->pitch * i, pixels + 3*sdlSurface_->w * (sdlSurface_->h-i-1),
+			   sdlSurface_->w*3);
+	}
+	
+	free(pixels);
+
+	SDL_SaveBMP(temp, filename.c_str());
+	SDL_FreeSurface(temp);
+}
+
 void GlRenderer::update() {
 }
 
 void GlRenderer::set_player(float x, float y) {
 	player_->set_position(x, y, 1.0f);
-}
-
-void GlRenderer::update_player(float x, float y) {
-	player_->update_position(x, y);
 }

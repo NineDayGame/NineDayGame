@@ -26,6 +26,13 @@ void Movable::update() {
 	//a_ += 1.0f;
 }
 
+void Movable::set_color(Vertex color) {
+	colors_.clear();
+	for (int i = 0; i < (mesh_->triangle_count() * 3); ++i) {
+		colors_.push_back(color);
+	}
+}
+
 void Movable::set_position(float x, float y, float z) {
 	x_ = x;
 	y_ = y;

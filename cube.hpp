@@ -12,6 +12,7 @@ public:
 
 	Cube();
 	void init();
+	int triangle_count();
 
 private:
 	DISALLOW_COPY_AND_ASSIGN(Cube);
