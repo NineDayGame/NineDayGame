@@ -48,7 +48,7 @@ void Living::die(Entity::ShPtr killer)
 	int radius = 5;
 
 	char c;
-	TCODColor co;
+	TCODColor color;
 	bool trans;
 	bool walk;
 	
@@ -58,12 +58,12 @@ void Living::die(Entity::ShPtr killer)
 		{
 			int sx = x+i*cos(a);
 			int sy = y+i*sin(a);
-			m->get_data(sx,sy,&c,&co,&trans,&walk);
-			m->set_data(sx,sy,c,color,trans,walk);
+			m->get_data(sx,sy,&c,&color,&trans,&walk);
+			m->set_data(sx,sy,c,TCOD_red,trans,walk);
 		}
 	}
 
-	m->get_data(x,y,&c,&co,&trans,&walk);
-	m->set_data(x,y,c,color,true,true);
+	m->get_data(x,y,&c,&color,&trans,&walk);
+	m->set_data(x,y,c,TCOD_red,true,true);
 	m->remove_entity(this->shared_from_this());
 }
