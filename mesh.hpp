@@ -8,7 +8,8 @@
 #include "SDL/SDL_opengl.h"
 
 #include "basetypes.hpp"
-#include "vertex.hpp"
+#include "vector2f.hpp"
+#include "vector3f.hpp"
 
 class Mesh {
 public:
@@ -19,7 +20,8 @@ public:
 	virtual int triangle_count() = 0;
 
 protected:
-	std::vector<Vertex> verticies_;
+	std::vector<Vector3f> verticies_;
+	std::vector<Vector2f> tex_coords_;
 
 private:	
 	DISALLOW_COPY_AND_ASSIGN(Mesh);

@@ -1,6 +1,7 @@
 #ifndef NDG_GLRENDERER_HPP_
 #define NDG_GLRENDERER_HPP_
 
+#include <boost/shared_array.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 #include <string>
@@ -24,8 +25,10 @@ public:
 	GlRenderer();
 	void init();
 	void init_gl();
+	void enable_fullscreen();
 	void load_map(const Map& map);
 	void load_mobs(std::list<Entity::WkPtr> mobs);
+	void load_textures();
 	void take_screenshot(std::string filename);
 	void update();
 	void set_player(float x, float y);
@@ -36,6 +39,8 @@ private:
 	std::vector<Movable::ShPtr> movables_;
 	Player::ShPtr player_;
 	SDL_Surface* sdlSurface_;
+	float cameraX_, cameraY_, cameraZ_;
+	boost::shared_array<unsigned int> texture;
 	
 	DISALLOW_COPY_AND_ASSIGN(GlRenderer);
 };

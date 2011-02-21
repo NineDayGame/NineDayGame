@@ -1,5 +1,5 @@
 #include "block.hpp"
-#include "vertex.hpp"
+#include "vector3f.hpp"
 
 Block::Block() {
 	init();
@@ -7,5 +7,5 @@ Block::Block() {
 
 void Block::init() {
 	mesh_.reset(new Cube());
-	set_color(Vertex(0.5f, 0.5f, 0.5f));
+	set_color(Vector3f(0.5f, 0.5f, 0.5f));
 }

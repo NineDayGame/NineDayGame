@@ -12,6 +12,7 @@ public:
 
 	Character();
 	void init();
+	//void draw();
 
 private:
 	DISALLOW_COPY_AND_ASSIGN(Character);

@@ -1,5 +1,7 @@
 #include <stdlib.h>
+#include <iostream>
 #include <libtcod.hpp>
+#include <math.h>
 #include <boost/foreach.hpp>
 #define foreach BOOST_FOREACH
 
@@ -18,7 +20,8 @@ const int SCREEN_BPP = 32;
 //The frame rate
 const int FRAMES_PER_SECOND = 60;
 
-GlRenderer::GlRenderer() {
+GlRenderer::GlRenderer()
+  : cameraX_(0.0f), cameraY_(0.0f), cameraZ_(-60.0f) {
 	init();
 }
 
@@ -52,12 +55,14 @@ void GlRenderer::init_gl() {
 	glClearDepth(2.0f);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
+    glEnable(GL_TEXTURE_2D);
+    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
-    glMatrixMode( GL_PROJECTION );
+    glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 	gluPerspective(45.0f, (GLfloat)SCREEN_WIDTH/(GLfloat)SCREEN_HEIGHT, 1.0f, 200.0f);
 
-    glMatrixMode( GL_MODELVIEW );
+    glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
     if( glGetError() != GL_NO_ERROR )
@@ -65,7 +70,13 @@ void GlRenderer::init_gl() {
         //error
     }
     
+    load_textures();
     player_.reset(new Player());
+    player_->set_texture(texture[0]);
+}
+
+void GlRenderer::enable_fullscreen() {
+	SDL_WM_ToggleFullScreen( sdlSurface_ );
 }
 
 void GlRenderer::load_map(const Map& map) {
@@ -76,8 +87,9 @@ void GlRenderer::load_map(const Map& map) {
 			if (map.display[x+y*map.width].c == '.') {
 				Block::ShPtr blk (new Block());
 				blk->set_position((float)x, (float)y, 0.0f);
+				blk->set_texture(texture[1]);
 				TCODColor c = map.display[x+y*map.width].color;
-				blk->set_color(Vertex((c.r/255.0f), (c.g/255.0f), (c.b/255.0f)));
+				blk->set_color(Vector3f((c.r/255.0f), (c.g/255.0f), (c.b/255.0f)));
 				movables_.push_back(blk);
 			} else if ((x > 0) && (y > 0)) { 
 				if (map.display[x+y*map.width].c == '#'
@@ -89,7 +101,8 @@ void GlRenderer::load_map(const Map& map) {
 						blk->set_position((float)x, (float)y, (float)i);
 						if (i < 2) {
 							TCODColor c = map.display[x+y*map.width].color;
-							blk->set_color(Vertex((c.r/255.0f), (c.g/255.0f), (c.b/255.0f)));
+							blk->set_texture(texture[0]);
+							blk->set_color(Vector3f((c.r/255.0f), (c.g/255.0f), (c.b/255.0f)));
 						}
 						movables_.push_back(blk);
 					}
@@ -106,7 +119,8 @@ void GlRenderer::load_mobs(std::list<Entity::WkPtr> mobs) {
 		Entity::ShPtr m = e.lock();
 		chr->set_position(m->x, m->y, 1.0f);
 		TCODColor c = m->color;
-		chr->set_color(Vertex((c.r/255.0f), (c.g/255.0f), (c.b/255.0f)));
+		chr->set_texture(texture[0]);
+		chr->set_color(Vector3f((c.r/255.0f), (c.g/255.0f), (c.b/255.0f)));
 		movables_.push_back(chr);
 	}
 }
@@ -118,10 +132,12 @@ void GlRenderer::render() {
 	glLoadIdentity();
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY_EXT);
 	//glPolygonMode(GL_FRONT, GL_LINE);
 	//glPolygonMode(GL_BACK, GL_LINE);
 
-	glTranslatef(0.0f, -40.0f, -40.0f);
+	//glTranslatef(0.0f, -40.0f, -40.0f);
+	glTranslatef(cameraX_, cameraY_, cameraZ_);
 	glRotatef(45.0f, 0.0f, 0.0f, 1.0f);
 	glRotatef(45.0f, -1.0f, 1.0f, 0.0f);
 
@@ -142,6 +158,35 @@ void GlRenderer::render() {
 	
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
+}
+
+void GlRenderer::load_textures() {
+
+	texture.reset(new unsigned int[2]);
+	SDL_Surface *textureImage[2]; 
+
+	//if ((textureImage[0] = SDL_LoadBMP( "default.bmp" ))) {
+		textureImage[0] = SDL_LoadBMP( "default.bmp" );
+		textureImage[1] = SDL_LoadBMP( "stone2.bmp" );
+		
+		glGenTextures( 2, &texture[0] );
+		
+		glBindTexture( GL_TEXTURE_2D, texture[0] );
+		glTexImage2D( GL_TEXTURE_2D, 0, 3, textureImage[0]->w, textureImage[0]->h, 0, GL_BGR,
+		        GL_UNSIGNED_BYTE, textureImage[0]->pixels );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+		
+		glBindTexture( GL_TEXTURE_2D, texture[1] );
+		glTexImage2D( GL_TEXTURE_2D, 0, 3, textureImage[1]->w, textureImage[1]->h, 0, GL_BGR,
+		        GL_UNSIGNED_BYTE, textureImage[1]->pixels );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+	//}
+
+    if (textureImage[0]) {
+	    SDL_FreeSurface(textureImage[0]);
+	}
 }
 
 void GlRenderer::take_screenshot(std::string filename) {
@@ -187,5 +232,10 @@ void GlRenderer::update() {
 }
 
 void GlRenderer::set_player(float x, float y) {
+
+	cameraX_ = -0.5f*x + 0.5f*y;
+	cameraY_ = -0.5f*x + -0.5f*y;
+	cameraZ_ = -30.0f + 0.4f*x + 0.4f*y;
+	
 	player_->set_position(x, y, 1.0f);
 }

@@ -1,5 +1,5 @@
 #include "character.hpp"
-#include "vertex.hpp"
+#include "vector3f.hpp"
 
 Character::Character() {
 	init();
@@ -7,5 +7,10 @@ Character::Character() {
 
 void Character::init() {
 	mesh_.reset(new Cube());
-	set_color(Vertex(0.0f, 0.0f, 0.5f));
+	set_color(Vector3f(0.0f, 0.0f, 0.5f));
 }
+
+/*void Character::draw() {
+	glBindTexture( GL_TEXTURE_2D, texture[0] );
+	Movable::draw();
+}*/

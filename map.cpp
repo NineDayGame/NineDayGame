@@ -140,7 +140,7 @@ void Map::randomize(int num_rooms)
 			}
 			else
 			{
-				set_data(x,y,'.',TCOD_dark_green,true,true);
+				set_data(x,y,'.',TCOD_white,true,true);
 			}
 		}
 	}
