@@ -35,7 +35,6 @@ public:
 	int height;
 	TCODMap* data;
 	ConsoleDisplay* display;
-	std::list<boost::shared_ptr<Entity> > entities;
 	
 	Map(int width, int height);
 	~Map();
@@ -49,9 +48,6 @@ public:
 
 	void randomize(int num_rooms);
 	void random_free_spot(int* x, int* y);
-
-	void add_entity(Entity* e);
-	void remove_entity(Entity* e);
 };
 
 #endif

@@ -32,9 +32,10 @@ void Map::draw(TCODConsole* console)
 			console->setFore(x,y,color);
 		}
 	}
-	foreach(Entity::ShPtr i,entities)
+	foreach(Container::ShPtr i,inventory)
 	{
-		i->draw(console);
+		Entity::ShPtr e = SCONVERT(Entity,Container,i);
+		e->draw(console);
 	}
 }
 
@@ -167,16 +168,4 @@ void Map::random_free_spot(int* x, int* y)
 		*x = rand->getInt(0,width-1);
 		*y = rand->getInt(0,height-1);
 	} while(!data->isWalkable(*x,*y));
-}
-
-void Map::add_entity(Entity* e)
-{
-	Entity::ShPtr p = SCONVERT(Entity,Container,e->shared_from_this());
-	entities.push_back(p);
-}
-
-void Map::remove_entity(Entity* e)
-{
-	Entity::ShPtr p = SCONVERT(Entity,Container,e->shared_from_this());
-	entities.remove(p);
 }

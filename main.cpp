@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
 
 		TCODColor color(rand->getInt(0,255),rand->getInt(0,255),rand->getInt(0,255));
 		Living::ShPtr e(new Living(Map::WkPtr(m),buf,x,y,'0'+i,color,3));
-		m->add_entity(e.get());
+		m->get(e);
 	}
 
 	for(int i = 0; i < 50; ++i)
@@ -56,16 +56,16 @@ int main(int argc, char* argv[])
 
 		//TCODColor color(rand->getInt(0,255),rand->getInt(0,255),rand->getInt(0,255));
 		Item::ShPtr e(new Item(Map::WkPtr(m),name,desc,x,y,'I',TCOD_green));
-		m->add_entity(e.get());
+		m->get(e);
 	}
 
-	Entity::ShPtr e = m->entities.front();
+	Entity::ShPtr e = SCONVERT(Entity,Container,m->inventory.front());
 	
-	std::list<Entity::ShPtr>::iterator i = m->entities.begin();
+	std::list<Container::ShPtr>::iterator i = m->inventory.begin();
 	std::list<Entity::ShPtr> follow;
 	for(int j = 0; j < 0; ++j)
 	{
-		follow.push_back(*(++i));
+		follow.push_back(SCONVERT(Entity,Container,*(++i)));
 	}
 	follow.push_front(e);
 

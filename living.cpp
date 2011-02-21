@@ -35,7 +35,7 @@ bool Living::move(int x, int y)
 			if(e != NULL && e->x == x && e->y == y)
 			{
 				get(e);
-				e->host_map.lock()->remove_entity(e.get());
+				e->host_map.lock()->remove(e);
 				cprintf("%s gets %s.",name.c_str(),e->name.c_str());
 			}
 		}
@@ -79,5 +79,5 @@ void Living::die(Entity* killer)
 
 	m->get_data(x,y,&c,&color,&trans,&walk);
 	m->set_data(x,y,c,TCOD_red,true,true);
-	m->remove_entity(this);
+	m->remove(this->shared_from_this());
 }

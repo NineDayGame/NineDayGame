@@ -53,11 +53,12 @@ void Entity::look()
 		}
 	}
 	seen.clear();
-	foreach(Entity::ShPtr i, host_map.lock()->entities)
+	foreach(Container::ShPtr i, host_map.lock()->inventory)
 	{
-		if(host_map.lock()->data->isInFov(i->x,i->y))
+		Entity::ShPtr e = SCONVERT(Entity,Container,i);
+		if(host_map.lock()->data->isInFov(e->x,e->y))
 		{
-			seen.push_back(i);
+			seen.push_back(e);
 		}
 	}
 }
