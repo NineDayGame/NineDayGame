@@ -45,7 +45,7 @@ int main(int argc, char* argv[])
 
 		TCODColor color(rand->getInt(0,255),rand->getInt(0,255),rand->getInt(0,255));
 		Living::ShPtr e(new Living(Map::WkPtr(m),buf,x,y,'0'+i,color,3));
-		m->add_entity(e);
+		m->add_entity(e.get());
 	}
 
 	for(int i = 0; i < 50; ++i)
@@ -59,7 +59,7 @@ int main(int argc, char* argv[])
 
 		//TCODColor color(rand->getInt(0,255),rand->getInt(0,255),rand->getInt(0,255));
 		Item::ShPtr e(new Item(Map::WkPtr(m),name,desc,x,y,'I',TCOD_green));
-		m->add_entity(e);
+		m->add_entity(e.get());
 	}
 
 	Entity::ShPtr e = m->entities.front();

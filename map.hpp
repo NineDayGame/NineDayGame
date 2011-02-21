@@ -4,10 +4,11 @@
 #include <boost/shared_ptr.hpp>
 #include <list>
 #include <libtcod.hpp>
+#include "container.hpp"
 
 class Entity;
 
-class Map
+class Map : public Container
 {
 private:
 	typedef struct
@@ -49,8 +50,8 @@ public:
 	void randomize(int num_rooms);
 	void random_free_spot(int* x, int* y);
 
-	void add_entity(boost::shared_ptr<Entity> e);
-	void remove_entity(boost::shared_ptr<Entity> e);
+	void add_entity(Entity* e);
+	void remove_entity(Entity* e);
 };
 
 #endif

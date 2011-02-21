@@ -34,11 +34,11 @@ bool Living::attack(Living::ShPtr e)
 	e->health--;
 	if(e->health <= 0)
 	{
-		e->die(this->shared_from_this());
+		e->die(this);
 	}
 }
 
-void Living::die(Entity::ShPtr killer)
+void Living::die(Entity* killer)
 {
 	cprintf("%s dies in a splatter of gore!",name.c_str());
 	
@@ -65,5 +65,5 @@ void Living::die(Entity::ShPtr killer)
 
 	m->get_data(x,y,&c,&color,&trans,&walk);
 	m->set_data(x,y,c,TCOD_red,true,true);
-	m->remove_entity(this->shared_from_this());
+	m->remove_entity(this);
 }

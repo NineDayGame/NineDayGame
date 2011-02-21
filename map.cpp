@@ -168,12 +168,14 @@ void Map::random_free_spot(int* x, int* y)
 	} while(!data->isWalkable(*x,*y));
 }
 
-void Map::add_entity(Entity::ShPtr e)
+void Map::add_entity(Entity* e)
 {
-	entities.push_back(e);
+	Entity::ShPtr p = boost::static_pointer_cast<Entity,Container>(e->shared_from_this());
+	entities.push_back(p);
 }
 
-void Map::remove_entity(Entity::ShPtr e)
+void Map::remove_entity(Entity* e)
 {
-	entities.remove(e);
+	Entity::ShPtr p = boost::static_pointer_cast<Entity,Container>(e->shared_from_this());
+	entities.remove(p);
 }
