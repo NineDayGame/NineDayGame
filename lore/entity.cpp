@@ -24,16 +24,17 @@ Entity::~Entity()
 
 bool Entity::move(int _x, int _y)
 {
-	if(host_map.lock()->data->isWalkable(_x,_y))
+	Map::ShPtr host = host_map.lock();
+	if(host->data->isWalkable(_x,_y))
 	{
-		bool transp = host_map.lock()->data->isTransparent(x,y);
-		bool transp2 = host_map.lock()->data->isTransparent(_x,_y);
-		host_map.lock()->data->setProperties(x,y,transp,true);
+		bool transp = host->data->isTransparent(x,y);
+		bool transp2 = host->data->isTransparent(_x,_y);
+		host->data->setProperties(x,y,transp,true);
 
 		x = _x;
 		y = _y;
 
-		host_map.lock()->data->setProperties(x,y,transp2,false);
+		host->data->setProperties(x,y,transp2,false);
 		return true;
 	}
 	return false;
@@ -41,22 +42,23 @@ bool Entity::move(int _x, int _y)
 
 void Entity::look()
 {
-	host_map.lock()->data->computeFov(x,y,sight_range,true,FOV_PERMISSIVE_5);
+	Map::ShPtr host = host_map.lock();
+	host->data->computeFov(x,y,sight_range,true,FOV_PERMISSIVE_5);
 	for(int i = -sight_range; i < sight_range; ++i)
 	{
 		for(int j = -sight_range; j < sight_range; ++j)
 		{
-			if(host_map.lock()->data->isInFov(x+i,y+j))
+			if(host->data->isInFov(x+i,y+j))
 			{
-				host_map.lock()->copy_data(known_map,x+i,y+j);
+				host->copy_data(known_map,x+i,y+j);
 			}
 		}
 	}
 	seen.clear();
-	foreach(Container::ShPtr i, host_map.lock()->inventory)
+	foreach(Container::ShPtr i, host->inventory)
 	{
 		Entity::ShPtr e = SCONVERT(Entity,Container,i);
-		if(host_map.lock()->data->isInFov(e->x,e->y))
+		if(host->data->isInFov(e->x,e->y))
 		{
 			seen.push_back(e);
 		}
