@@ -1,4 +1,3 @@
-echo $SHELL >&2
 for file in *.cpp; do
 	DEPS="$DEPS ${file%.cpp}.o ";
 done
