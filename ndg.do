@@ -1,5 +1,6 @@
+echo $SHELL >&2
 for file in *.cpp; do
-	DEPS+=${file%.cpp}.o" ";
+	DEPS="$DEPS ${file%.cpp}.o ";
 done
 
 redo-ifchange $DEPS
