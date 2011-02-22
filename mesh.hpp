@@ -21,6 +21,7 @@ public:
 
 protected:
 	std::vector<Vector3f> verticies_;
+	std::vector<Vector3f> normals_;
 	std::vector<Vector2f> tex_coords_;
 
 private:	

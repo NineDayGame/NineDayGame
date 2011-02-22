@@ -11,6 +11,7 @@
 #include "block.hpp"
 #include "player.hpp"
 #include "glrenderer.hpp"
+#include "vector4f.hpp"
 
 //Screen attributes
 const int SCREEN_WIDTH = 1024;
@@ -21,7 +22,9 @@ const int SCREEN_BPP = 32;
 const int FRAMES_PER_SECOND = 60;
 
 GlRenderer::GlRenderer()
-  : cameraX_(0.0f), cameraY_(0.0f), cameraZ_(-60.0f) {
+  : cameraX_(0.0f), cameraY_(0.0f), cameraZ_(-60.0f),
+    lightX_(0.0f), lightY_(0.0f), lightZ_(0.0f),
+    lights_(true), wireframes_(false) {
 	init();
 }
 
@@ -56,7 +59,11 @@ void GlRenderer::init_gl() {
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
     glEnable(GL_TEXTURE_2D);
+    glEnable(GL_COLOR_MATERIAL);
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+
+	glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -101,7 +108,7 @@ void GlRenderer::load_map(const Map& map) {
 						blk->set_position((float)x, (float)y, (float)i);
 						if (i < 2) {
 							TCODColor c = map.display[x+y*map.width].color;
-							blk->set_texture(texture[0]);
+							//blk->set_texture(texture[0]);
 							blk->set_color(Vector3f((c.r/255.0f), (c.g/255.0f), (c.b/255.0f)));
 						}
 						movables_.push_back(blk);
@@ -132,14 +139,23 @@ void GlRenderer::render() {
 	glLoadIdentity();
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
+	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+	glEnableClientState(GL_NORMAL_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY_EXT);
-	//glPolygonMode(GL_FRONT, GL_LINE);
-	//glPolygonMode(GL_BACK, GL_LINE);
+
+	GLfloat ambient[] = {0.2f, 0.2f, 0.2f, 1.0f};
+	GLfloat diffuse[] = {1.0f, 0.9f, 0.7f, 1.0f};
+	GLfloat pos[] = {lightX_, lightY_, lightZ_, 1.0f};
+	//GLfloat pos[] = {cameraX_, cameraY_, cameraZ_, 1.0f};
 
 	//glTranslatef(0.0f, -40.0f, -40.0f);
 	glTranslatef(cameraX_, cameraY_, cameraZ_);
 	glRotatef(45.0f, 0.0f, 0.0f, 1.0f);
 	glRotatef(45.0f, -1.0f, 1.0f, 0.0f);
+	
+	glLightfv( GL_LIGHT0, GL_AMBIENT, ambient);
+    glLightfv( GL_LIGHT0, GL_DIFFUSE, diffuse);
+    glLightfv( GL_LIGHT0, GL_POSITION, pos);
 
 	for (int i = 0; i < movables_.size(); ++i) {
 		movables_.at(i)->draw();
@@ -167,7 +183,7 @@ void GlRenderer::load_textures() {
 
 	//if ((textureImage[0] = SDL_LoadBMP( "default.bmp" ))) {
 		textureImage[0] = SDL_LoadBMP( "default.bmp" );
-		textureImage[1] = SDL_LoadBMP( "stone2.bmp" );
+		textureImage[1] = SDL_LoadBMP( "stone3.bmp" );
 		
 		glGenTextures( 2, &texture[0] );
 		
@@ -228,6 +244,26 @@ void GlRenderer::take_screenshot(std::string filename) {
 	SDL_FreeSurface(temp);
 }
 
+void GlRenderer::toggle_lighting() {
+	if (lights_) {
+		glDisable(GL_LIGHTING);
+	} else {
+		glEnable(GL_LIGHTING);
+	}
+	lights_ = !lights_;
+}
+
+void GlRenderer::toggle_wireframes() {
+	if (wireframes_) {
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	} else {
+		glPolygonMode(GL_FRONT, GL_POINT);
+		glPolygonMode(GL_BACK, GL_LINE);
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	}
+	wireframes_ = !wireframes_;
+}
+
 void GlRenderer::update() {
 }
 
@@ -236,6 +272,10 @@ void GlRenderer::set_player(float x, float y) {
 	cameraX_ = -0.5f*x + 0.5f*y;
 	cameraY_ = -0.5f*x + -0.5f*y;
 	cameraZ_ = -30.0f + 0.4f*x + 0.4f*y;
+	
+	lightX_ = x;
+	lightY_ = y;
+	lightZ_ = 1.0f;
 	
 	player_->set_position(x, y, 1.0f);
 }

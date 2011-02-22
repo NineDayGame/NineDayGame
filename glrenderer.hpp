@@ -30,6 +30,8 @@ public:
 	void load_mobs(std::list<Entity::WkPtr> mobs);
 	void load_textures();
 	void take_screenshot(std::string filename);
+	void toggle_lighting();
+	void toggle_wireframes();
 	void update();
 	void set_player(float x, float y);
 	void render();
@@ -40,7 +42,9 @@ private:
 	Player::ShPtr player_;
 	SDL_Surface* sdlSurface_;
 	float cameraX_, cameraY_, cameraZ_;
+	float lightX_, lightY_, lightZ_;
 	boost::shared_array<unsigned int> texture;
+	bool lights_, wireframes_;
 	
 	DISALLOW_COPY_AND_ASSIGN(GlRenderer);
 };

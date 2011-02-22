@@ -83,16 +83,23 @@ int main(int argc, char* argv[])
 						case SDLK_LEFT: e->move(e->x-1, e->y); e->look(); break;
 						case SDLK_RIGHT: e->move(e->x+1, e->y); e->look(); break;
 						case SDLK_F1: glr->enable_fullscreen(); break;
+						case SDLK_F2: glr->toggle_lighting(); break;
+						case SDLK_F3: glr->toggle_wireframes(); break;
 						case SDLK_F12: glr->take_screenshot(std::string("screenshot.bmp")); break;
 						/*case SDLK_UP: glr->set_player(0.0f, 1.0f); break;
 						case SDLK_DOWN: glr->set_player(0.0f, -1.0f); break;
 						case SDLK_LEFT: glr->set_player(1.0f, 0.0f); break;
 						case SDLK_RIGHT: glr->set_player(-1.0f, 0.0f); break;*/
 					}
-					//std::string filename = std::string("screenshot");
-					//filename += boost::lexical_cast<std::string>(ssc++);
-					//filename += ".bmp";
-					//glr->take_screenshot(filename);
+					/*std::string filename = std::string("screenshot");
+					if (ssc < 100) {
+						filename += "0";
+					} else if (ssc < 10) {
+						filename += "00";
+					}
+					filename += boost::lexical_cast<std::string>(ssc++);
+					filename += ".bmp";
+					glr->take_screenshot(filename);*/
 				}
 				
 				if ( event.type == SDL_QUIT ) {
