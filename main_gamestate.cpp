@@ -29,7 +29,7 @@ void MainGameState::handle_key_press(TCOD_key_t key)
 	}
 	if(key.c == 'm')
 	{
-		Menu::ShPtr c = Menu::ShPtr(new Menu(this->shared_from_this(),10,10,20,20));
+		Menu::ShPtr c = InventoryMenu::ShPtr(new InventoryMenu(this->shared_from_this(),10,10,20,20));
 		GameState::state = c;
 	}
 }
