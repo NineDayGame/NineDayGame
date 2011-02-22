@@ -7,7 +7,7 @@
 #include "SDL/SDL.h"
 #include "SDL/SDL_opengl.h"
 
-#include "basetypes.hpp"
+#include "util.hpp"
 #include "vector2f.hpp"
 #include "vector3f.hpp"
 

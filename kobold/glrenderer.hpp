@@ -10,7 +10,7 @@
 #include "SDL/SDL.h"
 #include "SDL/SDL_opengl.h"
 
-#include "basetypes.hpp"
+#include "util.hpp"
 #include "character.hpp"
 #include "entity.hpp"
 #include "map.hpp"

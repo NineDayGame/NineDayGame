@@ -177,8 +177,8 @@ void GlRenderer::load_textures() {
 	SDL_Surface *textureImage[2]; 
 
 	//if ((textureImage[0] = SDL_LoadBMP( "default.bmp" ))) {
-		textureImage[0] = SDL_LoadBMP( "default.bmp" );
-		textureImage[1] = SDL_LoadBMP( "stone3.bmp" );
+		textureImage[0] = SDL_LoadBMP( "resources/default.bmp" );
+		textureImage[1] = SDL_LoadBMP( "resources/stone3.bmp" );
 		
 		glGenTextures( 2, &texture[0] );
 		
