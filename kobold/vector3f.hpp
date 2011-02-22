@@ -3,7 +3,7 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include "basetypes.hpp"
+#include "util.hpp"
 
 // Basic object for representing a vertex in 3 dimensions
 class Vector3f {

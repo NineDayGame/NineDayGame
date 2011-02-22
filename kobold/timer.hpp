@@ -6,7 +6,7 @@
 #include "SDL/SDL.h"
 #include "SDL/SDL_opengl.h"
 
-#include "basetypes.hpp"
+#include "util.hpp"
 
 class Timer {
 public:

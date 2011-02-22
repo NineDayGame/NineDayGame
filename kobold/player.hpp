@@ -3,7 +3,7 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include "basetypes.hpp"
+#include "util.hpp"
 #include "movable.hpp"
 
 class Player : public Movable {

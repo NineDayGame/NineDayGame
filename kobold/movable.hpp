@@ -4,7 +4,7 @@
 #include <boost/shared_ptr.hpp>
 #include <vector>
 
-#include "basetypes.hpp"
+#include "util.hpp"
 #include "cube.hpp"
 
 #include "mesh.hpp"

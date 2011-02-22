@@ -1,7 +1,7 @@
 redo-ifchange $1.cpp
 
 CFLAGS=""
-INCLUDE="-I./libtcod-1.5.0/include"
+INCLUDE="-I./libraries/libtcod-1.5.0/include -I./lore -I./kobold -I./goblin"
 
 g++ $CFLAGS $INCLUDE -MD -MF $3.deps.tmp -c -o $3 $1.cpp
 
