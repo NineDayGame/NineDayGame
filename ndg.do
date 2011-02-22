@@ -1,4 +1,3 @@
-#DEPS="main.o map.o block.o camera.o character.o container.o cube.o entity.o glrenderer.o item.o living.o movable.o mesh.o menu.o main_gamestate.o player.o timer.o vector3f.o vector2f.o util.o menuitem.o"
 for file in *.cpp; do
 	DEPS+=${file%.cpp}.o" ";
 done
