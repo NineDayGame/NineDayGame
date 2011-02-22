@@ -11,7 +11,6 @@
 #include "block.hpp"
 #include "player.hpp"
 #include "glrenderer.hpp"
-#include "vector4f.hpp"
 
 //Screen attributes
 const int SCREEN_WIDTH = 1024;
