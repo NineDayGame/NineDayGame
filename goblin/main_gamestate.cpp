@@ -2,6 +2,7 @@
 #include "menu.hpp"
 #include "item.hpp"
 #include "util.hpp"
+#include "inventory_menu.hpp"
 
 GameState::ShPtr GameState::state = GameState::ShPtr();
 

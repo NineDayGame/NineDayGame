@@ -3,6 +3,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <libtcod.hpp>
+#include <vector>
 #include <string>
 #include "gamestate.hpp"
 
@@ -17,6 +18,8 @@ public:
 	std::string text;
 	TCODColor color;
 	bool selected;
+
+	std::vector<boost::shared_ptr<void> > args;
 	
 	MenuItem::Operation on_choose;
 
