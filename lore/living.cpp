@@ -59,14 +59,17 @@ void Living::die(Entity* killer)
 	Map::ShPtr m = host_map.lock();
 
 	double angle = atan2((y-killer->y),(x-killer->x));
-	int radius = 5;
+
+	TCODRandom* rand = TCODRandom::getInstance();
+	int radius = rand->getInt(0,6);
 
 	char c;
 	TCODColor color;
 	bool trans;
 	bool walk;
-	
-	for(double a = -3.14/4+angle; a < 3.14/4+angle; a += 0.1)
+
+	int splatter_range = rand->getInt(1,6);
+	for(double a = (-3.14/splatter_range)+angle; a < (3.14/splatter_range)+angle; a += 0.1)
 	{
 		for(int i = 0; i < radius; ++i)
 		{
