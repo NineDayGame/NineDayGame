@@ -81,10 +81,6 @@ void GlRenderer::init_gl() {
     player_->set_texture(texture[0]);
 }
 
-void GlRenderer::enable_fullscreen() {
-	SDL_WM_ToggleFullScreen( sdlSurface_ );
-}
-
 void GlRenderer::load_map(const Map& map) {
 	
 	movables_.clear();
@@ -243,6 +239,10 @@ void GlRenderer::take_screenshot(std::string filename) {
 	SDL_FreeSurface(temp);
 }
 
+void GlRenderer::toggle_fullscreen() {
+	SDL_WM_ToggleFullScreen( sdlSurface_ );
+}
+
 void GlRenderer::toggle_lighting() {
 	if (lights_) {
 		glDisable(GL_LIGHTING);
@@ -256,9 +256,9 @@ void GlRenderer::toggle_wireframes() {
 	if (wireframes_) {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	} else {
-		glPolygonMode(GL_FRONT, GL_POINT);
-		glPolygonMode(GL_BACK, GL_LINE);
-		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		//glPolygonMode(GL_FRONT, GL_POINT);
+		//glPolygonMode(GL_BACK, GL_LINE);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
 	wireframes_ = !wireframes_;
 }

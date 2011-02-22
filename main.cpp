@@ -7,19 +7,16 @@
 #include "block.hpp"
 #include "entity.hpp"
 #include "living.hpp"
-#include "glrenderer.hpp"
 #include "map.hpp"
 #include "vector3f.hpp"
 #include "camera.hpp"
 #include "item.hpp"
 #include "menu.hpp"
 #include "util.hpp"
-#include <boost/lexical_cast.hpp>
+#include "renderman.hpp"
+#include "inputman.hpp"
 
 #include "main_gamestate.hpp"
-
-//Event handler
-SDL_Event event;
 
 void clean_up()
 {
@@ -65,53 +62,18 @@ int main(int argc, char* argv[])
 	Entity::ShPtr e = SCONVERT(Entity,Container,m->inventory.front());
 	
 	if (argc==1) {		
-		int ssc = 0;
 		bool quit = false;
 
-		GlRenderer::ShPtr glr (new GlRenderer());
-		//glr->load_map(*(e->known_map));
-		e->look();
+		RenderMan::ShPtr renderman (new RenderMan());
+		renderman->set_entity(e);
+		InputMan::ShPtr inputman (new InputMan());
+		inputman->set_renderman(renderman);
+		inputman->set_entity(e);
 
 		while( quit == false )
 		{
-			while ( SDL_PollEvent( &event ) ) {
-				if( event.type == SDL_KEYDOWN ) {
-					switch( event.key.keysym.sym )
-					{
-						case SDLK_UP: e->move(e->x, e->y+1); e->look(); break;
-						case SDLK_DOWN: e->move(e->x, e->y-1); e->look(); break;
-						case SDLK_LEFT: e->move(e->x-1, e->y); e->look(); break;
-						case SDLK_RIGHT: e->move(e->x+1, e->y); e->look(); break;
-						case SDLK_F1: glr->enable_fullscreen(); break;
-						case SDLK_F2: glr->toggle_lighting(); break;
-						case SDLK_F3: glr->toggle_wireframes(); break;
-						case SDLK_F12: glr->take_screenshot(std::string("screenshot.bmp")); break;
-						/*case SDLK_UP: glr->set_player(0.0f, 1.0f); break;
-						case SDLK_DOWN: glr->set_player(0.0f, -1.0f); break;
-						case SDLK_LEFT: glr->set_player(1.0f, 0.0f); break;
-						case SDLK_RIGHT: glr->set_player(-1.0f, 0.0f); break;*/
-					}
-					/*std::string filename = std::string("screenshot");
-					if (ssc < 100) {
-						filename += "0";
-					} else if (ssc < 10) {
-						filename += "00";
-					}
-					filename += boost::lexical_cast<std::string>(ssc++);
-					filename += ".bmp";
-					glr->take_screenshot(filename);*/
-				}
-				
-				if ( event.type == SDL_QUIT ) {
-					quit = true;
-				}
-			}
-			
-			//glr->load_map(*m);
-			glr->load_map(*(e->known_map));
-			glr->load_mobs(e->seen);
-			glr->set_player((float)e->x, (float)e->y);
-			glr->render();
+			quit = inputman->read_input();
+			renderman->draw_frame();
 		}
 
 		clean_up();
