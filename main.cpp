@@ -36,26 +36,18 @@ int main(int argc, char* argv[])
 	for(int i = 0; i < 50; ++i)
 	{
 		char buf[32];
-		int x,y;
-		m->random_free_spot(&x,&y);
-		sprintf(buf,"Entity %d",i);
-
-		TCODColor color(rand->getInt(0,255),rand->getInt(0,255),rand->getInt(0,255));
-		Living::ShPtr e(new Living(Map::WkPtr(m),buf,x,y,'0'+i,color,3));
-		m->get(e);
-	}
-
-	for(int i = 0; i < 50; ++i)
-	{
 		char name[32];
 		char desc[32];
 		int x,y;
 		m->random_free_spot(&x,&y);
+		sprintf(buf,"Entity %d",i);
 		sprintf(name,"Item %d",i);
 		sprintf(desc,"A shiny item.");
 
-		//TCODColor color(rand->getInt(0,255),rand->getInt(0,255),rand->getInt(0,255));
-		Item::ShPtr e(new Item(Map::WkPtr(m),name,desc,x,y,'I',TCOD_green));
+		TCODColor color(rand->getInt(0,255),rand->getInt(0,255),rand->getInt(0,255));
+		Living::ShPtr e(new Living(Map::WkPtr(m),buf,x,y,'0'+i,color,3));
+		Item::ShPtr i(new Item(Map::WkPtr(m),name,desc,x,y,'I',TCOD_green));
+		e->get(i);
 		m->get(e);
 	}
 

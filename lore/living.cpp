@@ -15,7 +15,7 @@ Living::~Living()
 }
 
 bool Living::move(int x, int y)
-{	
+{
 	if(!Entity::move(x,y))
 	{
 		foreach(Entity::WkPtr w, seen)
@@ -56,10 +56,9 @@ void Living::die(Entity* killer)
 {
 	cprintf("%s dies in a splatter of gore!",name.c_str());
 	
-	Map::ShPtr m = host_map.lock();
+	Map::ShPtr m = SCONVERT(Map,Container,container.lock());
 
 	double angle = atan2((y-killer->y),(x-killer->x));
-
 	TCODRandom* rand = TCODRandom::getInstance();
 	int radius = rand->getInt(0,6);
 
@@ -78,6 +77,14 @@ void Living::die(Entity* killer)
 			m->get_data(sx,sy,&c,&color,&trans,&walk);
 			m->set_data(sx,sy,c,TCOD_red,trans,walk);
 		}
+	}
+
+	foreach(Container::ShPtr c, inventory)
+	{
+		Item::ShPtr i = SCONVERT(Item,Container,c);
+		i->x = x;
+		i->y = y;
+		m->get(i);
 	}
 
 	m->get_data(x,y,&c,&color,&trans,&walk);
