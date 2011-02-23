@@ -40,23 +40,4 @@ void InventoryMenu::init()
 void InventoryMenu::handle_key_press(TCOD_key_t key)
 {
 	Menu::handle_key_press(key);
-	if(key.vk == TCODK_ENTER)
-	{
-		foreach(MenuItem::ShPtr mi, menu_items)
-		{
-			if(mi->selected) { mi->choose(this->shared_from_this()); break; }
-		}
-	}
-	if(key.vk == TCODK_UP)
-	{
-		menu_items.at(selected_index)->unselect();
-		selected_index = (selected_index-1)%menu_items.size();
-		menu_items.at(selected_index)->select();
-	}
-	if(key.vk == TCODK_DOWN)
-	{
-		menu_items.at(selected_index)->unselect();
-		selected_index = (selected_index+1)%menu_items.size();
-		menu_items.at(selected_index)->select();
-	}
 }

@@ -35,9 +35,23 @@ void Menu::draw(TCODConsole* console)
 void Menu::handle_key_press(TCOD_key_t key)
 {
 	if(key.vk == TCODK_ESCAPE) { GameState::state = parent; }
-	if(key.vk == TCODK_SPACE)
+	if(key.vk == TCODK_ENTER || key.vk == TCODK_KPENTER)
 	{
-		Menu::ShPtr c = Menu::ShPtr(new Menu(this->shared_from_this(),30,10,20,20));
-		GameState::state = c;
+		foreach(MenuItem::ShPtr mi, menu_items)
+		{
+			if(mi->selected) { mi->choose(this->shared_from_this()); break; }
+		}
+	}
+	if(key.vk == TCODK_UP || key.vk == TCODK_KP8)
+	{
+		menu_items.at(selected_index)->unselect();
+		selected_index = (selected_index-1)%menu_items.size();
+		menu_items.at(selected_index)->select();
+	}
+	if(key.vk == TCODK_DOWN || key.vk == TCODK_KP2)
+	{
+		menu_items.at(selected_index)->unselect();
+		selected_index = (selected_index+1)%menu_items.size();
+		menu_items.at(selected_index)->select();
 	}
 }
