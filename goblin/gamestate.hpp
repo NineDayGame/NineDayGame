@@ -19,6 +19,9 @@ public:
 
 	virtual void handle_key_press(TCOD_key_t key) = 0;
 	virtual void draw(TCODConsole* console) { if(parent) parent->draw(console); }
+
+protected:
+	GameState::ShPtr get_first_parent() { if(parent) return parent->get_first_parent(); return this->shared_from_this(); }
 };
 
 #endif

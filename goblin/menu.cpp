@@ -1,7 +1,12 @@
 #include "menu.hpp"
+#include "util.hpp"
 
-Menu::Menu(GameState::ShPtr p, int sx, int sy, int w, int h) : GameState(p), screen_x(sx), screen_y(sy), width(w), height(h), selected_index(0) {}
+Menu::Menu(GameState::ShPtr p, int sx, int sy, int w, int h) : GameState(p), screen_x(sx), screen_y(sy), width(w), height(h), selected_index(0)
+{
+}
 Menu::~Menu() {}
+
+void Menu::init() {}
 
 void Menu::draw(TCODConsole* console)
 {
@@ -20,6 +25,10 @@ void Menu::draw(TCODConsole* console)
 		console->setFore(screen_x,y,TCOD_white);
 		console->setChar(screen_x+width-1,y,'#');
 		console->setFore(screen_x+width-1,y,TCOD_white);
+	}
+	foreach(MenuItem::ShPtr mi, menu_items)
+	{
+		mi->draw(console);
 	}
 }
 

@@ -3,39 +3,40 @@
 #include "item.hpp"
 #include "util.hpp"
 #include "main_gamestate.hpp"
+#include "whattodo_menu.hpp"
 
-static void foo(GameState::ShPtr m, MenuItem* me)
+static void create_what_to_do(GameState::ShPtr m, MenuItem* me)
 {
-	Item::ShPtr i = SCONVERT(Item,void,me->args.at(0));
-	cprintf("The %s is %s.",i->name.c_str(),i->description.c_str());
+	Entity::ShPtr e = SCONVERT(Entity,void,me->args.at(0));
+	Item::ShPtr i = SCONVERT(Item,void,me->args.at(1));
+	InventoryMenu::ShPtr im = DCONVERT(InventoryMenu,GameState,m);
+	WhatToDoMenu::ShPtr wtd(new WhatToDoMenu(im,im->screen_x+im->width,im->screen_y,10,im->height));
+	wtd->init(e,i);
+	GameState::state = wtd;
 }
 
 InventoryMenu::InventoryMenu(GameState::ShPtr parent, int sx, int sy, int w, int h) : Menu(parent,sx,sy,w,h)
 {
-	MainGameState::ShPtr m = SCONVERT(MainGameState,GameState,parent);
+}
+InventoryMenu::~InventoryMenu() {}
+
+void InventoryMenu::init()
+{
+	MainGameState::ShPtr m = SCONVERT(MainGameState,GameState,get_first_parent());
 	Entity::ShPtr e = m->player;
 	int i = 1;
 	foreach(Container::ShPtr c, e->inventory)
 	{
 		Item::ShPtr item = SCONVERT(Item,Container,c);
-		MenuItem::ShPtr mi(new MenuItem(screen_x+1,screen_y+i,item->name,TCOD_white,&foo));
+		MenuItem::ShPtr mi(new MenuItem(screen_x+1,screen_y+i,item->name,TCOD_white,&create_what_to_do));
+		mi->args.push_back(e);
 		mi->args.push_back(item);
 		menu_items.push_back(mi);
 		++i;
 	}
 	menu_items.at(selected_index)->select();
 }
-InventoryMenu::~InventoryMenu() {}
-	
-void InventoryMenu::draw(TCODConsole* console)
-{
-	Menu::draw(console);
-	foreach(MenuItem::ShPtr mi, menu_items)
-	{
-		mi->draw(console);
-	}
-	
-}
+
 void InventoryMenu::handle_key_press(TCOD_key_t key)
 {
 	Menu::handle_key_press(key);

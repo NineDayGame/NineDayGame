@@ -28,9 +28,10 @@ void MainGameState::handle_key_press(TCOD_key_t key)
 			Item::ShPtr i = SCONVERT(Item,Container,c); cprintf("%s",i->name.c_str());
 		}
 	}
-	if(key.c == 'm')
+	if(key.c == 'i')
 	{
-		Menu::ShPtr c = InventoryMenu::ShPtr(new InventoryMenu(this->shared_from_this(),10,10,20,20));
+		Menu::ShPtr c = InventoryMenu::ShPtr(new InventoryMenu(this->shared_from_this(),5,25,20,20));
+		c->init();
 		GameState::state = c;
 	}
 }

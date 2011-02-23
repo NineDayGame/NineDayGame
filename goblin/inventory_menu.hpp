@@ -10,8 +10,8 @@ public:
 
 	InventoryMenu(GameState::ShPtr parent, int sx, int sy, int w, int h);
 	virtual ~InventoryMenu();
-	
-	virtual void draw(TCODConsole* console);
+
+	virtual void init();
 	virtual void handle_key_press(TCOD_key_t key);
 };
 
