@@ -63,6 +63,8 @@ void GlRenderer::init_gl() {
 
 	glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
+    GLfloat ambient[] = {0.0f, 0.0f, 0.0f, 1.0f};
+    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambient);
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -79,6 +81,16 @@ void GlRenderer::init_gl() {
     load_textures();
     player_.reset(new Player());
     player_->set_texture(texture[0]);
+    Light::ShPtr plight = player_->get_light();
+    Vector4f::ShPtr amb (new Vector4f(0.08f, 0.08f, 0.08f, 1.0f));
+    plight->set_ambient(amb);
+    Vector4f::ShPtr diff (new Vector4f(1.0f, 0.9f, 0.7f, 1.0f));
+    plight->set_diffuse(diff);
+    plight->set_attenuation_constant(0.5f);
+    plight->set_attenuation_linear(0.01f);
+    plight->set_attenuation_quadratic(0.01f);
+    //GLfloat ambient[] = {0.08f, 0.08f, 0.08f, 1.0f};
+	//GLfloat diffuse[] = {1.0f, 0.9f, 0.7f, 1.0f};
 }
 
 void GlRenderer::load_map(const Map& map) {
@@ -138,8 +150,8 @@ void GlRenderer::render() {
 	glEnableClientState(GL_NORMAL_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY_EXT);
 
-	GLfloat ambient[] = {0.2f, 0.2f, 0.2f, 1.0f};
-	GLfloat diffuse[] = {1.0f, 0.9f, 0.7f, 1.0f};
+	//GLfloat ambient[] = {0.08f, 0.08f, 0.08f, 1.0f};
+	//GLfloat diffuse[] = {1.0f, 0.9f, 0.7f, 1.0f};
 	GLfloat pos[] = {lightX_, lightY_, lightZ_, 1.0f};
 	//GLfloat pos[] = {cameraX_, cameraY_, cameraZ_, 1.0f};
 
@@ -148,9 +160,7 @@ void GlRenderer::render() {
 	glRotatef(45.0f, 0.0f, 0.0f, 1.0f);
 	glRotatef(45.0f, -1.0f, 1.0f, 0.0f);
 	
-	glLightfv( GL_LIGHT0, GL_AMBIENT, ambient);
-    glLightfv( GL_LIGHT0, GL_DIFFUSE, diffuse);
-    glLightfv( GL_LIGHT0, GL_POSITION, pos);
+	set_light(GL_LIGHT0, player_->get_light());
 
 	for (int i = 0; i < movables_.size(); ++i) {
 		movables_.at(i)->draw();
@@ -198,6 +208,39 @@ void GlRenderer::load_textures() {
     if (textureImage[0]) {
 	    SDL_FreeSurface(textureImage[0]);
 	}
+}
+
+void GlRenderer::set_light(int index, Light::ShPtr light) {
+	
+	Vector4f::ShPtr v4f = light->get_ambient();
+	GLfloat lightVals[4] = {v4f->w, v4f->x, v4f->y, v4f->z};
+	glLightfv(index, GL_AMBIENT, lightVals);
+    
+    v4f = light->get_diffuse();
+    lightVals[0] = v4f->w;
+    lightVals[1] = v4f->x;
+    lightVals[2] = v4f->y;
+    lightVals[3] = v4f->z;
+    glLightfv(index, GL_DIFFUSE, lightVals);
+    
+    v4f = light->get_specular();
+    lightVals[0] = v4f->w;
+    lightVals[1] = v4f->x;
+    lightVals[2] = v4f->y;
+    lightVals[3] = v4f->z;
+    glLightfv(index, GL_SPECULAR, lightVals);
+
+    Vector3f::ShPtr v3f = light->get_position();
+    lightVals[0] = v3f->x_;
+    lightVals[1] = v3f->y_;
+    lightVals[2] = v3f->z_;
+    lightVals[3] = 1.0f;
+    glLightfv(index, GL_POSITION, lightVals);
+    //std::cout << "Setting light pos: " << lightVals[0] << ", " << lightVals[1] << ", " << lightVals[2];
+    
+    glLightf(index, GL_CONSTANT_ATTENUATION, light->get_attenuation_constant());
+    glLightf(index, GL_LINEAR_ATTENUATION, light->get_attenuation_linear());
+	glLightf(index, GL_QUADRATIC_ATTENUATION, light->get_attenuation_quadratic());
 }
 
 void GlRenderer::take_screenshot(std::string filename) {

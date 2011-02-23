@@ -3,8 +3,9 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include "util.hpp"
 #include "movable.hpp"
+#include "light.hpp"
+#include "util.hpp"
 
 class Player : public Movable {
 public:
@@ -12,8 +13,11 @@ public:
 
 	Player();
 	void init();
+	void set_position(float x, float y, float z);
+	Light::ShPtr get_light();
 
 private:
+	Light::ShPtr light_;
 	DISALLOW_COPY_AND_ASSIGN(Player);
 };
 
