@@ -10,9 +10,9 @@ class Vector4f {
 public: 
 	typedef boost::shared_ptr<Vector4f> ShPtr;
   
-	float w_, x_, y_, z_;
+	float w, x, y, z;
   
-	Vector4f(float, float, float, float);
+	Vector4f(float wi, float xi, float yi, float zi);
   
 private:
 	//DISALLOW_COPY_AND_ASSIGN(Vector4f);

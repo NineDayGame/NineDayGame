@@ -28,6 +28,7 @@ public:
 	void load_map(const Map& map);
 	void load_mobs(std::list<Entity::WkPtr> mobs);
 	void load_textures();
+	void set_light(int index, Light::ShPtr light);
 	void take_screenshot(std::string filename);
 	void toggle_fullscreen();
 	void toggle_lighting();

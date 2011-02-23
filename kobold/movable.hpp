@@ -19,7 +19,7 @@ public:
 	virtual void draw();
 	void update();
 	void set_color(Vector3f color);
-	void set_position(float x, float y, float z);
+	virtual void set_position(float x, float y, float z);
 	void set_rotation(float a, float b, float c);
 	void set_scale3f(float x, float y, float z);
 	void set_texture(unsigned int t);

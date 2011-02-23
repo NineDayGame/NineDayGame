@@ -1,8 +1,8 @@
 #include "vector4f.hpp"
 
-Vector4f::Vector4f(float w, float x, float y, float z)
-    : w_(w),
-      x_(x),
-      y_(y),
-      z_(z) {
+Vector4f::Vector4f(float wi, float xi, float yi, float zi)
+    : w(wi),
+      x(xi),
+      y(yi),
+      z(zi) {
 }
