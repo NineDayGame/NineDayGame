@@ -10,9 +10,11 @@ class Vector3f {
 public: 
 	typedef boost::shared_ptr<Vector3f> ShPtr;
   
-	float x_, y_, z_;
-  
-	Vector3f(float, float, float);
+	float x, y, z;
+
+	Vector3f(float xi, float yi, float zi);
+	float length() const;
+	float distance(const Vector3f& rhs) const;
   
 private:
 	//DISALLOW_COPY_AND_ASSIGN(Vector3f);

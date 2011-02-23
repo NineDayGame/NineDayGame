@@ -18,6 +18,7 @@ public:
 	//virtual void init();
 	virtual void draw();
 	void update();
+	const Vector3f::ShPtr get_position() const;
 	void set_color(Vector3f color);
 	virtual void set_position(float x, float y, float z);
 	void set_rotation(float a, float b, float c);

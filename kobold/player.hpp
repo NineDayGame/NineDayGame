@@ -14,10 +14,13 @@ public:
 	Player();
 	void init();
 	void set_position(float x, float y, float z);
+	const float get_sight_radius() const;
+	void set_sight_radius(float r);
 	Light::ShPtr get_light();
 
 private:
 	Light::ShPtr light_;
+	float sight_radius_;
 	DISALLOW_COPY_AND_ASSIGN(Player);
 };
 

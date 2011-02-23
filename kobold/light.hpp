@@ -12,27 +12,26 @@
 class Light {
 public:
 	typedef boost::shared_ptr<Light> ShPtr;
+	//static const Light NO_LIGHT;
 	
-	float get_attenuation_constant();
-	float get_attenuation_linear();
-	float get_attenuation_quadratic();
-	
-	Vector3f::ShPtr get_position();
-	Vector4f::ShPtr get_ambient();
-	Vector4f::ShPtr get_diffuse();
-	Vector4f::ShPtr get_specular();
-	
-	void set_attenuation_constant(float c);
-	void set_attenuation_linear(float l);
-	void set_attenuation_quadratic(float q);
-	
-	void set_position(Vector3f::ShPtr pos);
-	void set_ambient(Vector4f::ShPtr ambient);
-	void set_diffuse(Vector4f::ShPtr linear);
-	void set_specular(Vector4f::ShPtr spec);
-
 	Light();
 	void init();
+	
+	const float get_attenuation_constant() const;
+	void set_attenuation_constant(float c);
+	const float get_attenuation_linear() const;
+	void set_attenuation_linear(float l);
+	const float get_attenuation_quadratic() const;
+	void set_attenuation_quadratic(float q);
+	
+	const Vector3f::ShPtr get_position() const;
+	void set_position(Vector3f::ShPtr pos);
+	const Vector4f::ShPtr get_ambient() const;
+	void set_ambient(Vector4f::ShPtr ambient);
+	const Vector4f::ShPtr get_diffuse() const;
+	void set_diffuse(Vector4f::ShPtr linear);
+	const Vector4f::ShPtr get_specular() const;
+	void set_specular(Vector4f::ShPtr spec);
 
 private:
 

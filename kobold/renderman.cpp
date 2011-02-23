@@ -22,6 +22,7 @@ void RenderMan::set_entity(Entity::ShPtr entity) {
 	e_ = entity;
 	//renderer_->load_map(*(e->known_map));
 	e_->look();
+	renderer_->set_sight_radius(e_->sight_range);
 }
 
 void RenderMan::take_screenshot() {

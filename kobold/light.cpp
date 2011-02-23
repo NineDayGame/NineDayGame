@@ -1,5 +1,7 @@
 #include "light.hpp"
 
+//const Light Light::NO_LIGHT();
+
 Light::Light()
   : attenuation_constant_(1.0f),
     attenuation_linear_(0.0f),
@@ -18,32 +20,48 @@ void Light::init() {
 	specular_ = spec;
 }
 
-float Light::get_attenuation_constant() {
+const float Light::get_attenuation_constant() const {
 	return attenuation_constant_;
 }
 
-float Light::get_attenuation_linear() {
+const float Light::get_attenuation_linear() const {
 	return attenuation_linear_;
 }
 
-float Light::get_attenuation_quadratic() {
+const float Light::get_attenuation_quadratic() const {
 	return attenuation_quadratic_;
 }
 
-Vector3f::ShPtr Light::get_position() {
+const Vector3f::ShPtr Light::get_position() const {
 	return position_;
 }
 
-Vector4f::ShPtr Light::get_ambient() {
+void Light::set_position(Vector3f::ShPtr pos) {
+	position_ = pos;
+}
+
+const Vector4f::ShPtr Light::get_ambient() const {
 	return ambient_;
 }
 
-Vector4f::ShPtr Light::get_diffuse() {
+void Light::set_ambient(Vector4f::ShPtr ambient) {
+	ambient_ = ambient;
+}
+
+const Vector4f::ShPtr Light::get_diffuse() const {
 	return diffuse_;
 }
 
-Vector4f::ShPtr Light::get_specular() {
+void Light::set_diffuse(Vector4f::ShPtr diffuse) {
+	diffuse_ = diffuse;
+}
+
+const Vector4f::ShPtr Light::get_specular() const {
 	return specular_;
+}
+
+void Light::set_specular(Vector4f::ShPtr spec) {
+	specular_ = spec;
 }
 
 void Light::set_attenuation_constant(float c) {
@@ -56,20 +74,4 @@ void Light::set_attenuation_linear(float l) {
 
 void Light::set_attenuation_quadratic(float q) {
 	attenuation_quadratic_ = q;
-}
-
-void Light::set_position(Vector3f::ShPtr pos) {
-	position_ = pos;
-}
-
-void Light::set_ambient(Vector4f::ShPtr ambient) {
-	ambient_ = ambient;
-}
-
-void Light::set_diffuse(Vector4f::ShPtr diffuse) {
-	diffuse_ = diffuse;
-}
-
-void Light::set_specular(Vector4f::ShPtr spec) {
-	specular_ = spec;
 }

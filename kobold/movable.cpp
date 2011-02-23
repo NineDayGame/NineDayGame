@@ -29,6 +29,11 @@ void Movable::update() {
 	//a_ += 1.0f;
 }
 
+const Vector3f::ShPtr Movable::get_position() const {
+	const Vector3f::ShPtr p (new Vector3f(x_, y_, z_));
+	return p;
+}
+
 void Movable::set_color(Vector3f color) {
 	colors_.clear();
 	for (int i = 0; i < (mesh_->triangle_count() * 3); ++i) {
