@@ -69,8 +69,6 @@ void Map::clear()
 		for(int x = 0; x < width; ++x)
 		{
 			data->setProperties(x,y,true,true);
-			display[x+y*width].c = '.';
-			display[x+y*width].color = TCOD_grey;
 		}
 	}
 }

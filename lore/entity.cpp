@@ -15,6 +15,7 @@ Entity::Entity(boost::weak_ptr<Map> _host_map, int _x, int _y, int _c, TCODColor
 
 	host_map.lock()->data->setProperties(x,y,false,false);
 	known_map = Map::ShPtr(new Map(host_map.lock()->width,host_map.lock()->height));
+	known_map->clear();
 }
 
 Entity::~Entity()
