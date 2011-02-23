@@ -3,6 +3,7 @@
 #include "item.hpp"
 #include "util.hpp"
 #include "inventory_menu.hpp"
+#include "ai.hpp"
 
 GameState::ShPtr GameState::state = GameState::ShPtr();
 
@@ -34,10 +35,27 @@ void MainGameState::handle_key_press(TCOD_key_t key)
 		c->init();
 		GameState::state = c;
 	}
+
+	foreach(Container::ShPtr c, player->container.lock()->inventory)
+	{
+		AI::ShPtr a = DCONVERT(AI,Container,c);
+		if(a)
+		{
+			a->ai();
+		}
+	}
 }
 
 void MainGameState::draw(TCODConsole* console)
 {
+	foreach(Container::ShPtr c, player->container.lock()->inventory)
+	{
+		Entity::ShPtr e = DCONVERT(Entity,Container,c);
+		if(e)
+		{
+			e->look();
+		}
+	}
 	foreach(Camera::ShPtr c, cameras)
 	{
 		c->draw(console);

@@ -37,7 +37,6 @@ void EntityCamera::draw(TCODConsole* console)
 {
 	Camera::draw(console);
 	Entity::ShPtr t = target;
-	t->look();
 	Map::ShPtr m = map.lock();
 	for(int y = -height/2; y < height/2; ++y)
 	{

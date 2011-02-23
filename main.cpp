@@ -15,6 +15,7 @@
 #include "util.hpp"
 #include "renderman.hpp"
 #include "inputman.hpp"
+#include "monster.hpp"
 
 #include "main_gamestate.hpp"
 
@@ -32,6 +33,11 @@ int main(int argc, char* argv[])
 	m->clear();
 	m->randomize(10);
 
+	int x,y;
+	m->random_free_spot(&x,&y);
+	Living::ShPtr l(new Living(Map::WkPtr(m),"Hero",x,y,'@',TCOD_red,30));
+	m->get(l);
+
 	TCODRandom* rand = TCODRandom::getInstance();
 	for(int i = 0; i < 50; ++i)
 	{
@@ -45,12 +51,11 @@ int main(int argc, char* argv[])
 		sprintf(desc,"A shiny item.");
 
 		TCODColor color(rand->getInt(0,255),rand->getInt(0,255),rand->getInt(0,255));
-		Living::ShPtr e(new Living(Map::WkPtr(m),buf,x,y,'0'+i,color,3));
+		Monster::ShPtr e(new Monster(Map::WkPtr(m),buf,x,y,'0'+i,color,3));
 		Item::ShPtr i(new Item(Map::WkPtr(m),name,desc,x,y,'I',TCOD_green));
 		e->get(i);
 		m->get(e);
 	}
-
 	Entity::ShPtr e = SCONVERT(Entity,Container,m->inventory.front());
 	
 	if (argc==1) {		
