@@ -154,8 +154,6 @@ void GlRenderer::render() {
 	glTranslatef(cameraX_, cameraY_, cameraZ_);
 	glRotatef(45.0f, 0.0f, 0.0f, 1.0f);
 	glRotatef(45.0f, -1.0f, 1.0f, 0.0f);
-	
-	//set_light(GL_LIGHT0, *(player_->get_light()));
 
 	for (int i = 0; i < movables_.size(); ++i) {
 		if (movables_.at(i)->get_position()->distance(*(player_->get_position())) <= player_->get_sight_radius()+1) {
@@ -168,8 +166,7 @@ void GlRenderer::render() {
 	}
 	
 	player_->draw();
-	
-	//Update screen
+
 	SDL_GL_SwapBuffers();
 
 	//Cap the frame rate

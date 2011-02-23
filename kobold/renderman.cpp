@@ -12,10 +12,16 @@ void RenderMan::init() {
 }
 
 void RenderMan::draw_frame() {
+	/*renderer_->load_map(*(e_->known_map));
+	renderer_->load_mobs(e_->seen);
+	renderer_->set_player((float)e_->x, (float)e_->y);*/
+	renderer_->render();
+}
+
+void RenderMan::reload_world() {
 	renderer_->load_map(*(e_->known_map));
 	renderer_->load_mobs(e_->seen);
 	renderer_->set_player((float)e_->x, (float)e_->y);
-	renderer_->render();
 }
 
 void RenderMan::set_entity(Entity::ShPtr entity) {

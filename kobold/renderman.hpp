@@ -14,6 +14,7 @@ public:
 	RenderMan();
 	void init();
 	void draw_frame();
+	void reload_world();
 	void set_entity(Entity::ShPtr entity);
 	void take_screenshot();
 	void toggle_fullscreen();
