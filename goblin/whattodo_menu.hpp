@@ -14,7 +14,6 @@ public:
 	virtual ~WhatToDoMenu();
 
 	virtual void init(Entity::ShPtr e, Item::ShPtr i);
-	virtual void handle_key_press(TCOD_key_t key);
 };
 
 #endif

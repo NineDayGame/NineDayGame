@@ -50,8 +50,3 @@ void WhatToDoMenu::init(Entity::ShPtr e, Item::ShPtr i)
 
 	menu_items.at(selected_index)->select();
 }
-
-void WhatToDoMenu::handle_key_press(TCOD_key_t key)
-{
-	InventoryMenu::handle_key_press(key);
-}

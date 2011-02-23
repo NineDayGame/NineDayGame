@@ -34,10 +34,8 @@ void InventoryMenu::init()
 		menu_items.push_back(mi);
 		++i;
 	}
-	menu_items.at(selected_index)->select();
-}
-
-void InventoryMenu::handle_key_press(TCOD_key_t key)
-{
-	Menu::handle_key_press(key);
+	if(menu_items.size() > 0)
+	{
+		menu_items.at(selected_index)->select();
+	}
 }

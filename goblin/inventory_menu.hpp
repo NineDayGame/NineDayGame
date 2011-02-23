@@ -12,7 +12,6 @@ public:
 	virtual ~InventoryMenu();
 
 	virtual void init();
-	virtual void handle_key_press(TCOD_key_t key);
 };
 
 #endif

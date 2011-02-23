@@ -45,7 +45,8 @@ void Menu::handle_key_press(TCOD_key_t key)
 	if(key.vk == TCODK_UP || key.vk == TCODK_KP8)
 	{
 		menu_items.at(selected_index)->unselect();
-		selected_index = (selected_index-1)%menu_items.size();
+		if(selected_index == 0) { selected_index = menu_items.size()-1; }
+		else { selected_index = (selected_index-1)%menu_items.size(); }
 		menu_items.at(selected_index)->select();
 	}
 	if(key.vk == TCODK_DOWN || key.vk == TCODK_KP2)
