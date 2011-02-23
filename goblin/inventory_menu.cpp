@@ -10,7 +10,7 @@ static void create_what_to_do(GameState::ShPtr m, MenuItem* me)
 	Entity::ShPtr e = SCONVERT(Entity,void,me->args.at(0));
 	Item::ShPtr i = SCONVERT(Item,void,me->args.at(1));
 	InventoryMenu::ShPtr im = DCONVERT(InventoryMenu,GameState,m);
-	WhatToDoMenu::ShPtr wtd(new WhatToDoMenu(im,im->screen_x+im->width,im->screen_y,10,im->height));
+	WhatToDoMenu::ShPtr wtd(new WhatToDoMenu(im,im->screen_x+im->width,im->screen_y,10,4));
 	wtd->init(e,i);
 	GameState::state = wtd;
 }
