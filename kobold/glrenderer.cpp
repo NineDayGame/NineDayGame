@@ -318,7 +318,7 @@ void GlRenderer::set_player(float x, float y) {
 
 	cameraX_ = -0.7071f*x + 0.7071f*y;
 	cameraY_ = -0.5f*x + -0.5f*y;
-	cameraZ_ = -30.0f + 0.4f*x + 0.4f*y;
+	cameraZ_ = -30.0f + 0.5*x + 0.5f*y;
 	
 	lightX_ = x;
 	lightY_ = y;
