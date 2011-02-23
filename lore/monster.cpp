@@ -1,8 +1,14 @@
 #include "monster.hpp"
 #include "util.hpp"
+#include <cmath>
 
 Monster::Monster(Map::WkPtr host_map, std::string name, int x, int y, int c, TCODColor color, int health) : Living(host_map,name,x,y,c,color,health), AI(known_map) { }
 Monster::~Monster(){}
+
+static double distance(int x1, int y1, int x2, int y2)
+{
+	return sqrt(pow(x1-x2,2)+pow(y1-y2,2));
+}
 	
 void Monster::ai()
 {
@@ -35,6 +41,40 @@ void Monster::ai()
 			m->set_data(dx,dy,c2,color2,trans2,walk2);
 			
 			move(mx,my);
+			return;
 		}
 	}
+	double closest_val = 9999;
+	int closest_x = 0;
+	int closest_y = 0;
+	if(path->isEmpty())
+	{
+		for(int i = 0; i < known_map->height; ++i)
+		{
+			for(int j = 0; j < known_map->width; ++j)
+			{
+				if(known_map->display[j+i*known_map->width].c == 0)
+				{
+					double dist = distance(x,y,j,i);
+					if(dist < closest_val)
+					{
+						closest_x = j;
+						closest_y = i;
+						closest_val = dist;
+					}
+				}
+			}
+		}
+		path->compute(x,y,closest_x,closest_y);
+	}
+	int count = 5;
+	while(path->isEmpty() && count-- > 0)
+	{
+		int dx,dy;
+		known_map->random_free_spot(&dx,&dy);
+		path->compute(x,y,dx,dy);
+	}
+	int mx,my;
+	path->walk(&mx,&my,1);
+	move(mx,my);
 }
