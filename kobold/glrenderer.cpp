@@ -13,8 +13,8 @@
 #include "glrenderer.hpp"
 
 //Screen attributes
-const int SCREEN_WIDTH = 1200;
-const int SCREEN_HEIGHT = 750;
+const int SCREEN_WIDTH = 960;
+const int SCREEN_HEIGHT = 600;
 const int SCREEN_BPP = 32;
 
 //The frame rate
