@@ -20,25 +20,6 @@ Map::~Map()
 	delete[] display;
 }
 
-void Map::draw(TCODConsole* console)
-{
-	for(int y = 0; y < height; ++y)
-	{
-		for(int x = 0; x < width; ++x)
-		{
-			char c = display[x+y*width].c;
-			TCODColor color = display[x+y*width].color;
-			console->setChar(x,y,c);
-			console->setFore(x,y,color);
-		}
-	}
-	foreach(Container::ShPtr i,inventory)
-	{
-		Entity::ShPtr e = SCONVERT(Entity,Container,i);
-		e->draw(console);
-	}
-}
-
 bool Map::check_bounds(int x, int y)
 {
 	if(x < 0 || x > width) return false;

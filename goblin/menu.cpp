@@ -8,9 +8,10 @@ Menu::~Menu() {}
 
 void Menu::init() {}
 
-void Menu::draw(TCODConsole* console)
+void Menu::draw()
 {
-	GameState::draw(console);
+	TCODConsole* console = TCODConsole::root;
+	GameState::draw();
 	console->rect(screen_x,screen_y,width,height,true);
 	for(int x = screen_x; x < screen_x+width; ++x)
 	{
@@ -31,7 +32,7 @@ void Menu::draw(TCODConsole* console)
 		mi->y -= menu_offset;
 		if(mi->y > screen_y && mi->y < screen_y+height-1)
 		{
-			mi->draw(console);
+			mi->draw();
 		}
 		mi->y += menu_offset;
 	}

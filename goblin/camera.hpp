@@ -21,9 +21,9 @@ public:
 	Camera(int sx, int sy, int w, int h);
 	virtual ~Camera();
 
-	virtual void draw(TCODConsole* console);
+	virtual void draw();
 protected:
-	bool check_bounds(TCODConsole* console, Map::ShPtr map, int x, int y);
+	bool check_bounds(Map::ShPtr map, int x, int y);
 };
 
 class EntityCamera : public Camera
@@ -37,7 +37,7 @@ public:
 	EntityCamera(Map::WkPtr map, Entity::ShPtr target, int sx, int sy, int w, int h);
 	~EntityCamera();
 
-	virtual void draw(TCODConsole* console);
+	virtual void draw();
 };
 
 class TextCamera : public Camera
@@ -50,7 +50,7 @@ public:
 	TextCamera(int sx, int sy, int w, int h);
 	virtual ~TextCamera();
 
-	virtual void draw(TCODConsole* console);
+	virtual void draw();
 	virtual void print(const std::string s);
 };
 

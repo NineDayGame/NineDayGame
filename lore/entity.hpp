@@ -33,9 +33,6 @@ public:
 
 	virtual bool move(int x, int y);
 	virtual void look();
-	
-	virtual void draw(TCODConsole* console);
-	virtual void draw_map(TCODConsole* console);
 };
 
 #endif

@@ -46,7 +46,7 @@ void MainGameState::handle_key_press(TCOD_key_t key)
 	}
 }
 
-void MainGameState::draw(TCODConsole* console)
+void MainGameState::draw()
 {
 	foreach(Container::ShPtr c, player->container.lock()->inventory)
 	{
@@ -58,6 +58,6 @@ void MainGameState::draw(TCODConsole* console)
 	}
 	foreach(Camera::ShPtr c, cameras)
 	{
-		c->draw(console);
+		c->draw();
 	}
 }

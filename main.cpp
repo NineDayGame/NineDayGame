@@ -107,7 +107,7 @@ int main(int argc, char* argv[])
 
 		while(!TCODConsole::isWindowClosed())
 		{
-			GameState::state->draw(TCODConsole::root);
+			GameState::state->draw();
 
 			//TCODSystem::saveScreenshot(NULL);
 			TCODConsole::flush();

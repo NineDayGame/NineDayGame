@@ -11,17 +11,17 @@ Camera::~Camera()
 {
 
 }
-void Camera::draw(TCODConsole* console)
+void Camera::draw()
 {
-	console->rect(screen_x,screen_y,width,height,true);
+	TCODConsole::root->rect(screen_x,screen_y,width,height,true);
 }
 
-bool Camera::check_bounds(TCODConsole* console, Map::ShPtr map, int x, int y)
+bool Camera::check_bounds(Map::ShPtr map, int x, int y)
 {
 	if(x < screen_x || x > screen_x+width) return false;
 	if(y < screen_y || y > screen_y+height) return false;
-	if(x < 0 || x > console->getWidth()) return false;
-	if(y < 0 || y > console->getHeight()) return false;
+	if(x < 0 || x > TCODConsole::root->getWidth()) return false;
+	if(y < 0 || y > TCODConsole::root->getHeight()) return false;
 	if(x > map->width || y > map->height) return false;
 	return true;
 }
@@ -44,9 +44,9 @@ static bool compare_entities(Entity::WkPtr first, Entity::WkPtr second)
 	return first.lock()->z < second.lock()->z;
 }
 
-void EntityCamera::draw(TCODConsole* console)
+void EntityCamera::draw()
 {
-	Camera::draw(console);
+	Camera::draw();
 	Entity::ShPtr t = target;
 	Map::ShPtr m = map.lock();
 	for(int y = -height/2; y < height/2; ++y)
@@ -57,12 +57,12 @@ void EntityCamera::draw(TCODConsole* console)
 			int ty = t->y+y;
 			int draw_x = x+screen_x+width/2;
 			int draw_y = y+screen_y+height/2;
-			if(check_bounds(console,m,draw_x,draw_y))
+			if(check_bounds(m,draw_x,draw_y))
 			{
 				char c = m->display[tx+ty*m->width].c;
 				TCODColor color = m->display[tx+ty*m->width].color;
-				console->setChar(draw_x,draw_y,c);
-				console->setFore(draw_x,draw_y,color);
+				TCODConsole::root->setChar(draw_x,draw_y,c);
+				TCODConsole::root->setFore(draw_x,draw_y,color);
 			}
 		}
 	}
@@ -77,12 +77,12 @@ void EntityCamera::draw(TCODConsole* console)
 			int ty = e->y-t->y;
 			int draw_x = screen_x+width/2+tx;
 			int draw_y = screen_y+height/2+ty;
-			if(check_bounds(console,m,draw_x,draw_y))
+			if(check_bounds(m,draw_x,draw_y))
 			{
 				char c = e->c;
 				TCODColor color = e->color;
-				console->setChar(draw_x,draw_y,c);
-				console->setFore(draw_x,draw_y,color);
+				TCODConsole::root->setChar(draw_x,draw_y,c);
+				TCODConsole::root->setFore(draw_x,draw_y,color);
 			}
 		}
 	}
@@ -99,13 +99,13 @@ TextCamera::~TextCamera()
 
 }
 
-void TextCamera::draw(TCODConsole* console)
+void TextCamera::draw()
 {
-	Camera::draw(console);
+	Camera::draw();
 	int i = 0;
 	foreach(std::string s, text)
 	{
-		console->printLeft(screen_x,screen_y+i,TCOD_BKGND_NONE,s.c_str());
+		TCODConsole::root->printLeft(screen_x,screen_y+i,TCOD_BKGND_NONE,s.c_str());
 		++i;
 	}
 }

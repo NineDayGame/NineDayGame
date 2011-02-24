@@ -26,7 +26,7 @@ public:
 	MenuItem(int x, int y, std::string& text, TCODColor color, MenuItem::Operation on_choose);
 	virtual ~MenuItem();
 
-	virtual void draw(TCODConsole* console);
+	virtual void draw();
 	virtual void select();
 	virtual void unselect();
 

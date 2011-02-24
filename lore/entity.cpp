@@ -70,18 +70,3 @@ void Entity::look()
 		}
 	}
 }
-
-void Entity::draw(TCODConsole* console)
-{
-	console->setChar(x,y,c);
-	console->setFore(x,y,color);
-}
-
-void Entity::draw_map(TCODConsole* console)
-{
-	known_map->draw(console);
-	foreach(Entity::WkPtr i, seen)
-	{
-		i.lock()->draw(console);
-	}
-}
