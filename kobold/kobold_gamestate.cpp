@@ -30,18 +30,19 @@ void KoboldGameState::handle_input()
 		case SDLK_F3: renderer->toggle_wireframes(); break;
 		case SDLK_F12: renderer->take_screenshot(); break;
 		}
+
+		foreach(Container::ShPtr c, player->container.lock()->inventory)
+		{
+			AI::ShPtr a = DCONVERT(AI,Container,c);
+			if(a)
+			{
+				a->ai();
+			}
+		}
 	}
 		
 	if ( event_.type == SDL_QUIT ) {
 		GameState::running = false;
-	}
-	foreach(Container::ShPtr c, player->container.lock()->inventory)
-	{
-		AI::ShPtr a = DCONVERT(AI,Container,c);
-		if(a)
-		{
-			a->ai();
-		}
 	}
 }
 void KoboldGameState::draw()
