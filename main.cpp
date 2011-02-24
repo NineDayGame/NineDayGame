@@ -44,12 +44,12 @@ int main(int argc, char* argv[])
 	{
 		char buf[32];
 		char name[32];
-		char desc[32];
+		char desc[128];
 		int x,y;
 		m->random_free_spot(&x,&y);
 		sprintf(buf,"Entity %d",i);
-		sprintf(name,"Item %d",i);
-		sprintf(desc,"A shiny item.");
+		sprintf(name,"health potion");
+		sprintf(desc,"a potion that restores up to 10 health");
 
 		TCODColor color(rand->getInt(0,255),rand->getInt(0,255),rand->getInt(0,255));
 		Monster::ShPtr e(new Monster(Map::WkPtr(m),buf,x,y,'0'+i,color,3));

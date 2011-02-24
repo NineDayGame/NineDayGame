@@ -9,3 +9,11 @@ Item::~Item()
 {
 
 }
+
+void Item::use(Living::ShPtr user)
+{
+	TCODRandom* r = TCODRandom::getInstance();
+	int gain = r->getInt(1,10);
+	user->health += gain;
+	cprintf("%s uses the %s and regains %d health.",user->name.c_str(),name.c_str(),gain);
+}
