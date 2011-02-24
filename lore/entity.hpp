@@ -15,6 +15,8 @@ class Entity : public Container
 public:
 	typedef boost::shared_ptr<Entity> ShPtr;
 	typedef boost::weak_ptr<Entity> WkPtr;
+
+	typedef void (*FOVCallback)(int x, int y, bool seen_before, char c, TCODColor color, bool transparent, bool walkable);
 	
 	int x;
 	int y;
@@ -33,6 +35,11 @@ public:
 
 	virtual bool move(int x, int y);
 	virtual void look();
+
+	void register_fovcb(Entity::FOVCallback cb);
+
+protected:
+	Entity::FOVCallback fov_cb;
 };
 
 #endif
