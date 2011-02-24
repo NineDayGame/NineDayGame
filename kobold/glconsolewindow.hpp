@@ -11,17 +11,20 @@
 
 #include "glwindow.hpp"
 #include "rect.hpp"
+#include "printable.hpp"
 //#include "util.hpp"
 
-class GlConsoleWindow : public GlWindow {
+class GlConsoleWindow : public GlWindow, public Printable {
 public:
 	typedef boost::shared_ptr<GlConsoleWindow> ShPtr;
 
 	GlConsoleWindow();
 	void init();
 	void draw();
-	void print(std::string output);
+	
 	void set_dl_index(int dl_index);
+
+	virtual void print(const std::string s);
 
 private:
 	boost::shared_array<std::string> console_;

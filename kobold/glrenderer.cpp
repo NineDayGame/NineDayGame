@@ -96,7 +96,7 @@ void GlRenderer::init_gl() {
 	cwindow_->set_dl_index(dl_index_);
 	cwindow_->set_texture(texture[2]);
 	cwindow_->print(std::string("Welcome to NineDayGame"));
-	//print_to_opengl = cwindow_;
+	register_printable(cwindow_);
 }
 
 void GlRenderer::load_map(const Map& map) {

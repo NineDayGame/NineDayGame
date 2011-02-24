@@ -5,6 +5,7 @@
 #include <libtcod.hpp>
 #include <list>
 #include <string>
+#include "printable.hpp"
 #include "map.hpp"
 #include "entity.hpp"
 
@@ -40,7 +41,7 @@ public:
 	virtual void draw();
 };
 
-class TextCamera : public Camera
+class TextCamera : public Camera, public Printable
 {
 public:
 	typedef boost::shared_ptr<TextCamera> ShPtr;

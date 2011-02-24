@@ -1,9 +1,14 @@
 #include <stdarg.h>
 #include <stdio.h>
+#include <list>
 #include "util.hpp"
 
-TextCamera::ShPtr print_to_camera;
-//GlConsoleWindow::ShPtr print_to_opengl;
+std::list<Printable::ShPtr> util__printables;
+
+void register_printable(Printable::ShPtr p)
+{
+	util__printables.push_back(p);
+}
 
 void cprintf(char const* format, ...)
 {
@@ -12,13 +17,11 @@ void cprintf(char const* format, ...)
 	va_start (args, format);
 	vsprintf (buffer,format, args);
 	va_end (args);
-	if(print_to_camera)
-	{		
-		print_to_camera->print(buffer);
-	}
-	/*if(print_to_opengl)
+
+	foreach(Printable::ShPtr p, util__printables)
 	{
-		print_to_opengl->print(buffer);
-	}*/
+		p->print(buffer);
+	}
+
 	printf("%s\n",buffer);
 }
