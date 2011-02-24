@@ -14,6 +14,7 @@ public:
 	RenderMan();
 	void init();
 	void draw_frame();
+	void print_to_renderer(std::string output);
 	void reload_world();
 	void set_entity(Entity::ShPtr entity);
 	void take_screenshot();

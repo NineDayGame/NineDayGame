@@ -2,7 +2,8 @@
 #include <stdio.h>
 #include "util.hpp"
 
-TextCamera::ShPtr print_to;
+TextCamera::ShPtr print_to_camera;
+//GlConsoleWindow::ShPtr print_to_opengl;
 
 void cprintf(char const* format, ...)
 {
@@ -11,9 +12,13 @@ void cprintf(char const* format, ...)
 	va_start (args, format);
 	vsprintf (buffer,format, args);
 	va_end (args);
-	if(print_to)
+	if(print_to_camera)
 	{		
-		print_to->print(buffer);
+		print_to_camera->print(buffer);
 	}
+	/*if(print_to_opengl)
+	{
+		print_to_opengl->print(buffer);
+	}*/
 	printf("%s\n",buffer);
 }

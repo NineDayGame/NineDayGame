@@ -17,7 +17,7 @@
 #include "player.hpp"
 #include "timer.hpp"
 #include "util.hpp"
-#include "glwindow.hpp"
+#include "glconsolewindow.hpp"
 
 class GlRenderer {
 public:
@@ -30,7 +30,7 @@ public:
 	void load_mobs(std::list<Entity::WkPtr> mobs);
 	void load_textures();
 	void load_font();
-	void printgl(int x, int y, std::string output);
+	void printgl(std::string output);
 	void set_light(int index, const Light& light);
 	void set_sight_radius(float r);
 	void take_screenshot(std::string filename);
@@ -42,7 +42,7 @@ public:
 	void render();
 
 private:
-	GlWindow::ShPtr window_;
+	GlConsoleWindow::ShPtr cwindow_;
 	Timer::ShPtr fps_;
 	std::vector<Movable::ShPtr> movables_;
 	Player::ShPtr player_;

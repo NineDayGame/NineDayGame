@@ -91,7 +91,7 @@ int main(int argc, char* argv[])
 		c = TextCamera::ShPtr(new TextCamera(0,0,width,20));
 		mgs->cameras.push_back(c);
 		TextCamera::ShPtr tc = SCONVERT(TextCamera,Camera,c);
-		print_to = tc;
+		print_to_camera = tc;
 	}
 
 	while(GameState::running)

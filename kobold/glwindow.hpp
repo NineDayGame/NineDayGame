@@ -20,13 +20,15 @@ public:
 	void set_scale3f(float x, float y, float z);
 	void set_texture(unsigned int t);
 
-private:
+protected:
 	Mesh::ShPtr mesh_;
-	std::vector<Vector3f> colors_;
 	unsigned int texture_index_;
 
-	float x_, y_, z_;
-	float sx_, sy_, sz_;
+private:
+	std::vector<Vector3f> colors_;
+
+	Vector3f::ShPtr position_;
+	Vector3f::ShPtr scale_;
 
 	DISALLOW_COPY_AND_ASSIGN(GlWindow);
 };
