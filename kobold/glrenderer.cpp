@@ -97,7 +97,8 @@ void GlRenderer::init_gl() {
 	cwindow_->set_texture(texture[2]);
 	cwindow_->show();
 	cwindow_->print(std::string("Welcome to NineDayGame"));
-	//print_to_opengl = cwindow_;
+	register_printable(cwindow_);
+	
 	sheet_window_.reset(new GlWindow());
 	inventory_window_.reset(new GlWindow());
 }

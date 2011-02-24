@@ -32,7 +32,7 @@ void GlConsoleWindow::draw() {
 	glPopMatrix();
 }
 
-void GlConsoleWindow::print(std::string output) {
+void GlConsoleWindow::print(const std::string output) {
 	console_[top_++] = output;
 	if (top_ >= kLINE_COUNT) {
 		top_ = 0;
