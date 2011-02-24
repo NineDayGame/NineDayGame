@@ -15,6 +15,7 @@ MainGameState::MainGameState(GameState::ShPtr p, Entity::ShPtr e) : GameState(p)
 
 void MainGameState::handle_input()
 {
+	TCODConsole::flush();
 	TCOD_key_t key = TCODConsole::waitForKeypress(true);
 	
 	if(TCODConsole::isWindowClosed()) { GameState::running = false; return; }
@@ -64,5 +65,4 @@ void MainGameState::draw()
 	{
 		c->draw();
 	}
-	TCODConsole::flush();
 }

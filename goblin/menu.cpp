@@ -36,11 +36,11 @@ void Menu::draw()
 		}
 		mi->y += menu_offset;
 	}
-	TCODConsole::flush();
 }
 
 void Menu::handle_input()
 {
+	TCODConsole::flush();
 	TCOD_key_t key = TCODConsole::waitForKeypress(true);
 
 	if(TCODConsole::isWindowClosed()) { GameState::running = false; return; }
