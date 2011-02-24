@@ -17,7 +17,7 @@ public:
 	MainGameState(GameState::ShPtr p, Entity::ShPtr e);
 	virtual ~MainGameState() {}
 
-	virtual void handle_key_press(TCOD_key_t key);
+	virtual void handle_input();
 	virtual void draw();
 };
 

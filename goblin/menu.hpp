@@ -28,7 +28,7 @@ public:
 	virtual void init();
 	
 	virtual void draw();
-	virtual void handle_key_press(TCOD_key_t key);
+	virtual void handle_input();
 
 };
 

@@ -11,13 +11,14 @@ public:
 	typedef boost::shared_ptr<GameState> ShPtr;
 	
 	static GameState::ShPtr state;
+	static bool running;
 	
 	GameState::ShPtr parent;
 
-	GameState(GameState::ShPtr p) { parent = p; }
+	GameState(GameState::ShPtr p) : parent(p) {}
 	virtual ~GameState() {}
 
-	virtual void handle_key_press(TCOD_key_t key) = 0;
+	virtual void handle_input() = 0;
 	virtual void draw() { if(parent) parent->draw(); }
 
 protected:

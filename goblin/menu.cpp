@@ -36,10 +36,14 @@ void Menu::draw()
 		}
 		mi->y += menu_offset;
 	}
+	TCODConsole::flush();
 }
 
-void Menu::handle_key_press(TCOD_key_t key)
+void Menu::handle_input()
 {
+	TCOD_key_t key = TCODConsole::waitForKeypress(true);
+
+	if(TCODConsole::isWindowClosed()) { GameState::running = false; return; }
 	if(key.vk == TCODK_ESCAPE) { GameState::state = parent; }
 	if(key.vk == TCODK_ENTER || key.vk == TCODK_KPENTER)
 	{

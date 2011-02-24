@@ -105,14 +105,10 @@ int main(int argc, char* argv[])
 		TextCamera::ShPtr tc = SCONVERT(TextCamera,Camera,c);
 		print_to = tc;
 
-		while(!TCODConsole::isWindowClosed())
+		while(GameState::running)
 		{
 			GameState::state->draw();
-
-			//TCODSystem::saveScreenshot(NULL);
-			TCODConsole::flush();
-			TCOD_key_t key=TCODConsole::waitForKeypress(true);
-			GameState::state->handle_key_press(key);
+			GameState::state->handle_input();
 		}
 	}
 
