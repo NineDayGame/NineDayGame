@@ -22,6 +22,15 @@ static void drop(GameState::ShPtr m, MenuItem* me)
 	GameState::state = m->parent->parent;
 }
 
+static void use(GameState::ShPtr m, MenuItem* me)
+{
+	Living::ShPtr e = SCONVERT(Living,void,me->args.at(0));
+	Item::ShPtr i = SCONVERT(Item,void,me->args.at(1));
+	i->use(e);
+	e->remove(i);
+	GameState::state = m->parent->parent;
+}
+
 WhatToDoMenu::WhatToDoMenu(GameState::ShPtr parent, int sx, int sy, int w, int h) : InventoryMenu(parent,sx,sy,w,h)
 {
 	
@@ -37,6 +46,12 @@ void WhatToDoMenu::init(Entity::ShPtr e, Item::ShPtr i)
 	
 	s = "Look";
 	mi = MenuItem::ShPtr(new MenuItem(screen_x+1,screen_y+j++,s,TCOD_white,&look));
+	mi->args.push_back(e);
+	mi->args.push_back(i);
+	menu_items.push_back(mi);
+
+	s = "Use";
+	mi = MenuItem::ShPtr(new MenuItem(screen_x+1,screen_y+j++,s,TCOD_white,&use));
 	mi->args.push_back(e);
 	mi->args.push_back(i);
 	menu_items.push_back(mi);

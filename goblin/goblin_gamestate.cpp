@@ -4,6 +4,8 @@
 #include "util.hpp"
 #include "inventory_menu.hpp"
 #include "ai.hpp"
+#include "living.hpp"
+#include <stdio.h>
 
 GoblinGameState::GoblinGameState(GameState::ShPtr p, Entity::ShPtr e) : GameState(p), player(e)
 {
@@ -50,6 +52,11 @@ void GoblinGameState::handle_input()
 
 void GoblinGameState::draw()
 {
+	char buffer[128];
+	Living::ShPtr p = SCONVERT(Living,Entity,player);
+	sprintf(buffer,"Health: %d/%d",p->health,p->max_health);
+	health_indicator->text.clear();
+	health_indicator->print(buffer);
 	foreach(Container::ShPtr c, player->container.lock()->inventory)
 	{
 		Entity::ShPtr e = DCONVERT(Entity,Container,c);

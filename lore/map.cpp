@@ -90,8 +90,8 @@ void Map::randomize(int num_rooms)
 		Map::Room r; // Randomly generate the dimensions for rectangular rooms
 		r.x = rand->getInt(0,width-3);
 		r.y = rand->getInt(0,height-3);
-		r.w = rand->getInt(3,std::min(10,width-r.x-1));
-		r.h = rand->getInt(3,std::min(10,height-r.y-1));
+		r.w = rand->getInt(3,std::min(30,width-r.x-1));
+		r.h = rand->getInt(3,std::min(30,height-r.y-1));
 		rooms.push_back(r);
 
 		// Draw the rooms as walls
