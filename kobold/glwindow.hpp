@@ -25,12 +25,12 @@ public:
 protected:
 	Mesh::ShPtr mesh_;
 	unsigned int texture_index_;
+	Vector3f::ShPtr position_;
+	Vector3f::ShPtr scale_;
 
 private:
 	std::vector<Vector3f> colors_;
 	bool visible_;
-	Vector3f::ShPtr position_;
-	Vector3f::ShPtr scale_;
 
 	DISALLOW_COPY_AND_ASSIGN(GlWindow);
 };
