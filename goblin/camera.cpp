@@ -30,6 +30,9 @@ EntityCamera::~EntityCamera()
 
 static bool compare_entities(Entity::WkPtr first, Entity::WkPtr second)
 {
+	Entity::ShPtr f = first.lock();
+	Entity::ShPtr s = second.lock();
+	if(!f || !s) return false;
 	return first.lock()->z < second.lock()->z;
 }
 
@@ -37,7 +40,6 @@ void EntityCamera::draw(TCODConsole* console)
 {
 	Camera::draw(console);
 	Entity::ShPtr t = target;
-	t->look();
 	Map::ShPtr m = map.lock();
 	for(int y = -height/2; y < height/2; ++y)
 	{
@@ -55,12 +57,15 @@ void EntityCamera::draw(TCODConsole* console)
 	foreach(Entity::WkPtr i, t->seen)
 	{
 		Entity::ShPtr e = i.lock();
-		int tx = e->x-t->x;
-		int ty = e->y-t->y;
-		char c = e->c;
-		TCODColor color = e->color;
-		console->setChar(screen_x+width/2+tx,screen_y+height/2+ty,c);
-		console->setFore(screen_x+width/2+tx,screen_y+height/2+ty,color);
+		if(e)
+		{
+			int tx = e->x-t->x;
+			int ty = e->y-t->y;
+			char c = e->c;
+			TCODColor color = e->color;
+			console->setChar(screen_x+width/2+tx,screen_y+height/2+ty,c);
+			console->setFore(screen_x+width/2+tx,screen_y+height/2+ty,color);
+		}
 	}
 }
 

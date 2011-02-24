@@ -15,6 +15,7 @@ Entity::Entity(boost::weak_ptr<Map> _host_map, int _x, int _y, int _c, TCODColor
 
 	host_map.lock()->data->setProperties(x,y,false,false);
 	known_map = Map::ShPtr(new Map(host_map.lock()->width,host_map.lock()->height));
+	known_map->clear();
 }
 
 Entity::~Entity()
@@ -24,7 +25,12 @@ Entity::~Entity()
 
 bool Entity::move(int _x, int _y)
 {
-	Map::ShPtr host = host_map.lock();
+	Map::ShPtr host = SCONVERT(Map,Container,container.lock());
+	if(_x < 0 || _x > host->width || _y < 0 || _y > host->height)
+	{
+		return false;
+	}
+	
 	if(host->data->isWalkable(_x,_y))
 	{
 		bool transp = host->data->isTransparent(x,y);
@@ -42,7 +48,7 @@ bool Entity::move(int _x, int _y)
 
 void Entity::look()
 {
-	Map::ShPtr host = host_map.lock();
+	Map::ShPtr host = SCONVERT(Map,Container,container.lock());
 	host->data->computeFov(x,y,sight_range,true,FOV_PERMISSIVE_5);
 	for(int i = -sight_range; i < sight_range; ++i)
 	{
