@@ -10,13 +10,14 @@
 #include "SDL/SDL.h"
 #include "SDL/SDL_opengl.h"
 
-#include "util.hpp"
 #include "character.hpp"
 #include "entity.hpp"
 #include "map.hpp"
 #include "movable.hpp"
 #include "player.hpp"
 #include "timer.hpp"
+#include "util.hpp"
+#include "glwindow.hpp"
 
 class GlRenderer {
 public:
@@ -28,6 +29,8 @@ public:
 	void load_map(const Map& map);
 	void load_mobs(std::list<Entity::WkPtr> mobs);
 	void load_textures();
+	void load_font();
+	void printgl(int x, int y, std::string output);
 	void set_light(int index, const Light& light);
 	void set_sight_radius(float r);
 	void take_screenshot(std::string filename);
@@ -39,6 +42,7 @@ public:
 	void render();
 
 private:
+	GlWindow::ShPtr window_;
 	Timer::ShPtr fps_;
 	std::vector<Movable::ShPtr> movables_;
 	Player::ShPtr player_;
@@ -47,6 +51,7 @@ private:
 	float lightX_, lightY_, lightZ_;
 	boost::shared_array<unsigned int> texture;
 	bool lights_, wireframes_;
+	int dl_index_;
 	
 	DISALLOW_COPY_AND_ASSIGN(GlRenderer);
 };

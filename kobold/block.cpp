@@ -1,4 +1,5 @@
 #include "block.hpp"
+#include "cube.hpp"
 #include "vector3f.hpp"
 
 Block::Block() {

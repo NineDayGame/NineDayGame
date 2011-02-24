@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "player.hpp"
+#include "rect.hpp"
 #include "vector3f.hpp"
 
 Player::Player()
@@ -9,8 +10,9 @@ Player::Player()
 }
 
 void Player::init() {
-	mesh_.reset(new Cube());
+	mesh_.reset(new Rect());
 	set_color(Vector3f(0.5f, 0.0f, 0.0f));
+	set_rotation(60.0f, -45.0f, -22.0f);
 	Light::ShPtr light (new Light());
 	light_ = light;
 }

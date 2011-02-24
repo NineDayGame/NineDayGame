@@ -80,6 +80,7 @@ void GlRenderer::init_gl() {
     }
     
     load_textures();
+    load_font();
     player_.reset(new Player());
     player_->set_texture(texture[0]);
     Light::ShPtr plight = player_->get_light();
@@ -90,8 +91,8 @@ void GlRenderer::init_gl() {
     plight->set_attenuation_constant(0.5f);
     plight->set_attenuation_linear(0.01f);
     plight->set_attenuation_quadratic(0.01f);
-    //GLfloat ambient[] = {0.08f, 0.08f, 0.08f, 1.0f};
-	//GLfloat diffuse[] = {1.0f, 0.9f, 0.7f, 1.0f};
+
+	window_.reset(new GlWindow());
 }
 
 void GlRenderer::load_map(const Map& map) {
@@ -132,7 +133,7 @@ void GlRenderer::load_mobs(std::list<Entity::WkPtr> mobs) {
 	foreach (Entity::WkPtr e, mobs) {
 		Character::ShPtr chr (new Character());
 		Entity::ShPtr m = e.lock();
-		chr->set_position(m->x, m->y, 1.0f);
+		chr->set_position(m->x, m->y, 0.5f);
 		TCODColor c = m->color;
 		chr->set_texture(texture[0]);
 		chr->set_color(Vector3f((c.r/255.0f), (c.g/255.0f), (c.b/255.0f)));
@@ -144,6 +145,7 @@ void GlRenderer::render() {
 	fps_->start();
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
@@ -165,7 +167,25 @@ void GlRenderer::render() {
 		movables_.at(i)->draw();
 	}
 	
-	player_->draw();
+	//player_->draw();
+	
+	glDisable(GL_LIGHTING);
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	glOrtho(0, SCREEN_WIDTH, 0, SCREEN_HEIGHT, -1, 1);
+	glMatrixMode(GL_MODELVIEW);
+	
+	//window_->draw();
+	printgl(0, 0, std::string("Hero explodes into tiny bits of goo!"));
+	
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	//glMatrixMode(GL_MODELVIEW);
+	//glPopMatrix();
+	//glPopMatrix();
+	//glMatrixMode(GL_MODELVIEW);
+	glEnable(GL_LIGHTING);
 
 	SDL_GL_SwapBuffers();
 
@@ -181,14 +201,15 @@ void GlRenderer::render() {
 
 void GlRenderer::load_textures() {
 
-	texture.reset(new unsigned int[2]);
-	SDL_Surface *textureImage[2]; 
+	texture.reset(new unsigned int[3]);
+	SDL_Surface *textureImage[3]; 
 
 	//if ((textureImage[0] = SDL_LoadBMP( "default.bmp" ))) {
-		textureImage[0] = SDL_LoadBMP( "resources/default.bmp" );
-		textureImage[1] = SDL_LoadBMP( "resources/stone3.bmp" );
+		textureImage[0] = SDL_LoadBMP("resources/default.bmp");
+		textureImage[1] = SDL_LoadBMP("resources/stone3.bmp");
+		textureImage[2] = SDL_LoadBMP("resources/terminal.bmp");
 		
-		glGenTextures( 2, &texture[0] );
+		glGenTextures( 3, &texture[0] );
 		
 		glBindTexture( GL_TEXTURE_2D, texture[0] );
 		glTexImage2D( GL_TEXTURE_2D, 0, 3, textureImage[0]->w, textureImage[0]->h, 0, GL_BGR,
@@ -201,11 +222,64 @@ void GlRenderer::load_textures() {
 		        GL_UNSIGNED_BYTE, textureImage[1]->pixels );
 		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
 		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+		
+		glBindTexture( GL_TEXTURE_2D, texture[2] );
+		glTexImage2D( GL_TEXTURE_2D, 0, 3, textureImage[2]->w, textureImage[2]->h, 0, GL_BGR,
+		        GL_UNSIGNED_BYTE, textureImage[2]->pixels );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 	//}
 
     if (textureImage[0]) {
 	    SDL_FreeSurface(textureImage[0]);
 	}
+	if (textureImage[1]) {
+	    SDL_FreeSurface(textureImage[1]);
+	}
+	if (textureImage[2]) {
+	    SDL_FreeSurface(textureImage[2]);
+	}
+}
+
+void GlRenderer::load_font() {
+    float cx, cy;
+    dl_index_ = glGenLists( 256 );
+    glBindTexture(GL_TEXTURE_2D, texture[2]);
+
+    for (int i = 0; i < 256; ++i) {
+
+	    cy = 1 - (float)(i % 16) / 16.0f;
+	    cx = 1 - (float)(i / 16) / 16.0f;
+
+	    glNewList(dl_index_ + (255 - i), GL_COMPILE);
+		glBegin(GL_QUADS);
+		glTexCoord2f(cx - 0.0625, cy);
+		glVertex2i(0, 0);
+
+		glTexCoord2f(cx, cy);
+		glVertex2i(8, 0);
+
+		glTexCoord2f(cx, cy - 0.0625f);
+		glVertex2i(8, 8);
+
+		glTexCoord2f(cx - 0.0625f, cy - 0.0625f);
+		glVertex2i(0, 8);
+		glEnd();
+
+		glTranslated(9, 0, 0);
+	    glEndList();
+	}
+}
+
+void GlRenderer::printgl(int x, int y, std::string output)
+{
+	glPushMatrix();
+    glLoadIdentity();
+    glTranslated(x, y, 0);
+    glListBase(dl_index_ - 0);
+    glBindTexture( GL_TEXTURE_2D, texture[2] );
+    glCallLists(output.size(), GL_BYTE, output.c_str());
+	glPopMatrix();
 }
 
 void GlRenderer::set_light(int index, const Light& light) {
