@@ -1,21 +1,21 @@
-#ifndef MAIN_GAME_STATE_HPP
-#define MAIN_GAME_STATE_HPP
+#ifndef GOBLIN_GAME_STATE_HPP
+#define GOBLIN_GAME_STATE_HPP
 
 #include <boost/shared_ptr.hpp>
 #include "gamestate.hpp"
 #include "camera.hpp"
 #include "entity.hpp"
 
-class MainGameState : public GameState
+class GoblinGameState : public GameState
 {
 public:
-	typedef boost::shared_ptr<MainGameState> ShPtr;
+	typedef boost::shared_ptr<GoblinGameState> ShPtr;
 	
 	Entity::ShPtr player;
 	std::list<Camera::ShPtr> cameras;
 	
-	MainGameState(GameState::ShPtr p, Entity::ShPtr e);
-	virtual ~MainGameState() {}
+	GoblinGameState(GameState::ShPtr p, Entity::ShPtr e);
+	virtual ~GoblinGameState() {}
 
 	virtual void handle_input();
 	virtual void draw();

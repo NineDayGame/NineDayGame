@@ -2,7 +2,7 @@
 #include "entity.hpp"
 #include "item.hpp"
 #include "util.hpp"
-#include "main_gamestate.hpp"
+#include "goblin_gamestate.hpp"
 #include "whattodo_menu.hpp"
 
 static void create_what_to_do(GameState::ShPtr m, MenuItem* me)
@@ -22,7 +22,7 @@ InventoryMenu::~InventoryMenu() {}
 
 void InventoryMenu::init()
 {
-	MainGameState::ShPtr m = SCONVERT(MainGameState,GameState,get_first_parent());
+	GoblinGameState::ShPtr m = SCONVERT(GoblinGameState,GameState,get_first_parent());
 	Entity::ShPtr e = m->player;
 	int i = 1;
 	foreach(Container::ShPtr c, e->inventory)

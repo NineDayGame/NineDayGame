@@ -1,4 +1,4 @@
-#include "main_gamestate.hpp"
+#include "goblin_gamestate.hpp"
 #include "menu.hpp"
 #include "item.hpp"
 #include "util.hpp"
@@ -8,12 +8,12 @@
 GameState::ShPtr GameState::state = GameState::ShPtr();
 bool GameState::running = true;
 
-MainGameState::MainGameState(GameState::ShPtr p, Entity::ShPtr e) : GameState(p), player(e)
+GoblinGameState::GoblinGameState(GameState::ShPtr p, Entity::ShPtr e) : GameState(p), player(e)
 {
 	
 }
 
-void MainGameState::handle_input()
+void GoblinGameState::handle_input()
 {
 	TCODConsole::flush();
 	TCOD_key_t key = TCODConsole::waitForKeypress(true);
@@ -51,7 +51,7 @@ void MainGameState::handle_input()
 	}
 }
 
-void MainGameState::draw()
+void GoblinGameState::draw()
 {
 	foreach(Container::ShPtr c, player->container.lock()->inventory)
 	{

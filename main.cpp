@@ -17,7 +17,7 @@
 #include "inputman.hpp"
 #include "monster.hpp"
 
-#include "main_gamestate.hpp"
+#include "goblin_gamestate.hpp"
 
 void clean_up()
 {
@@ -87,7 +87,7 @@ int main(int argc, char* argv[])
 		}
 		follow.push_front(e);
 
-		MainGameState::ShPtr mgs(new MainGameState(GameState::ShPtr(),e));
+		GoblinGameState::ShPtr mgs(new GoblinGameState(GameState::ShPtr(),e));
 		GameState::state = mgs;
 		
 		Camera::ShPtr c;
