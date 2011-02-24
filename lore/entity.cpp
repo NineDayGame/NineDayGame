@@ -12,6 +12,7 @@ Entity::Entity(boost::weak_ptr<Map> _host_map, int _x, int _y, int _c, TCODColor
 	c = _c;
 	color = _color;
 	sight_range = 7;
+	fov_cb = NULL;
 
 	host_map.lock()->data->setProperties(x,y,false,false);
 	known_map = Map::ShPtr(new Map(host_map.lock()->width,host_map.lock()->height));
@@ -54,7 +55,15 @@ void Entity::look()
 		{
 			if(host->data->isInFov(x+i,y+j))
 			{
-				host->copy_data(known_map,x+i,y+j);
+				char _c;
+				TCODColor _color;
+				bool _transparent;
+				bool _walkable;
+				bool seen_before = known_map->display[x+i + (y+j)*known_map->width].c != 0;
+				host->get_data(x+i,y+j,&_c,&_color,&_transparent,&_walkable);
+				known_map->set_data(x+i,y+j,_c,_color,_transparent,_walkable);
+				
+				if(fov_cb) (*fov_cb)(x+i,y+j,seen_before,_c,_color,_transparent,_walkable);
 			}
 		}
 	}
@@ -67,4 +76,9 @@ void Entity::look()
 			seen.push_back(e);
 		}
 	}
+}
+
+void Entity::register_fovcb(Entity::FOVCallback cb)
+{
+	fov_cb = cb;
 }
