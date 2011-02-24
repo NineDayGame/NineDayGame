@@ -4,7 +4,7 @@
 #include "util.hpp"
 #include "item.hpp"
 
-Living::Living(Map::WkPtr host_map, std::string n, int x, int y, int c, TCODColor color, int _health) : Entity(host_map,x,y,c,color), health(_health), name(n)
+Living::Living(Map::WkPtr host_map, std::string n, int x, int y, int c, TCODColor color, int _health) : Entity(host_map,x,y,c,color), health(_health), name(n),_rand(TCODRandom::getInstance())
 {
 	z = 1;
 }
@@ -12,6 +12,24 @@ Living::Living(Map::WkPtr host_map, std::string n, int x, int y, int c, TCODColo
 Living::~Living()
 {
 
+}
+
+void Living::init_stats(int _str, int _magic, int _dex, int _intel, int _con, int _soul, int _disp, int _speed)
+{
+	str = _str;
+	magic = _magic;
+	dex = _dex;
+	intel = _intel;
+	con = _con;
+	soul = _soul;
+	disp = _disp;
+	speed = _speed;
+
+	max_health = _rand->getInt(con,con*4);
+	max_mana = _rand->getInt(magic+soul,magic*2+soul*2);
+
+	health = max_health;
+	mana = max_mana;
 }
 
 bool Living::move(int x, int y)
@@ -44,7 +62,12 @@ bool Living::move(int x, int y)
 
 bool Living::attack(Living::ShPtr e)
 {
-	e->health--;
+	if(melee_tohit() > e->dodge())
+	{
+		int damage = melee_damage();
+		e->health -= damage;
+		cprintf("%s hit %s for %d damage.",name.c_str(),e->name.c_str(),damage);
+	}
 	if(e->health <= 0)
 	{
 		e->die(this);
@@ -58,15 +81,14 @@ void Living::die(Living* killer)
 	Map::ShPtr m = SCONVERT(Map,Container,container.lock());
 
 	double angle = atan2((y-killer->y),(x-killer->x));
-	TCODRandom* rand = TCODRandom::getInstance();
-	int radius = rand->getInt(0,6);
+	int radius = _rand->getInt(0,6);
 
 	char c;
 	TCODColor color;
 	bool trans;
 	bool walk;
 
-	int splatter_range = rand->getInt(1,6);
+	int splatter_range = _rand->getInt(1,6);
 	for(double a = (-3.14/splatter_range)+angle; a < (3.14/splatter_range)+angle; a += 0.1)
 	{
 		for(int i = 0; i < radius; ++i)

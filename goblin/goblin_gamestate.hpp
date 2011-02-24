@@ -13,6 +13,7 @@ public:
 	
 	Entity::ShPtr player;
 	std::list<Camera::ShPtr> cameras;
+	TextCamera::ShPtr health_indicator;
 	
 	GoblinGameState(GameState::ShPtr p, Entity::ShPtr e);
 	virtual ~GoblinGameState() {}
