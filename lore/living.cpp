@@ -44,7 +44,6 @@ bool Living::move(int x, int y)
 
 bool Living::attack(Living::ShPtr e)
 {
-	cprintf("%s attacks %s!",name.c_str(),e->name.c_str());
 	e->health--;
 	if(e->health <= 0)
 	{
@@ -52,9 +51,9 @@ bool Living::attack(Living::ShPtr e)
 	}
 }
 
-void Living::die(Entity* killer)
+void Living::die(Living* killer)
 {
-	cprintf("%s dies in a splatter of gore!",name.c_str());
+	cprintf("%s killed %s!",killer->name.c_str(),name.c_str());
 	
 	Map::ShPtr m = SCONVERT(Map,Container,container.lock());
 
