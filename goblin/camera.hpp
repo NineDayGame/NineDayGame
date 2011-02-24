@@ -22,6 +22,8 @@ public:
 	virtual ~Camera();
 
 	virtual void draw(TCODConsole* console);
+protected:
+	bool check_bounds(TCODConsole* console, Map::ShPtr map, int x, int y);
 };
 
 class EntityCamera : public Camera

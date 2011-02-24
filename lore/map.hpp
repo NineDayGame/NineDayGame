@@ -10,7 +10,7 @@ class Entity;
 
 class Map : public Container
 {
-private:
+protected:
 	typedef struct
 	{
 		TCODColor color;
@@ -48,6 +48,8 @@ public:
 
 	void randomize(int num_rooms);
 	void random_free_spot(int* x, int* y);
+
+	bool check_bounds(int x, int y);
 };
 
 #endif
