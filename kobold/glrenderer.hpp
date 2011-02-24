@@ -10,6 +10,7 @@
 #include "SDL/SDL.h"
 #include "SDL/SDL_opengl.h"
 
+#include "abilitywindow.hpp"
 #include "character.hpp"
 #include "entity.hpp"
 #include "map.hpp"
@@ -43,6 +44,7 @@ public:
 	void render();
 
 private:
+	AbilityWindow::ShPtr ability_window_;
 	GlConsoleWindow::ShPtr cwindow_;
 	GlWindow::ShPtr sheet_window_;
 	GlWindow::ShPtr inventory_window_;

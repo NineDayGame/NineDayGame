@@ -99,6 +99,15 @@ void GlRenderer::init_gl() {
 	cwindow_->print(std::string("Welcome to NineDayGame"));
 	register_printable(cwindow_);
 	
+	ability_window_.reset(new AbilityWindow());
+	ability_window_->set_dl_index(dl_index_);
+	ability_window_->set_texture(texture[2]);
+	ability_window_->set_position(SCREEN_WIDTH-160, 0, 0);
+	ability_window_->show();
+	ability_window_->set_ability(std::string("Mortal strike"), 1);
+	ability_window_->set_ability(std::string("Shield bash"), 2);
+	ability_window_->set_ability(std::string("Defend"),10);
+	
 	sheet_window_.reset(new GlWindow());
 	inventory_window_.reset(new GlWindow());
 }
@@ -188,6 +197,7 @@ void GlRenderer::render() {
 	glMatrixMode(GL_MODELVIEW);
 	
 	cwindow_->draw();
+	ability_window_->draw();
 	//printgl(0, 0, std::string("Hero explodes into tiny bits of goo!"));
 	
 	glMatrixMode(GL_PROJECTION);
