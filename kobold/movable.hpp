@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "util.hpp"
-#include "cube.hpp"
+//#include "cube.hpp"
 
 #include "mesh.hpp"
 #include "vector3f.hpp"
@@ -29,7 +29,7 @@ protected:
 	Mesh::ShPtr mesh_;
 	std::vector<Vector3f> colors_;
 	float x_, y_, z_;
-	float a_, b_, c_, d_;
+	float rx_, ry_, rz_;
 	float sx_, sy_, sz_;
 
 private:
