@@ -33,14 +33,12 @@ bool Entity::move(int _x, int _y)
 	
 	if(host->data->isWalkable(_x,_y))
 	{
-		bool transp = host->data->isTransparent(x,y);
-		bool transp2 = host->data->isTransparent(_x,_y);
-		host->data->setProperties(x,y,transp,true);
+		host->data->setProperties(x,y,true,true);
 
 		x = _x;
 		y = _y;
 
-		host->data->setProperties(x,y,transp2,false);
+		host->data->setProperties(x,y,false,false);
 		return true;
 	}
 	return false;
