@@ -18,6 +18,10 @@ void RenderMan::draw_frame() {
 	renderer_->render();
 }
 
+void RenderMan::print_to_renderer(std::string output) {
+	renderer_->printgl(output);
+}
+
 void RenderMan::reload_world() {
 	renderer_->load_map(*(e_->known_map));
 	renderer_->load_mobs(e_->seen);

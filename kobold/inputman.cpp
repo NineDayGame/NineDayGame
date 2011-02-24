@@ -16,10 +16,9 @@ bool InputMan::read_input() {
 	
 	bool retVal = false;
 	
-	while ( SDL_PollEvent( &event_ ) ) {
-		if( event_.type == SDL_KEYDOWN ) {
-			switch( event_.key.keysym.sym )
-			{
+	while (SDL_PollEvent( &event_) ) {
+		if (event_.type == SDL_KEYDOWN) {
+			switch (event_.key.keysym.sym) {
 				case SDLK_KP1:
 				case SDLK_LEFT: e_->move(e_->x-1, e_->y); e_->look(); break;
 				case SDLK_KP2: e_->move(e_->x-1, e_->y-1); e_->look(); break;
@@ -37,8 +36,12 @@ bool InputMan::read_input() {
 				case SDLK_F3: renderman_->toggle_wireframes(); break;
 				case SDLK_F12: renderman_->take_screenshot(); break;
 			}
-		
 			renderman_->reload_world();
+		} else if (event_.type == SDL_MOUSEBUTTONDOWN) {
+			switch (event_.button.button) {
+				case SDL_BUTTON_LEFT: renderman_->print_to_renderer(std::string("Mouse 1")); break;
+				case SDL_BUTTON_RIGHT: renderman_->print_to_renderer(std::string("Mouse 2")); break;
+			}
 		}
 		
 		if ( event_.type == SDL_QUIT ) {

@@ -15,8 +15,8 @@ void GlWindow::init() {
 void GlWindow::draw() {
 	glPushMatrix();
 	glLoadIdentity();
-	glTranslatef(128, 0, 0);
-	glScalef(256, 100, 0);
+	glTranslatef(position_->x, position_->y, 0.0f);
+	glScalef(scale_->x, scale_->y, 0.0f);
 	
 	glBindTexture(GL_TEXTURE_2D, texture_index_);
 	mesh_->draw();
@@ -27,10 +27,6 @@ void GlWindow::draw() {
 	glPopMatrix();
 }
 
-/*void GlWindow::update() {
-	//a_ += 1.0f;
-}*/
-
 void GlWindow::set_color(Vector3f color) {
 	colors_.clear();
 	for (int i = 0; i < (mesh_->triangle_count() * 3); ++i) {
@@ -39,15 +35,11 @@ void GlWindow::set_color(Vector3f color) {
 }
 
 void GlWindow::set_position(float x, float y, float z) {
-	x_ = x;
-	y_ = y;
-	z_ = z;
+	position_.reset(new Vector3f(x, y, z));
 }
 
 void GlWindow::set_scale3f(float x, float y, float z) {
-	sx_ = x;
-	sy_ = y;
-	sz_ = z;
+	scale_.reset(new Vector3f(x, y, z));
 }
 
 void GlWindow::set_texture(unsigned int t) {

@@ -13,8 +13,8 @@
 #include "glrenderer.hpp"
 
 //Screen attributes
-const int SCREEN_WIDTH = 1024;
-const int SCREEN_HEIGHT = 768;
+const int SCREEN_WIDTH = 1200;
+const int SCREEN_HEIGHT = 750;
 const int SCREEN_BPP = 32;
 
 //The frame rate
@@ -92,7 +92,11 @@ void GlRenderer::init_gl() {
     plight->set_attenuation_linear(0.01f);
     plight->set_attenuation_quadratic(0.01f);
 
-	window_.reset(new GlWindow());
+	cwindow_.reset(new GlConsoleWindow());
+	cwindow_->set_dl_index(dl_index_);
+	cwindow_->set_texture(texture[2]);
+	cwindow_->print(std::string("Welcome to NineDayGame"));
+	//print_to_opengl = cwindow_;
 }
 
 void GlRenderer::load_map(const Map& map) {
@@ -176,8 +180,8 @@ void GlRenderer::render() {
 	glOrtho(0, SCREEN_WIDTH, 0, SCREEN_HEIGHT, -1, 1);
 	glMatrixMode(GL_MODELVIEW);
 	
-	//window_->draw();
-	printgl(0, 0, std::string("Hero explodes into tiny bits of goo!"));
+	cwindow_->draw();
+	//printgl(0, 0, std::string("Hero explodes into tiny bits of goo!"));
 	
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
@@ -266,20 +270,21 @@ void GlRenderer::load_font() {
 		glVertex2i(0, 8);
 		glEnd();
 
-		glTranslated(9, 0, 0);
+		glTranslated(8, 0, 0);
 	    glEndList();
 	}
 }
 
-void GlRenderer::printgl(int x, int y, std::string output)
+void GlRenderer::printgl(std::string output)
 {
-	glPushMatrix();
+	/*glPushMatrix();
     glLoadIdentity();
     glTranslated(x, y, 0);
     glListBase(dl_index_ - 0);
     glBindTexture( GL_TEXTURE_2D, texture[2] );
     glCallLists(output.size(), GL_BYTE, output.c_str());
-	glPopMatrix();
+	glPopMatrix();*/
+	cwindow_->print(output);
 }
 
 void GlRenderer::set_light(int index, const Light& light) {
