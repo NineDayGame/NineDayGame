@@ -14,10 +14,10 @@
 #include "menu.hpp"
 #include "util.hpp"
 #include "renderman.hpp"
-#include "inputman.hpp"
 #include "monster.hpp"
 
 #include "goblin_gamestate.hpp"
+#include "kobold_gamestate.hpp"
 
 void clean_up()
 {
@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
 
 	int x,y;
 	m->random_free_spot(&x,&y);
-	Living::ShPtr l(new Living(Map::WkPtr(m),"Hero",x,y,'@',TCOD_red,30));
+	Living::ShPtr l(new Living(Map::WkPtr(m),"Hero",x,y,'@',TCOD_red,30000));
 	m->get(l);
 
 	TCODRandom* rand = TCODRandom::getInstance();
@@ -59,22 +59,10 @@ int main(int argc, char* argv[])
 	Entity::ShPtr e = SCONVERT(Entity,Container,m->inventory.front());
 	
 	if (argc==1) {		
-		bool quit = false;
-
 		RenderMan::ShPtr renderman (new RenderMan());
 		renderman->set_entity(e);
-		InputMan::ShPtr inputman (new InputMan());
-		inputman->set_renderman(renderman);
-		inputman->set_entity(e);
-
-		while( quit == false )
-		{
-			quit = inputman->read_input();
-			renderman->draw_frame();
-		}
-
-		clean_up();
-	
+		KoboldGameState::ShPtr kgs(new KoboldGameState(GameState::ShPtr(),renderman,e));
+		GameState::state = kgs;	
 	} else {
 
 		TCODConsole::initRoot(width,height,"Test",false);
@@ -104,13 +92,15 @@ int main(int argc, char* argv[])
 		mgs->cameras.push_back(c);
 		TextCamera::ShPtr tc = SCONVERT(TextCamera,Camera,c);
 		print_to = tc;
-
-		while(GameState::running)
-		{
-			GameState::state->draw();
-			GameState::state->handle_input();
-		}
 	}
+
+	while(GameState::running)
+	{
+		GameState::state->draw();
+		GameState::state->handle_input();
+	}
+
+	clean_up();
 
 	return 0;
 }
