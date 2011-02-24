@@ -10,7 +10,6 @@
 #include "SDL/SDL.h"
 #include "SDL/SDL_opengl.h"
 
-#include "abilitywindow.hpp"
 #include "character.hpp"
 #include "entity.hpp"
 #include "map.hpp"
@@ -18,8 +17,11 @@
 #include "player.hpp"
 #include "timer.hpp"
 #include "util.hpp"
+#include "abilitywindow.hpp"
 #include "glconsolewindow.hpp"
 #include "glwindow.hpp"
+#include "healthwindow.hpp"
+#include "menuwindow.hpp"
 
 class GlRenderer {
 public:
@@ -46,6 +48,8 @@ public:
 private:
 	AbilityWindow::ShPtr ability_window_;
 	GlConsoleWindow::ShPtr cwindow_;
+	HealthWindow::ShPtr health_window_;
+	MenuWindow::ShPtr menu_window_;
 	GlWindow::ShPtr sheet_window_;
 	GlWindow::ShPtr inventory_window_;
 	Timer::ShPtr fps_;

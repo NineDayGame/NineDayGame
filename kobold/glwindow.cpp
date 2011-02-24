@@ -41,12 +41,16 @@ void GlWindow::set_position(float x, float y, float z) {
 	position_.reset(new Vector3f(x, y, z));
 }
 
-void GlWindow::set_scale3f(float x, float y, float z) {
+void GlWindow::set_scale(float x, float y, float z) {
 	scale_.reset(new Vector3f(x, y, z));
 }
 
 void GlWindow::set_texture(unsigned int t) {
 	texture_index_ = t;
+}
+
+bool GlWindow::is_shown() {
+	return visible_;
 }
 
 void GlWindow::show() {

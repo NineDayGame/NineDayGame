@@ -108,6 +108,23 @@ void GlRenderer::init_gl() {
 	ability_window_->set_ability(std::string("Shield bash"), 2);
 	ability_window_->set_ability(std::string("Defend"),10);
 	
+	menu_window_.reset(new MenuWindow());
+	menu_window_->set_dl_index(dl_index_);
+	menu_window_->set_texture(texture[2]);
+	menu_window_->set_position(400, 200, 0);
+	menu_window_->set_scale(200, 200, 0);
+	//menu_window_->show();
+	menu_window_->push_item(std::string("Menu item 1"));
+	menu_window_->push_item(std::string("Menu item 2"));
+	menu_window_->push_item(std::string("Menu item 3"));
+	
+	health_window_.reset(new HealthWindow());
+	health_window_->set_dl_index(dl_index_);
+	health_window_->set_texture(texture[2]);
+	health_window_->set_position(0, SCREEN_HEIGHT-8, 0);
+	health_window_->update_health(20, 20);
+	health_window_->show();
+	
 	sheet_window_.reset(new GlWindow());
 	inventory_window_.reset(new GlWindow());
 }
@@ -198,6 +215,8 @@ void GlRenderer::render() {
 	
 	cwindow_->draw();
 	ability_window_->draw();
+	menu_window_->draw();
+	health_window_->draw();
 	//printgl(0, 0, std::string("Hero explodes into tiny bits of goo!"));
 	
 	glMatrixMode(GL_PROJECTION);
