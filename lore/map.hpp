@@ -10,7 +10,7 @@ class Entity;
 
 class Map : public Container
 {
-private:
+protected:
 	typedef struct
 	{
 		TCODColor color;
@@ -39,8 +39,6 @@ public:
 	Map(int width, int height);
 	~Map();
 
-	void draw(TCODConsole* console);
-
 	void get_data(int x, int y, char* c, TCODColor* color, bool* transparent, bool* walkable);
 	void set_data(int x, int y, char c, TCODColor color, bool transparent, bool walkable);
 	void copy_data(Map::ShPtr m, int x, int y);
@@ -48,6 +46,8 @@ public:
 
 	void randomize(int num_rooms);
 	void random_free_spot(int* x, int* y);
+
+	bool check_bounds(int x, int y);
 };
 
 #endif

@@ -17,7 +17,7 @@
 #include "inputman.hpp"
 #include "monster.hpp"
 
-#include "main_gamestate.hpp"
+#include "goblin_gamestate.hpp"
 
 void clean_up()
 {
@@ -87,7 +87,7 @@ int main(int argc, char* argv[])
 		}
 		follow.push_front(e);
 
-		MainGameState::ShPtr mgs(new MainGameState(GameState::ShPtr(),e));
+		GoblinGameState::ShPtr mgs(new GoblinGameState(GameState::ShPtr(),e));
 		GameState::state = mgs;
 		
 		Camera::ShPtr c;
@@ -105,14 +105,10 @@ int main(int argc, char* argv[])
 		TextCamera::ShPtr tc = SCONVERT(TextCamera,Camera,c);
 		print_to_camera = tc;
 
-		while(!TCODConsole::isWindowClosed())
+		while(GameState::running)
 		{
-			GameState::state->draw(TCODConsole::root);
-
-			//TCODSystem::saveScreenshot(NULL);
-			TCODConsole::flush();
-			TCOD_key_t key=TCODConsole::waitForKeypress(true);
-			GameState::state->handle_key_press(key);
+			GameState::state->draw();
+			GameState::state->handle_input();
 		}
 	}
 

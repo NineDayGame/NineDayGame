@@ -1,4 +1,4 @@
-#include "main_gamestate.hpp"
+#include "goblin_gamestate.hpp"
 #include "menu.hpp"
 #include "item.hpp"
 #include "util.hpp"
@@ -6,14 +6,19 @@
 #include "ai.hpp"
 
 GameState::ShPtr GameState::state = GameState::ShPtr();
+bool GameState::running = true;
 
-MainGameState::MainGameState(GameState::ShPtr p, Entity::ShPtr e) : GameState(p), player(e)
+GoblinGameState::GoblinGameState(GameState::ShPtr p, Entity::ShPtr e) : GameState(p), player(e)
 {
 	
 }
 
-void MainGameState::handle_key_press(TCOD_key_t key)
+void GoblinGameState::handle_input()
 {
+	TCODConsole::flush();
+	TCOD_key_t key = TCODConsole::waitForKeypress(true);
+	
+	if(TCODConsole::isWindowClosed()) { GameState::running = false; return; }
 	if(key.vk == TCODK_KP8) { player->move(player->x,player->y-1); }
 	if(key.vk == TCODK_KP2) { player->move(player->x,player->y+1); }
 	if(key.vk == TCODK_KP4) { player->move(player->x-1,player->y); }
@@ -46,7 +51,7 @@ void MainGameState::handle_key_press(TCOD_key_t key)
 	}
 }
 
-void MainGameState::draw(TCODConsole* console)
+void GoblinGameState::draw()
 {
 	foreach(Container::ShPtr c, player->container.lock()->inventory)
 	{
@@ -58,6 +63,6 @@ void MainGameState::draw(TCODConsole* console)
 	}
 	foreach(Camera::ShPtr c, cameras)
 	{
-		c->draw(console);
+		c->draw();
 	}
 }

@@ -10,8 +10,9 @@ MenuItem::~MenuItem()
 
 }
 
-void MenuItem::draw(TCODConsole* console)
+void MenuItem::draw()
 {
+	TCODConsole* console = TCODConsole::root;
 	if(selected)
 	{
 		console->setBackgroundColor(TCOD_blue);

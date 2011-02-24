@@ -20,23 +20,11 @@ Map::~Map()
 	delete[] display;
 }
 
-void Map::draw(TCODConsole* console)
+bool Map::check_bounds(int x, int y)
 {
-	for(int y = 0; y < height; ++y)
-	{
-		for(int x = 0; x < width; ++x)
-		{
-			char c = display[x+y*width].c;
-			TCODColor color = display[x+y*width].color;
-			console->setChar(x,y,c);
-			console->setFore(x,y,color);
-		}
-	}
-	foreach(Container::ShPtr i,inventory)
-	{
-		Entity::ShPtr e = SCONVERT(Entity,Container,i);
-		e->draw(console);
-	}
+	if(x < 0 || x > width) return false;
+	if(y < 0 || y > height) return false;
+	return true;
 }
 
 void Map::get_data(int x, int y, char* c, TCODColor* color, bool* transparent, bool* walkable)
@@ -49,17 +37,23 @@ void Map::get_data(int x, int y, char* c, TCODColor* color, bool* transparent, b
 
 void Map::set_data(int x, int y, char c, TCODColor color, bool transparent, bool walkable)
 {
-	display[x+y*width].c = c;
-	display[x+y*width].color = color;
-	data->setProperties(x,y,transparent,walkable);
+	if(check_bounds(x,y))
+	{
+		display[x+y*width].c = c;
+		display[x+y*width].color = color;
+		data->setProperties(x,y,transparent,walkable);
+	}
 }
 
 void Map::copy_data(Map::ShPtr m, int x, int y)
 {
-	ConsoleDisplay cd = display[x+y*width];
-	bool t = data->isTransparent(x,y);
-	bool w = data->isWalkable(x,y);
-	m->set_data(x,y,cd.c,cd.color,t,w);
+	if(check_bounds(x,y) && m->check_bounds(x,y))
+	{
+		ConsoleDisplay cd = display[x+y*width];
+		bool t = data->isTransparent(x,y);
+		bool w = data->isWalkable(x,y);
+		m->set_data(x,y,cd.c,cd.color,t,w);
+	}
 }
 
 void Map::clear()
@@ -69,6 +63,8 @@ void Map::clear()
 		for(int x = 0; x < width; ++x)
 		{
 			data->setProperties(x,y,true,true);
+			display[x+y*width].c = 0;
+			display[x+y*width].color = TCOD_black;
 		}
 	}
 }
