@@ -5,9 +5,6 @@
 #include "inventory_menu.hpp"
 #include "ai.hpp"
 
-GameState::ShPtr GameState::state = GameState::ShPtr();
-bool GameState::running = true;
-
 GoblinGameState::GoblinGameState(GameState::ShPtr p, Entity::ShPtr e) : GameState(p), player(e)
 {
 	
