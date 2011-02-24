@@ -133,11 +133,14 @@ void GlRenderer::load_mobs(std::list<Entity::WkPtr> mobs) {
 	foreach (Entity::WkPtr e, mobs) {
 		Character::ShPtr chr (new Character());
 		Entity::ShPtr m = e.lock();
-		chr->set_position(m->x, m->y, 0.5f);
-		TCODColor c = m->color;
-		chr->set_texture(texture[0]);
-		chr->set_color(Vector3f((c.r/255.0f), (c.g/255.0f), (c.b/255.0f)));
-		movables_.push_back(chr);
+		if(m)
+		{
+			chr->set_position(m->x, m->y, 0.5f);
+			TCODColor c = m->color;
+			chr->set_texture(texture[0]);
+			chr->set_color(Vector3f((c.r/255.0f), (c.g/255.0f), (c.b/255.0f)));
+			movables_.push_back(chr);
+		}
 	}
 }
 
