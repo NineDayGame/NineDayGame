@@ -18,6 +18,7 @@
 #include "timer.hpp"
 #include "util.hpp"
 #include "glconsolewindow.hpp"
+#include "glwindow.hpp"
 
 class GlRenderer {
 public:
@@ -43,6 +44,8 @@ public:
 
 private:
 	GlConsoleWindow::ShPtr cwindow_;
+	GlWindow::ShPtr sheet_window_;
+	GlWindow::ShPtr inventory_window_;
 	Timer::ShPtr fps_;
 	std::vector<Movable::ShPtr> movables_;
 	Player::ShPtr player_;

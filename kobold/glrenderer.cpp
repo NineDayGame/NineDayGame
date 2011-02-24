@@ -95,8 +95,11 @@ void GlRenderer::init_gl() {
 	cwindow_.reset(new GlConsoleWindow());
 	cwindow_->set_dl_index(dl_index_);
 	cwindow_->set_texture(texture[2]);
+	cwindow_->show();
 	cwindow_->print(std::string("Welcome to NineDayGame"));
 	//print_to_opengl = cwindow_;
+	sheet_window_.reset(new GlWindow());
+	inventory_window_.reset(new GlWindow());
 }
 
 void GlRenderer::load_map(const Map& map) {

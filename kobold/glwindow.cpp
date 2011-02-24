@@ -3,7 +3,8 @@
 #include "vector3f.hpp"
 
 GlWindow::GlWindow()
-  : texture_index_(0) {
+  : texture_index_(0),
+    visible_(false) {
 	init();
 }
 
@@ -13,18 +14,20 @@ void GlWindow::init() {
 }
 
 void GlWindow::draw() {
-	glPushMatrix();
-	glLoadIdentity();
-	glTranslatef(position_->x, position_->y, 0.0f);
-	glScalef(scale_->x, scale_->y, 0.0f);
-	
-	glBindTexture(GL_TEXTURE_2D, texture_index_);
-	mesh_->draw();
-	glColorPointer(3, GL_FLOAT, 0, &colors_[0]);
-	
-	glDrawArrays(GL_TRIANGLES, 0, mesh_->triangle_count() * 3);
-	
-	glPopMatrix();
+	if (visible_) {
+		glPushMatrix();
+		glLoadIdentity();
+		glTranslatef(position_->x, position_->y, 0.0f);
+		glScalef(scale_->x, scale_->y, 0.0f);
+		
+		glBindTexture(GL_TEXTURE_2D, texture_index_);
+		mesh_->draw();
+		glColorPointer(3, GL_FLOAT, 0, &colors_[0]);
+		
+		glDrawArrays(GL_TRIANGLES, 0, mesh_->triangle_count() * 3);
+		
+		glPopMatrix();
+	}
 }
 
 void GlWindow::set_color(Vector3f color) {
@@ -44,4 +47,12 @@ void GlWindow::set_scale3f(float x, float y, float z) {
 
 void GlWindow::set_texture(unsigned int t) {
 	texture_index_ = t;
+}
+
+void GlWindow::show() {
+	visible_ = true;
+}
+
+void GlWindow::hide() {
+	visible_ = false;
 }

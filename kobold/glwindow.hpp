@@ -19,6 +19,8 @@ public:
 	virtual void set_position(float x, float y, float z);
 	void set_scale3f(float x, float y, float z);
 	void set_texture(unsigned int t);
+	void show();
+	void hide();
 
 protected:
 	Mesh::ShPtr mesh_;
@@ -26,7 +28,7 @@ protected:
 
 private:
 	std::vector<Vector3f> colors_;
-
+	bool visible_;
 	Vector3f::ShPtr position_;
 	Vector3f::ShPtr scale_;
 
