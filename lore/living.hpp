@@ -17,12 +17,14 @@
 	last_args = args;                           \
 	if(action_energy < (energy)/speed)          \
 	{                                           \
+		blocked = true;                         \
 		Living::ShPtr l = SCONVERT(Living,Container,this->shared_from_this()); \
 		as.schedule_action(l,__FUNCTION__,(energy)/speed); \
 		return;                                 \
 	}                                           \
 	else                                        \
 	{                                           \
+		blocked = false;                        \
 		action_energy -= (energy)/speed;        \
 	}
 
@@ -57,6 +59,7 @@ public:
 	int disp;
 	float speed;
 
+	bool blocked;
 	int action_energy;
 
 	int melee_tohit() { return rand(str/4 + dex); }
@@ -69,7 +72,7 @@ public:
 	virtual void init_stats(int str, int magic, int dex, int intel, int con, int soul, int disp, int speed);
 	
 	virtual bool move(int x, int y);
-	virtual bool attack(Living::ShPtr e);
+	virtual void attack(ActionArgs args);
 	
 	void test(ActionArgs args);
 

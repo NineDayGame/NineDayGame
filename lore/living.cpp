@@ -6,12 +6,13 @@
 
 #include "action_scheduler.hpp"
 
-Living::Living(Map::WkPtr host_map, std::string n, int x, int y, int c, TCODColor color, int _health) : Entity(host_map,x,y,c,color), health(_health), name(n),_rand(TCODRandom::getInstance()), action_energy(0)
+Living::Living(Map::WkPtr host_map, std::string n, int x, int y, int c, TCODColor color, int _health) : Entity(host_map,x,y,c,color), health(_health), name(n),_rand(TCODRandom::getInstance()), action_energy(0), blocked(false)
 {
 	z = 1;
 	faction = 0;
 
 	actions["test"] = &Living::test;
+	actions["attack"] = &Living::attack;
 }
 
 void Living::test(ActionArgs args)
@@ -53,7 +54,9 @@ bool Living::move(int x, int y)
 			Living::ShPtr e = DCONVERT(Living,Entity,w.lock());
 			if(e != NULL && e->x == x && e->y == y)
 			{
-				attack(e);
+				ActionArgs args;
+				args.push_back(e);
+				attack(args);
 			}
 		}
 	}
@@ -72,8 +75,10 @@ bool Living::move(int x, int y)
 	}
 }
 
-bool Living::attack(Living::ShPtr e)
+void Living::attack(ActionArgs args)
 {
+	SCHEDULE_ACTION(100);
+	Living::ShPtr e = SCONVERT(Living,void,args[0]);
 	if(melee_tohit() > e->dodge())
 	{
 		int damage = melee_damage();
