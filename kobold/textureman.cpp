@@ -47,18 +47,18 @@ void TextureMan::load_textures() {
 			tex->set_index(tex_indicies[i]);
 			textures_.push_back(tex);
 			// TODO: Not sure if we can free this just yet - please check this
-			//SDL_FreeSurface(textureImage[i]);
+			SDL_FreeSurface(textureImage[i]);
 		} else {
 			std::cout << "TextureMan: Error loading texture " << tex_names_.at(i) << std::endl;
 		}
 	}
 
 	// TODO: Not sure if we have to do this down here... see above TODO
-	for (int i = 0; i < tex_count; ++i) {
-		if (textureImage[i]) {
-			SDL_FreeSurface(textureImage[i]);
-		}
-	}
+	//for (int i = 0; i < tex_count; ++i) {
+	//	if (textureImage[i]) {
+	//		SDL_FreeSurface(textureImage[i]);
+	//	}
+	//}
 	
 	loaded_ = true;	
 }
@@ -67,11 +67,8 @@ void TextureMan::load_textures() {
  * Uses a dumb linear search to find a texture with the same name. Optimizations welcome!
  */
 const Texture::ShPtr TextureMan::get_texture(std::string name) const {
-	std::cout << "Looking up texture " << name << std::endl;
 	foreach (Texture::ShPtr tex, textures_) {
-		std::cout << "Checking " << tex->get_name() << std::endl;
 		if (tex->is_name(name)) {
-			std::cout << "Match found " << tex->get_index() << std::endl;
 			return tex;
 		}
 	}
