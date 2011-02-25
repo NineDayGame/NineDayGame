@@ -14,9 +14,9 @@
 // *** This will only work in functions inside of a Living-derived class ***
 // This assumes the ActionArgs for the function is called args
 #define SCHEDULE_ACTION(energy)                 \
-	last_args = args;                           \
 	if(action_energy < (energy)/speed)          \
 	{                                           \
+		last_args.push_back(args);              \
 		blocked = true;                         \
 		Living::ShPtr l = SCONVERT(Living,Container,this->shared_from_this()); \
 		as.schedule_action(l,__FUNCTION__,(energy)/speed); \
@@ -42,7 +42,7 @@ public:
 	typedef void (Living::*Action)(ActionArgs args);
 	
 	boost::unordered_map<std::string, Living::Action> actions;
-	ActionArgs last_args;
+	std::list<ActionArgs> last_args;
 
 	std::string name;
 
@@ -78,6 +78,9 @@ public:
 	virtual void walk(ActionArgs args);
 	virtual void attack(ActionArgs args);
 	virtual void pickup(ActionArgs args);
+	virtual void wait(ActionArgs args);
+
+	virtual void spin_attack(ActionArgs args);
 	
 	void test(ActionArgs args);
 
@@ -85,6 +88,8 @@ public:
 protected:
 	TCODRandom* _rand;
 	virtual int rand(int x) { return _rand->getInt(0,x); }
+
+	double distance(int x1, int y1, int x2, int y2);
 };
 
 #endif

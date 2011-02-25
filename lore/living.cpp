@@ -15,6 +15,8 @@ Living::Living(Map::WkPtr host_map, std::string n, int x, int y, int c, TCODColo
 	REGISTER_ACTION(attack);
 	REGISTER_ACTION(walk);
 	REGISTER_ACTION(pickup);
+	REGISTER_ACTION(wait);
+	REGISTER_ACTION(spin_attack);
 }
 
 void Living::test(ActionArgs args)
@@ -27,6 +29,11 @@ void Living::test(ActionArgs args)
 Living::~Living()
 {
 
+}
+
+double Living::distance(int x1, int y1, int x2, int y2)
+{
+	return sqrt(pow(x1-x2,2)+pow(y1-y2,2));
 }
 
 void Living::init_stats(int _str, int _magic, int _dex, int _intel, int _con, int _soul, int _disp, int _speed)
@@ -93,15 +100,18 @@ void Living::attack(ActionArgs args)
 {
 	SCHEDULE_ACTION(100);
 	Living::ShPtr e = SCONVERT(Living,void,args[0]);
-	if(melee_tohit() > e->dodge())
+	if(e)
 	{
-		int damage = melee_damage();
-		e->health -= damage;
-		cprintf("%s hit %s for %d damage.",name.c_str(),e->name.c_str(),damage);
-	}
-	if(e->health <= 0)
-	{
-		e->die(this);
+		if(melee_tohit() > e->dodge())
+		{
+			int damage = melee_damage();
+			e->health -= damage;
+			cprintf("%s hit %s for %d damage.",name.c_str(),e->name.c_str(),damage);
+		}
+		if(e->health <= 0)
+		{
+			e->die(this);
+		}
 	}
 }
 
@@ -142,4 +152,31 @@ void Living::die(Living* killer)
 	m->get_data(x,y,&c,&color,&trans,&walk);
 	m->set_data(x,y,c,TCOD_red,true,true);
 	m->remove(this->shared_from_this());
+}
+
+void Living::wait(ActionArgs args)
+{
+	SCHEDULE_ACTION(10);
+}
+
+void Living::spin_attack(ActionArgs args)
+{
+	SCHEDULE_ACTION(500);
+	cprintf("%s performs a spin attack!",name.c_str());
+	std::list<Living::ShPtr> to_attack;
+	foreach(Entity::WkPtr e, seen)
+	{
+		Living::ShPtr l = SCONVERT(Living,Entity,e.lock());
+		if(l && l.get() != this && l->health > 0 && distance(x,y,l->x,l->y) < 2)
+		{
+			to_attack.push_back(l);
+		}
+	}
+	action_energy += to_attack.size() * 100/speed;
+	foreach(Living::ShPtr e, to_attack)
+	{
+		ActionArgs a;
+		a.push_back(e);
+		attack(a);
+	}
 }
