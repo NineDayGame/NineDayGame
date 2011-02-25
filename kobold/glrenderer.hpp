@@ -15,6 +15,7 @@
 #include "map.hpp"
 #include "movable.hpp"
 #include "player.hpp"
+#include "textureman.hpp"
 #include "timer.hpp"
 #include "util.hpp"
 #include "abilitywindow.hpp"
@@ -33,7 +34,6 @@ public:
 	void add_window(GlWindow::ShPtr window);
 	void load_map(const Map& map);
 	void load_mobs(std::list<Entity::WkPtr> mobs);
-	void load_textures();
 	void load_font();
 	void printgl(std::string output);
 	void set_light(int index, const Light& light);
@@ -42,7 +42,6 @@ public:
 	void toggle_fullscreen();
 	void toggle_lighting();
 	void toggle_wireframes();
-	void update();
 	void set_player(float x, float y);
 	void render();
 
@@ -56,12 +55,12 @@ private:
 	Timer::ShPtr fps_;
 	std::vector<Movable::ShPtr> movables_;
 	std::list<GlWindow::ShPtr> windows_;
+	TextureMan::ShPtr texman_;
 	
 	Player::ShPtr player_;
 	SDL_Surface* sdlSurface_;
 	float cameraX_, cameraY_, cameraZ_;
 	float lightX_, lightY_, lightZ_;
-	boost::shared_array<unsigned int> texture;
 	bool lights_, wireframes_;
 	int dl_index_;
 	

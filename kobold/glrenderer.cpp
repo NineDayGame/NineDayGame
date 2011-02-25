@@ -79,10 +79,14 @@ void GlRenderer::init_gl() {
         //error
     }
     
-    load_textures();
+    texman_.reset(new TextureMan());
+    texman_->load_textures();
+    const int texid = texman_->get_texture("resources/terminal.bmp")->get_index();
+    
+    
     load_font();
     player_.reset(new Player());
-    player_->set_texture(texture[0]);
+    player_->set_texture(texman_->get_texture("resources/default.bmp")->get_index());
     Light::ShPtr plight = player_->get_light();
     Vector4f::ShPtr amb (new Vector4f(0.08f, 0.08f, 0.08f, 1.0f));
     plight->set_ambient(amb);
@@ -94,7 +98,7 @@ void GlRenderer::init_gl() {
     
     cwindow_.reset(new GlConsoleWindow());
 	cwindow_->set_dl_index(dl_index_);
-	cwindow_->set_texture(texture[2]);
+	cwindow_->set_texture(texid);
 	cwindow_->show();
 	cwindow_->print(std::string("Welcome to NineDayGame"));
 	register_printable(cwindow_);
@@ -102,7 +106,7 @@ void GlRenderer::init_gl() {
 	
 	ability_window_.reset(new AbilityWindow());
 	ability_window_->set_dl_index(dl_index_);
-	ability_window_->set_texture(texture[2]);
+	ability_window_->set_texture(texid);
 	ability_window_->set_position(SCREEN_WIDTH-160, 0, 0);
 	ability_window_->show();
 	ability_window_->set_ability(std::string("Mortal strike"), 1);
@@ -122,7 +126,7 @@ void GlRenderer::init_gl() {
 	
 	health_window_.reset(new HealthWindow());
 	health_window_->set_dl_index(dl_index_);
-	health_window_->set_texture(texture[2]);
+	health_window_->set_texture(texid);
 	health_window_->set_position(0, SCREEN_HEIGHT-8, 0);
 	health_window_->update_health(20, 20);
 	health_window_->show();
@@ -139,12 +143,13 @@ void GlRenderer::add_window(GlWindow::ShPtr window) {
 void GlRenderer::load_map(const Map& map) {
 	
 	movables_.clear();
+	const int texid = texman_->get_texture("resources/stone3.bmp")->get_index();
 	for (int x = 0; x < map.width; ++x) {
 		for (int y = 0; y < map.height; ++y) {
 			if (map.display[x+y*map.width].c == '.') {
 				Block::ShPtr blk (new Block());
 				blk->set_position((float)x, (float)y, 0.0f);
-				blk->set_texture(texture[1]);
+				blk->set_texture(texid);
 				TCODColor c = map.display[x+y*map.width].color;
 				blk->set_color(Vector3f((c.r/255.0f), (c.g/255.0f), (c.b/255.0f)));
 				movables_.push_back(blk);
@@ -170,7 +175,8 @@ void GlRenderer::load_map(const Map& map) {
 }
 
 void GlRenderer::load_mobs(std::list<Entity::WkPtr> mobs) {
-	//for (int i = 0; i < mobs.size(); ++i) {
+
+	const int texid = texman_->get_texture("resources/default.bmp")->get_index();
 	foreach (Entity::WkPtr e, mobs) {
 		Character::ShPtr chr (new Character());
 		Entity::ShPtr m = e.lock();
@@ -178,7 +184,7 @@ void GlRenderer::load_mobs(std::list<Entity::WkPtr> mobs) {
 		{
 			chr->set_position(m->x, m->y, 0.5f);
 			TCODColor c = m->color;
-			chr->set_texture(texture[0]);
+			chr->set_texture(texid);
 			chr->set_color(Vector3f((c.r/255.0f), (c.g/255.0f), (c.b/255.0f)));
 			movables_.push_back(chr);
 		}
@@ -223,18 +229,9 @@ void GlRenderer::render() {
 	foreach(GlWindow::ShPtr window, windows_) {
 		window->draw();
 	}
-	//cwindow_->draw();
-	//ability_window_->draw();
-	//menu_window_->draw();
-	//health_window_->draw();
-	//printgl(0, 0, std::string("Hero explodes into tiny bits of goo!"));
 	
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
-	//glMatrixMode(GL_MODELVIEW);
-	//glPopMatrix();
-	//glPopMatrix();
-	//glMatrixMode(GL_MODELVIEW);
 	glEnable(GL_LIGHTING);
 
 	SDL_GL_SwapBuffers();
@@ -249,52 +246,11 @@ void GlRenderer::render() {
 	glDisableClientState(GL_COLOR_ARRAY);
 }
 
-void GlRenderer::load_textures() {
-
-	texture.reset(new unsigned int[3]);
-	SDL_Surface *textureImage[3]; 
-
-	//if ((textureImage[0] = SDL_LoadBMP( "default.bmp" ))) {
-		textureImage[0] = SDL_LoadBMP("resources/default.bmp");
-		textureImage[1] = SDL_LoadBMP("resources/stone3.bmp");
-		textureImage[2] = SDL_LoadBMP("resources/terminal.bmp");
-		
-		glGenTextures( 3, &texture[0] );
-		
-		glBindTexture( GL_TEXTURE_2D, texture[0] );
-		glTexImage2D( GL_TEXTURE_2D, 0, 3, textureImage[0]->w, textureImage[0]->h, 0, GL_BGR,
-		        GL_UNSIGNED_BYTE, textureImage[0]->pixels );
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-		
-		glBindTexture( GL_TEXTURE_2D, texture[1] );
-		glTexImage2D( GL_TEXTURE_2D, 0, 3, textureImage[1]->w, textureImage[1]->h, 0, GL_BGR,
-		        GL_UNSIGNED_BYTE, textureImage[1]->pixels );
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-		
-		glBindTexture( GL_TEXTURE_2D, texture[2] );
-		glTexImage2D( GL_TEXTURE_2D, 0, 3, textureImage[2]->w, textureImage[2]->h, 0, GL_BGR,
-		        GL_UNSIGNED_BYTE, textureImage[2]->pixels );
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-		glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-	//}
-
-    if (textureImage[0]) {
-	    SDL_FreeSurface(textureImage[0]);
-	}
-	if (textureImage[1]) {
-	    SDL_FreeSurface(textureImage[1]);
-	}
-	if (textureImage[2]) {
-	    SDL_FreeSurface(textureImage[2]);
-	}
-}
-
+// TODO: Fonts should be a separate object, and loaded and managed by a font manager
 void GlRenderer::load_font() {
     float cx, cy;
     dl_index_ = glGenLists( 256 );
-    glBindTexture(GL_TEXTURE_2D, texture[2]);
+    glBindTexture(GL_TEXTURE_2D, texman_->get_texture("resources/terminal.bmp")->get_index());
 
     for (int i = 0; i < 256; ++i) {
 
@@ -321,15 +277,9 @@ void GlRenderer::load_font() {
 	}
 }
 
+// TODO: Take this out of the engine
 void GlRenderer::printgl(std::string output)
 {
-	/*glPushMatrix();
-    glLoadIdentity();
-    glTranslated(x, y, 0);
-    glListBase(dl_index_ - 0);
-    glBindTexture( GL_TEXTURE_2D, texture[2] );
-    glCallLists(output.size(), GL_BYTE, output.c_str());
-	glPopMatrix();*/
 	cwindow_->print(output);
 }
 
@@ -431,9 +381,6 @@ void GlRenderer::toggle_wireframes() {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
 	wireframes_ = !wireframes_;
-}
-
-void GlRenderer::update() {
 }
 
 void GlRenderer::set_player(float x, float y) {
