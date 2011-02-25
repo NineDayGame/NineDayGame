@@ -1,18 +1,46 @@
 #ifndef LIVING_HPP
 #define LIVING_HPP
 #include <boost/shared_ptr.hpp>
+#include <boost/unordered_map.hpp>
+#include <boost/tuple/tuple.hpp>
 #include <libtcod.hpp>
 #include <string>
+#include <vector>
 #include "entity.hpp"
 #include "map.hpp"
 #include "util.hpp"
+
+// Schedules the action to run when the Living gets enough energy.
+// *** This will only work in functions inside of a Living-derived class ***
+// This assumes the ActionArgs for the function is called args
+#define SCHEDULE_ACTION(energy)                 \
+	last_args = args;                           \
+	if(action_energy < (energy)/speed)          \
+	{                                           \
+		Living::ShPtr l = SCONVERT(Living,Container,this->shared_from_this()); \
+		as.schedule_action(l,__FUNCTION__,(energy)/speed); \
+		return;                                 \
+	}                                           \
+	else                                        \
+	{                                           \
+		action_energy -= (energy)/speed;        \
+	}
+
 
 class Living : public Entity
 {
 public:
 	typedef boost::shared_ptr<Living> ShPtr;
+	typedef std::vector<boost::shared_ptr<void> > ActionArgs;
+	typedef void (Living::*Action)(ActionArgs args);
+	
+	boost::unordered_map<std::string, Living::Action> actions;
+
+	ActionArgs last_args;
 
 	std::string name;
+
+	int faction;
 
 	int max_health;
 	int max_mana;
@@ -27,7 +55,9 @@ public:
 	int con;
 	int soul;
 	int disp;
-	int speed;
+	float speed;
+
+	int action_energy;
 
 	int melee_tohit() { return rand(str/4 + dex); }
 	int melee_damage() { return rand(str)+1; }
@@ -39,7 +69,9 @@ public:
 	virtual void init_stats(int str, int magic, int dex, int intel, int con, int soul, int disp, int speed);
 	
 	virtual bool move(int x, int y);
-	virtual bool attack(boost::shared_ptr<Living> e);
+	virtual bool attack(Living::ShPtr e);
+	
+	void test(ActionArgs args);
 
 	virtual void die(Living* killer);
 protected:

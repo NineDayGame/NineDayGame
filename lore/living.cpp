@@ -4,9 +4,21 @@
 #include "util.hpp"
 #include "item.hpp"
 
-Living::Living(Map::WkPtr host_map, std::string n, int x, int y, int c, TCODColor color, int _health) : Entity(host_map,x,y,c,color), health(_health), name(n),_rand(TCODRandom::getInstance())
+#include "action_scheduler.hpp"
+
+Living::Living(Map::WkPtr host_map, std::string n, int x, int y, int c, TCODColor color, int _health) : Entity(host_map,x,y,c,color), health(_health), name(n),_rand(TCODRandom::getInstance()), action_energy(0)
 {
 	z = 1;
+	faction = 0;
+
+	actions["test"] = &Living::test;
+}
+
+void Living::test(ActionArgs args)
+{
+	SCHEDULE_ACTION(100);
+	Living::ShPtr s = SCONVERT(Living,void,(args[0]));
+	cprintf("%s -> %s",__FUNCTION__,s->name.c_str());
 }
 
 Living::~Living()
