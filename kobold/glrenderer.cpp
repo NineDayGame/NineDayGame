@@ -91,13 +91,14 @@ void GlRenderer::init_gl() {
     plight->set_attenuation_constant(0.5f);
     plight->set_attenuation_linear(0.01f);
     plight->set_attenuation_quadratic(0.01f);
-
-	cwindow_.reset(new GlConsoleWindow());
+    
+    cwindow_.reset(new GlConsoleWindow());
 	cwindow_->set_dl_index(dl_index_);
 	cwindow_->set_texture(texture[2]);
 	cwindow_->show();
 	cwindow_->print(std::string("Welcome to NineDayGame"));
 	register_printable(cwindow_);
+	add_window(cwindow_);
 	
 	ability_window_.reset(new AbilityWindow());
 	ability_window_->set_dl_index(dl_index_);
@@ -107,8 +108,9 @@ void GlRenderer::init_gl() {
 	ability_window_->set_ability(std::string("Mortal strike"), 1);
 	ability_window_->set_ability(std::string("Shield bash"), 2);
 	ability_window_->set_ability(std::string("Defend"),10);
+	add_window(ability_window_);
 	
-	menu_window_.reset(new MenuWindow());
+	/*menu_window_.reset(new MenuWindow());
 	menu_window_->set_dl_index(dl_index_);
 	menu_window_->set_texture(texture[2]);
 	menu_window_->set_position(400, 200, 0);
@@ -116,7 +118,7 @@ void GlRenderer::init_gl() {
 	//menu_window_->show();
 	menu_window_->push_item(std::string("Menu item 1"));
 	menu_window_->push_item(std::string("Menu item 2"));
-	menu_window_->push_item(std::string("Menu item 3"));
+	menu_window_->push_item(std::string("Menu item 3"));*/
 	
 	health_window_.reset(new HealthWindow());
 	health_window_->set_dl_index(dl_index_);
@@ -124,9 +126,14 @@ void GlRenderer::init_gl() {
 	health_window_->set_position(0, SCREEN_HEIGHT-8, 0);
 	health_window_->update_health(20, 20);
 	health_window_->show();
+	add_window(health_window_);
 	
-	sheet_window_.reset(new GlWindow());
-	inventory_window_.reset(new GlWindow());
+	//sheet_window_.reset(new GlWindow());
+	//inventory_window_.reset(new GlWindow());
+}
+
+void GlRenderer::add_window(GlWindow::ShPtr window) {
+	windows_.push_back(window);
 }
 
 void GlRenderer::load_map(const Map& map) {
@@ -213,10 +220,13 @@ void GlRenderer::render() {
 	glOrtho(0, SCREEN_WIDTH, 0, SCREEN_HEIGHT, -1, 1);
 	glMatrixMode(GL_MODELVIEW);
 	
-	cwindow_->draw();
-	ability_window_->draw();
-	menu_window_->draw();
-	health_window_->draw();
+	foreach(GlWindow::ShPtr window, windows_) {
+		window->draw();
+	}
+	//cwindow_->draw();
+	//ability_window_->draw();
+	//menu_window_->draw();
+	//health_window_->draw();
 	//printgl(0, 0, std::string("Hero explodes into tiny bits of goo!"));
 	
 	glMatrixMode(GL_PROJECTION);

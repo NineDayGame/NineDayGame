@@ -6,15 +6,18 @@
 
 const int kFONT_HEIGHT = 8;
 
-MenuWindow::MenuWindow() 
+MenuWindow::MenuWindow()
   : tail_(0) {
 	init();
 }
 
+MenuWindow::~MenuWindow() {}
+
 void MenuWindow::init() {
-	//items_.reset(new std::string[kLINE_COUNT]);
 	mesh_.reset(new Rect());
 	set_color(Vector3f(1.0f, 1.0f, 1.0f));
+	push_item(std::string("Item 1"));
+	push_item(std::string("Item 2"));
 }
 
 void MenuWindow::draw() {
@@ -43,6 +46,8 @@ void MenuWindow::set_scale(float x, float y, float z) {
 	GlWindow::set_scale(x, y, z);
 	clear_items();
 }
+
+void MenuWindow::handle_input() {}
 
 void MenuWindow::push_item(std::string item) {
 	if (tail_ >= item_max_) {

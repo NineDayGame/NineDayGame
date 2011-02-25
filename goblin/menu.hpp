@@ -22,13 +22,19 @@ public:
 
 	int menu_offset;
 
-	Menu(GameState::ShPtr parent, int sx, int sy, int w, int h);
-	virtual ~Menu();
-
-	virtual void init();
+	Menu(GameState::ShPtr p, int sx, int sy, int w, int h)
+	  : GameState(p),
+	    screen_x(sx), screen_y(sy),
+	    width(w), height(h),
+	    selected_index(0),
+	    menu_offset(0) { }
 	
-	virtual void draw();
-	virtual void handle_input();
+	virtual ~Menu() {}
+
+	virtual void init() = 0;
+	
+	virtual void draw() = 0;
+	virtual void handle_input() = 0;
 
 };
 

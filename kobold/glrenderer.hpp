@@ -30,6 +30,7 @@ public:
 	GlRenderer();
 	void init();
 	void init_gl();
+	void add_window(GlWindow::ShPtr window);
 	void load_map(const Map& map);
 	void load_mobs(std::list<Entity::WkPtr> mobs);
 	void load_textures();
@@ -46,14 +47,16 @@ public:
 	void render();
 
 private:
-	AbilityWindow::ShPtr ability_window_;
 	GlConsoleWindow::ShPtr cwindow_;
+	AbilityWindow::ShPtr ability_window_;
 	HealthWindow::ShPtr health_window_;
 	MenuWindow::ShPtr menu_window_;
-	GlWindow::ShPtr sheet_window_;
-	GlWindow::ShPtr inventory_window_;
+	/*GlWindow::ShPtr sheet_window_;
+	GlWindow::ShPtr inventory_window_;*/
 	Timer::ShPtr fps_;
 	std::vector<Movable::ShPtr> movables_;
+	std::list<GlWindow::ShPtr> windows_;
+	
 	Player::ShPtr player_;
 	SDL_Surface* sdlSurface_;
 	float cameraX_, cameraY_, cameraZ_;

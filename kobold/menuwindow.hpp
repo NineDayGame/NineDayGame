@@ -9,7 +9,9 @@
 #include "SDL/SDL.h"
 #include "SDL/SDL_opengl.h"
 
+#include "gamestate.hpp"
 #include "glwindow.hpp"
+#include "menu.hpp"
 #include "rect.hpp"
 #include "printable.hpp"
 //#include "util.hpp"
@@ -19,8 +21,10 @@ public:
 	typedef boost::shared_ptr<MenuWindow> ShPtr;
 
 	MenuWindow();
-	void init();
-	void draw();
+	virtual ~MenuWindow();
+	virtual void init();
+	virtual void draw();
+	virtual void handle_input();
 	
 	void set_dl_index(int dl_index);
 	void set_scale(float x, float y, float z);
@@ -28,6 +32,7 @@ public:
 	void push_item(const std::string name);
 
 private:
+	GameState::ShPtr gamestate_;
 	boost::shared_array<std::string> items_;
 	int dl_index_;
 	int item_max_;

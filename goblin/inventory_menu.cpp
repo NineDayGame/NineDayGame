@@ -15,7 +15,7 @@ static void create_what_to_do(GameState::ShPtr m, MenuItem* me)
 	GameState::state = wtd;
 }
 
-InventoryMenu::InventoryMenu(GameState::ShPtr parent, int sx, int sy, int w, int h) : Menu(parent,sx,sy,w,h)
+InventoryMenu::InventoryMenu(GameState::ShPtr parent, int sx, int sy, int w, int h) : GoblinMenu(parent,sx,sy,w,h)
 {
 }
 InventoryMenu::~InventoryMenu() {}
