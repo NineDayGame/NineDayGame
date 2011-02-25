@@ -61,9 +61,9 @@ int main(int argc, char* argv[])
 	Living::ShPtr e = SCONVERT(Living,Container,m->inventory.front());
 	
 	if (argc==1) {		
-		RenderMan::ShPtr renderman (new RenderMan());
-		renderman->set_entity(e);
-		KoboldGameState::ShPtr kgs(new KoboldGameState(GameState::ShPtr(),renderman,e));
+		//RenderMan::ShPtr renderman (new RenderMan());
+		//renderman->set_entity(e);
+		KoboldGameState::ShPtr kgs(new KoboldGameState(GameState::ShPtr(),e));
 		GameState::state = kgs;	
 	} else {
 

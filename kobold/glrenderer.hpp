@@ -36,20 +36,24 @@ public:
 	void clear_windows();
 	void set_ambient_light(const Vector4f& light);
 	void set_light(int index, const Light& light);
-	void set_sight_radius(float r);
 	void take_screenshot(std::string filename);
 	void toggle_fullscreen();
 	void toggle_lighting();
 	void toggle_wireframes();
-	void set_player(float x, float y);
 	void render();
+	
+	// TODO: These need to die
+	void set_player(float x, float y);
+	void set_sight_radius(float r);
 
 private:
 	Timer::ShPtr fps_;
 	std::vector<Movable::ShPtr> movables_;
 	std::list<GlWindow::ShPtr> windows_;
+	std::list<Light::ShPtr> dynamic_lights_;
 	
 	Player::ShPtr player_;
+	// Required for screenshots and toggling between fullscreen and regular screen
 	SDL_Surface* sdlSurface_;
 	float cameraX_, cameraY_, cameraZ_;
 	float lightX_, lightY_, lightZ_;

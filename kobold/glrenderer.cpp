@@ -85,7 +85,7 @@ void GlRenderer::init_gl() {
     const Font::ShPtr cfont = fontman_->get_font("resources/terminal.bmp");*/
     
     player_.reset(new Player());
-    player_->set_texture(/*texman_->get_texture("resources/default.bmp")->get_index()*/1);
+    //player_->set_texture(/*texman_->get_texture("resources/default.bmp")->get_index()*/1);
     Light::ShPtr plight = player_->get_light();
     Vector4f::ShPtr amb (new Vector4f(0.08f, 0.08f, 0.08f, 1.0f));
     plight->set_ambient(amb);
@@ -94,9 +94,6 @@ void GlRenderer::init_gl() {
     plight->set_attenuation_constant(0.5f);
     plight->set_attenuation_linear(0.01f);
     plight->set_attenuation_quadratic(0.01f);
-   	
-	//sheet_window_.reset(new GlWindow());
-	//inventory_window_.reset(new GlWindow());
 }
 
 void GlRenderer::add_window(const GlWindow::ShPtr window) {
@@ -169,12 +166,6 @@ void GlRenderer::render() {
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
 }
-
-// TODO: Take this out of the engine
-/*void GlRenderer::printgl(std::string output)
-{
-	cwindow_->print(output);
-}*/
 
 void GlRenderer::set_ambient_light(const Vector4f& light) {
 	GLfloat ambient[] = {light.w, light.x, light.y, light.z};
