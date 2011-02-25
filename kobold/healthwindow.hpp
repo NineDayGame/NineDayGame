@@ -6,6 +6,7 @@
 #include "SDL/SDL.h"
 #include "SDL/SDL_opengl.h"
 
+#include "font.hpp"
 #include "glwindow.hpp"
 #include "rect.hpp"
 #include "printable.hpp"
@@ -19,11 +20,12 @@ public:
 	void init();
 	void draw();
 	void update_health(int current, int max);
-	void set_dl_index(int dl_index);
+	void set_font(Font::ShPtr font);
 
 private:
 	std::string health_string_;
 	int dl_index_;
+	Font::ShPtr font_;
 
 	//DISALLOW_COPY_AND_ASSIGN(HealthWindow);
 };

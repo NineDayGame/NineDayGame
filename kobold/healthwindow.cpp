@@ -18,12 +18,11 @@ void HealthWindow::init() {
 void HealthWindow::draw() {
 	if (is_shown()) {
 		glPushMatrix();
-		glBindTexture(GL_TEXTURE_2D, texture_index_);
-		glListBase(dl_index_);
+		glBindTexture(GL_TEXTURE_2D, font_->get_texture()->get_index());
+		glListBase(font_->get_displaylist());
 		
 		glLoadIdentity();
 		glTranslatef(position_->x, position_->y, position_->z);
-		//std::cout << "draw " << console_[i].size() << " ";
 		glCallLists(health_string_.size(), GL_BYTE, health_string_.c_str());
 		
 		glPopMatrix();
@@ -38,6 +37,6 @@ void HealthWindow::update_health(int current, int max) {
 	health_string_ += boost::lexical_cast<std::string>(max);
 }
 
-void HealthWindow::set_dl_index(int dl_index) {
-	dl_index_ = dl_index;
+void HealthWindow::set_font(Font::ShPtr font) {
+	font_ = font;
 }

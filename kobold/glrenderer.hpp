@@ -15,6 +15,7 @@
 #include "map.hpp"
 #include "movable.hpp"
 #include "player.hpp"
+#include "fontman.hpp"
 #include "textureman.hpp"
 #include "timer.hpp"
 #include "util.hpp"
@@ -34,7 +35,6 @@ public:
 	void add_window(GlWindow::ShPtr window);
 	void load_map(const Map& map);
 	void load_mobs(std::list<Entity::WkPtr> mobs);
-	void load_font();
 	void printgl(std::string output);
 	void set_light(int index, const Light& light);
 	void set_sight_radius(float r);
@@ -56,6 +56,7 @@ private:
 	std::vector<Movable::ShPtr> movables_;
 	std::list<GlWindow::ShPtr> windows_;
 	TextureMan::ShPtr texman_;
+	FontMan::ShPtr fontman_;
 	
 	Player::ShPtr player_;
 	SDL_Surface* sdlSurface_;

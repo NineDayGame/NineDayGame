@@ -18,8 +18,8 @@ void GlConsoleWindow::init() {
 void GlConsoleWindow::draw() {
 	if (is_shown()) {
 		glPushMatrix();
-		glBindTexture(GL_TEXTURE_2D, texture_index_);
-		glListBase(dl_index_);
+		glBindTexture(GL_TEXTURE_2D, font_->get_texture()->get_index());
+		glListBase(font_->get_displaylist());
 		int lineno = (top_ == 0) ? kLINE_COUNT - 1 : top_ - 1;
 		
 		for (int i = 0; i < kLINE_COUNT; ++i) {
@@ -41,6 +41,6 @@ void GlConsoleWindow::print(const std::string output) {
 	}
 }
 
-void GlConsoleWindow::set_dl_index(int dl_index) {
-	dl_index_ = dl_index;
+void GlConsoleWindow::set_font(Font::ShPtr font) {
+	font_ = font;
 }

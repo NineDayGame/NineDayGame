@@ -82,9 +82,10 @@ void GlRenderer::init_gl() {
     texman_.reset(new TextureMan());
     texman_->load_textures();
     const int texid = texman_->get_texture("resources/terminal.bmp")->get_index();
+    fontman_.reset(new FontMan());
+    fontman_->load_fonts(*texman_);
+    const Font::ShPtr cfont = fontman_->get_font("resources/terminal.bmp");
     
-    
-    load_font();
     player_.reset(new Player());
     player_->set_texture(texman_->get_texture("resources/default.bmp")->get_index());
     Light::ShPtr plight = player_->get_light();
@@ -97,16 +98,14 @@ void GlRenderer::init_gl() {
     plight->set_attenuation_quadratic(0.01f);
     
     cwindow_.reset(new GlConsoleWindow());
-	cwindow_->set_dl_index(dl_index_);
-	cwindow_->set_texture(texid);
+	cwindow_->set_font(cfont);
 	cwindow_->show();
 	cwindow_->print(std::string("Welcome to NineDayGame"));
 	register_printable(cwindow_);
 	add_window(cwindow_);
 	
 	ability_window_.reset(new AbilityWindow());
-	ability_window_->set_dl_index(dl_index_);
-	ability_window_->set_texture(texid);
+	ability_window_->set_font(cfont);
 	ability_window_->set_position(SCREEN_WIDTH-160, 0, 0);
 	ability_window_->show();
 	ability_window_->set_ability(std::string("Mortal strike"), 1);
@@ -125,8 +124,7 @@ void GlRenderer::init_gl() {
 	menu_window_->push_item(std::string("Menu item 3"));*/
 	
 	health_window_.reset(new HealthWindow());
-	health_window_->set_dl_index(dl_index_);
-	health_window_->set_texture(texid);
+	health_window_->set_font(cfont);
 	health_window_->set_position(0, SCREEN_HEIGHT-8, 0);
 	health_window_->update_health(20, 20);
 	health_window_->show();
@@ -244,37 +242,6 @@ void GlRenderer::render() {
 	
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
-}
-
-// TODO: Fonts should be a separate object, and loaded and managed by a font manager
-void GlRenderer::load_font() {
-    float cx, cy;
-    dl_index_ = glGenLists( 256 );
-    glBindTexture(GL_TEXTURE_2D, texman_->get_texture("resources/terminal.bmp")->get_index());
-
-    for (int i = 0; i < 256; ++i) {
-
-	    cy = 1 - (float)(i % 16) / 16.0f;
-	    cx = 1 - (float)(i / 16) / 16.0f;
-
-	    glNewList(dl_index_ + (255 - i), GL_COMPILE);
-		glBegin(GL_QUADS);
-		glTexCoord2f(cx - 0.0625, cy);
-		glVertex2i(0, 0);
-
-		glTexCoord2f(cx, cy);
-		glVertex2i(8, 0);
-
-		glTexCoord2f(cx, cy - 0.0625f);
-		glVertex2i(8, 8);
-
-		glTexCoord2f(cx - 0.0625f, cy - 0.0625f);
-		glVertex2i(0, 8);
-		glEnd();
-
-		glTranslated(8, 0, 0);
-	    glEndList();
-	}
 }
 
 // TODO: Take this out of the engine

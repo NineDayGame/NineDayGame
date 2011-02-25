@@ -46,19 +46,12 @@ void TextureMan::load_textures() {
 			Texture::ShPtr tex (new Texture(tex_names_.at(i)));
 			tex->set_index(tex_indicies[i]);
 			textures_.push_back(tex);
-			// TODO: Not sure if we can free this just yet - please check this
+
 			SDL_FreeSurface(textureImage[i]);
 		} else {
 			std::cout << "TextureMan: Error loading texture " << tex_names_.at(i) << std::endl;
 		}
 	}
-
-	// TODO: Not sure if we have to do this down here... see above TODO
-	//for (int i = 0; i < tex_count; ++i) {
-	//	if (textureImage[i]) {
-	//		SDL_FreeSurface(textureImage[i]);
-	//	}
-	//}
 	
 	loaded_ = true;	
 }
