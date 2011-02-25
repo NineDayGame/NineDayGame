@@ -1,6 +1,6 @@
 redo-ifchange $1.cpp
 
-CFLAGS="-O3"
+CFLAGS="-g"
 INCLUDE="-I./libraries/libtcod-1.5.0/include -I./lore -I./kobold -I./goblin"
 
 g++ $CFLAGS $INCLUDE -MD -MF $1.d -c -o $3 $1.cpp
