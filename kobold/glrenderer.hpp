@@ -4,15 +4,13 @@
 #include <boost/shared_array.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
+#include <list>
 #include <string>
 #include <vector>
 
 #include "SDL/SDL.h"
 #include "SDL/SDL_opengl.h"
 
-#include "character.hpp"
-#include "entity.hpp"
-#include "map.hpp"
 #include "movable.hpp"
 #include "player.hpp"
 #include "fontman.hpp"
@@ -32,10 +30,11 @@ public:
 	GlRenderer();
 	void init();
 	void init_gl();
+	void add_movable(Movable::ShPtr movable);
 	void add_window(GlWindow::ShPtr window);
-	void load_map(const Map& map);
-	void load_mobs(std::list<Entity::WkPtr> mobs);
-	void printgl(std::string output);
+	void clear_movables();
+	void clear_windows();
+	void set_ambient_light(const Vector4f& light);
 	void set_light(int index, const Light& light);
 	void set_sight_radius(float r);
 	void take_screenshot(std::string filename);
@@ -46,17 +45,9 @@ public:
 	void render();
 
 private:
-	GlConsoleWindow::ShPtr cwindow_;
-	AbilityWindow::ShPtr ability_window_;
-	HealthWindow::ShPtr health_window_;
-	MenuWindow::ShPtr menu_window_;
-	/*GlWindow::ShPtr sheet_window_;
-	GlWindow::ShPtr inventory_window_;*/
 	Timer::ShPtr fps_;
 	std::vector<Movable::ShPtr> movables_;
 	std::list<GlWindow::ShPtr> windows_;
-	TextureMan::ShPtr texman_;
-	FontMan::ShPtr fontman_;
 	
 	Player::ShPtr player_;
 	SDL_Surface* sdlSurface_;

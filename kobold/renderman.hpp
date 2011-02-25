@@ -6,6 +6,10 @@
 #include "entity.hpp"
 #include "glrenderer.hpp"
 #include "util.hpp"
+//----------------------------------------------
+#include "textureman.hpp"
+#include "fontman.hpp"
+//----------------------------------------------
 
 class RenderMan {
 public:
@@ -26,6 +30,16 @@ private:
 	GlRenderer::ShPtr renderer_;
 	Entity::ShPtr e_;
 	int ssCount_;
+
+//----------------------------------------------
+	GlConsoleWindow::ShPtr cwindow_;
+	AbilityWindow::ShPtr ability_window_;
+	HealthWindow::ShPtr health_window_;
+	MenuWindow::ShPtr menu_window_;
+
+	TextureMan::ShPtr texman_;
+	FontMan::ShPtr fontman_;
+//----------------------------------------------
 	
 	DISALLOW_COPY_AND_ASSIGN(RenderMan);
 };
