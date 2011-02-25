@@ -13,6 +13,8 @@ public:
 	
 	Monster(Map::WkPtr host_map, std::string name, int x, int y, int c, TCODColor color, int health);
 	virtual ~Monster();
+
+	void foo(ActionArgs args);
 	
 	virtual void ai();
 };

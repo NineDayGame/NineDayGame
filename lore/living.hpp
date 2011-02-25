@@ -28,6 +28,11 @@
 		action_energy -= (energy)/speed;        \
 	}
 
+#define REGISTER_ACTION(action)           \
+	{                                           \
+		typedef typeof(*this) T;                \
+		actions[#action] = static_cast<Living::Action>(&T::action); \
+	}
 
 class Living : public Entity
 {
@@ -37,7 +42,6 @@ public:
 	typedef void (Living::*Action)(ActionArgs args);
 	
 	boost::unordered_map<std::string, Living::Action> actions;
-
 	ActionArgs last_args;
 
 	std::string name;

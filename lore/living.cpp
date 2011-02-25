@@ -11,10 +11,10 @@ Living::Living(Map::WkPtr host_map, std::string n, int x, int y, int c, TCODColo
 	z = 1;
 	faction = 0;
 
-	actions["test"] = &Living::test;
-	actions["attack"] = &Living::attack;
-	actions["walk"] = &Living::walk;
-	actions["pickup"] = &Living::pickup;
+	REGISTER_ACTION(test);
+	REGISTER_ACTION(attack);
+	REGISTER_ACTION(walk);
+	REGISTER_ACTION(pickup);
 }
 
 void Living::test(ActionArgs args)

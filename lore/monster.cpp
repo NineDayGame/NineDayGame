@@ -1,12 +1,21 @@
+#include <cmath>
 #include "monster.hpp"
 #include "util.hpp"
-#include <cmath>
+#include "action_scheduler.hpp"
 
 Monster::Monster(Map::WkPtr host_map, std::string name, int x, int y, int c, TCODColor color, int health) : Living(host_map,name,x,y,c,color,health), AI(known_map)
 {
 	faction = _rand->getInt(0,3);
+	
+	REGISTER_ACTION(foo);
 }
 Monster::~Monster(){}
+
+void Monster::foo(ActionArgs args)
+{
+	SCHEDULE_ACTION(100);
+	cprintf("Foo!");
+}
 
 static double distance(int x1, int y1, int x2, int y2)
 {
