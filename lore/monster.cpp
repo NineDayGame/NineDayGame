@@ -1,9 +1,21 @@
+#include <cmath>
 #include "monster.hpp"
 #include "util.hpp"
-#include <cmath>
+#include "action_scheduler.hpp"
 
-Monster::Monster(Map::WkPtr host_map, std::string name, int x, int y, int c, TCODColor color, int health) : Living(host_map,name,x,y,c,color,health), AI(known_map) { }
+Monster::Monster(Map::WkPtr host_map, std::string name, int x, int y, int c, TCODColor color, int health) : Living(host_map,name,x,y,c,color,health), AI(known_map)
+{
+	faction = _rand->getInt(0,3);
+	
+	REGISTER_ACTION(foo);
+}
 Monster::~Monster(){}
+
+void Monster::foo(ActionArgs args)
+{
+	SCHEDULE_ACTION(100);
+	cprintf("Foo!");
+}
 
 static double distance(int x1, int y1, int x2, int y2)
 {
@@ -12,10 +24,12 @@ static double distance(int x1, int y1, int x2, int y2)
 	
 void Monster::ai()
 {
+	boost::shared_ptr<int> mx(new int());
+	boost::shared_ptr<int> my(new int());
 	foreach(Entity::WkPtr e, seen)
 	{
 		Living::ShPtr l = DCONVERT(Living,Entity,e.lock());
-		if(l && l->name == "Hero")
+		if(l && l->faction != faction)
 		{
 			char c,c2;
 			TCODColor color,color2;
@@ -24,8 +38,7 @@ void Monster::ai()
 			int ox = x;
 			int oy = y;
 			int dx = l->x;
-			int dy = l->y;
-			int mx, my;
+			int dy = l->y;			
 			Map::ShPtr m = known_map;
 			
 			m->get_data(ox,oy,&c,&color,&trans,&walk);
@@ -35,12 +48,15 @@ void Monster::ai()
 			m->set_data(dx,dy,c2,color2,true,true);
 
 			path->compute(ox,oy,dx,dy);
-			path->walk(&mx,&my,1);
+			path->walk(mx.get(),my.get(),1);
 
 			m->set_data(dx,dy,c,color,trans,walk);
 			m->set_data(dx,dy,c2,color2,trans2,walk2);
-			
-			move(mx,my);
+
+			ActionArgs args;
+			args.push_back(mx);
+			args.push_back(my);
+			this->walk(args);
 			return;
 		}
 	}
@@ -74,7 +90,10 @@ void Monster::ai()
 		known_map->random_free_spot(&dx,&dy);
 		path->compute(x,y,dx,dy);
 	}
-	int mx,my;
-	path->walk(&mx,&my,1);
-	move(mx,my);
+	path->walk(mx.get(),my.get(),1);
+	
+	ActionArgs args;
+	args.push_back(mx);
+	args.push_back(my);
+	walk(args);
 }

@@ -4,9 +4,24 @@
 #include "util.hpp"
 #include "item.hpp"
 
-Living::Living(Map::WkPtr host_map, std::string n, int x, int y, int c, TCODColor color, int _health) : Entity(host_map,x,y,c,color), health(_health), name(n),_rand(TCODRandom::getInstance())
+#include "action_scheduler.hpp"
+
+Living::Living(Map::WkPtr host_map, std::string n, int x, int y, int c, TCODColor color, int _health) : Entity(host_map,x,y,c,color), health(_health), name(n),_rand(TCODRandom::getInstance()), action_energy(0), blocked(false)
 {
 	z = 1;
+	faction = 0;
+
+	REGISTER_ACTION(test);
+	REGISTER_ACTION(attack);
+	REGISTER_ACTION(walk);
+	REGISTER_ACTION(pickup);
+}
+
+void Living::test(ActionArgs args)
+{
+	SCHEDULE_ACTION(100);
+	Living::ShPtr s = SCONVERT(Living,void,(args[0]));
+	cprintf("%s -> %s",__FUNCTION__,s->name.c_str());
 }
 
 Living::~Living()
@@ -32,16 +47,21 @@ void Living::init_stats(int _str, int _magic, int _dex, int _intel, int _con, in
 	mana = max_mana;
 }
 
-bool Living::move(int x, int y)
+void Living::walk(ActionArgs args)
 {
-	if(!Entity::move(x,y))
+	SCHEDULE_ACTION(10);
+	boost::shared_ptr<int> _x = SCONVERT(int,void,args[0]);
+	boost::shared_ptr<int> _y = SCONVERT(int,void,args[1]);
+	if(!move(*_x,*_y))
 	{
 		foreach(Entity::WkPtr w, seen)
 		{
 			Living::ShPtr e = DCONVERT(Living,Entity,w.lock());
-			if(e != NULL && e->x == x && e->y == y)
+			if(e != NULL && e->x == *_x && e->y == *_y)
 			{
-				attack(e);
+				ActionArgs a;
+				a.push_back(e);
+				attack(a);
 			}
 		}
 	}
@@ -52,16 +72,27 @@ bool Living::move(int x, int y)
 			Item::ShPtr e = DCONVERT(Item,Entity,w.lock());
 			if(e != NULL && e->x == x && e->y == y)
 			{
-				get(e);
-				e->host_map.lock()->remove(e);
-				cprintf("%s gets %s.",name.c_str(),e->name.c_str());
+				ActionArgs a;
+				a.push_back(e);
+				pickup(a);
 			}
 		}
 	}
 }
 
-bool Living::attack(Living::ShPtr e)
+void Living::pickup(ActionArgs args)
 {
+	SCHEDULE_ACTION(10);
+	Item::ShPtr e = SCONVERT(Item,void,args[0]);
+	get(e);
+	e->host_map.lock()->remove(e);
+	cprintf("%s gets %s.",name.c_str(),e->name.c_str());
+}
+
+void Living::attack(ActionArgs args)
+{
+	SCHEDULE_ACTION(100);
+	Living::ShPtr e = SCONVERT(Living,void,args[0]);
 	if(melee_tohit() > e->dodge())
 	{
 		int damage = melee_damage();

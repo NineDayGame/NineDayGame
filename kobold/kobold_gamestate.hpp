@@ -3,7 +3,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include "gamestate.hpp"
-#include "entity.hpp"
+#include "living.hpp"
 #include "renderman.hpp"
 
 class KoboldGameState : public GameState
@@ -12,9 +12,9 @@ public:
 	typedef boost::shared_ptr<KoboldGameState> ShPtr;
 
 	RenderMan::ShPtr renderer;
-	Entity::ShPtr player;
+	Living::ShPtr player;
 	
-	KoboldGameState(GameState::ShPtr p, RenderMan::ShPtr r, Entity::ShPtr e);
+	KoboldGameState(GameState::ShPtr p, RenderMan::ShPtr r, Living::ShPtr e);
 	virtual ~KoboldGameState() {}
 
 	virtual void handle_input();
