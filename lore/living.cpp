@@ -91,8 +91,8 @@ void Living::pickup(ActionArgs args)
 {
 	SCHEDULE_ACTION(10);
 	Item::ShPtr e = SCONVERT(Item,void,args[0]);
+	e->container.lock()->remove(e);
 	get(e);
-	e->host_map.lock()->remove(e);
 	cprintf("%s gets %s.",name.c_str(),e->name.c_str());
 }
 
