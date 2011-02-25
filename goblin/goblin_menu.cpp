@@ -1,14 +1,15 @@
-#include "menu.hpp"
+#include "goblin_menu.hpp"
 #include "util.hpp"
 
-Menu::Menu(GameState::ShPtr p, int sx, int sy, int w, int h) : GameState(p), screen_x(sx), screen_y(sy), width(w), height(h), selected_index(0), menu_offset(0)
+GoblinMenu::GoblinMenu(GameState::ShPtr p, int sx, int sy, int w, int h) 
+  : Menu(p, sx, sy, w, h)//, selected_index(0), menu_offset(0)
 {
 }
-Menu::~Menu() {}
+GoblinMenu::~GoblinMenu() {}
 
-void Menu::init() {}
+void GoblinMenu::init() {}
 
-void Menu::draw()
+void GoblinMenu::draw()
 {
 	TCODConsole* console = TCODConsole::root;
 	GameState::draw();
@@ -38,7 +39,7 @@ void Menu::draw()
 	}
 }
 
-void Menu::handle_input()
+void GoblinMenu::handle_input()
 {
 	TCODConsole::flush();
 	TCOD_key_t key = TCODConsole::waitForKeypress(true);

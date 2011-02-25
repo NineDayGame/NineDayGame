@@ -1,9 +1,9 @@
 #ifndef INVENTORY_MENU_HPP
 #define INVENTORY_MENU_HPP
 
-#include "menu.hpp"
+#include "goblin_menu.hpp"
 
-class InventoryMenu : public Menu
+class InventoryMenu : public GoblinMenu
 {
 public:
 	typedef boost::shared_ptr<InventoryMenu> ShPtr;

@@ -16,20 +16,22 @@ void GlConsoleWindow::init() {
 }
 
 void GlConsoleWindow::draw() {
-	glPushMatrix();
-	glBindTexture(GL_TEXTURE_2D, texture_index_);
-    glListBase(dl_index_);
-    int lineno = (top_ == 0) ? kLINE_COUNT - 1 : top_ - 1;
-    
-    for (int i = 0; i < kLINE_COUNT; ++i) {
-		glLoadIdentity();
-		glTranslatef(0, i*kFONT_HEIGHT, 0);
-		//std::cout << "draw " << console_[i].size() << " ";
-		glCallLists(console_[lineno].size(), GL_BYTE, console_[lineno].c_str());
-		lineno = (lineno == 0) ? kLINE_COUNT - 1 : lineno - 1;
+	if (is_shown()) {
+		glPushMatrix();
+		glBindTexture(GL_TEXTURE_2D, font_->get_texture()->get_index());
+		glListBase(font_->get_displaylist());
+		int lineno = (top_ == 0) ? kLINE_COUNT - 1 : top_ - 1;
+		
+		for (int i = 0; i < kLINE_COUNT; ++i) {
+			glLoadIdentity();
+			glTranslatef(0, i*kFONT_HEIGHT, 0);
+			//std::cout << "draw " << console_[i].size() << " ";
+			glCallLists(console_[lineno].size(), GL_BYTE, console_[lineno].c_str());
+			lineno = (lineno == 0) ? kLINE_COUNT - 1 : lineno - 1;
+		}
+		
+		glPopMatrix();
 	}
-	
-	glPopMatrix();
 }
 
 void GlConsoleWindow::print(const std::string output) {
@@ -39,6 +41,6 @@ void GlConsoleWindow::print(const std::string output) {
 	}
 }
 
-void GlConsoleWindow::set_dl_index(int dl_index) {
-	dl_index_ = dl_index;
+void GlConsoleWindow::set_font(Font::ShPtr font) {
+	font_ = font;
 }

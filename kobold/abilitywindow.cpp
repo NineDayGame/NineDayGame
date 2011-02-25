@@ -19,13 +19,12 @@ void AbilityWindow::init() {
 
 void AbilityWindow::draw() {
 	glPushMatrix();
-	glBindTexture(GL_TEXTURE_2D, texture_index_);
-    glListBase(dl_index_);
+	glBindTexture(GL_TEXTURE_2D, font_->get_texture()->get_index());
+	glListBase(font_->get_displaylist());
     
     for (int i = 0; i < kLINE_COUNT; ++i) {
 		glLoadIdentity();
 		glTranslatef(position_->x, position_->y+kFONT_HEIGHT*(kLINE_COUNT-(i+1)), position_->z);
-		//std::cout << "draw " << console_[i].size() << " ";
 		glCallLists(abilities_[i].size(), GL_BYTE, abilities_[i].c_str());
 	}
 	
@@ -42,6 +41,6 @@ void AbilityWindow::set_ability(std::string ability, int index) {
 	abilities_[index-1] = ability;
 }
 
-void AbilityWindow::set_dl_index(int dl_index) {
-	dl_index_ = dl_index;
+void AbilityWindow::set_font(Font::ShPtr font) {
+	font_ = font;
 }

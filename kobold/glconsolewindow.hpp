@@ -9,6 +9,7 @@
 #include "SDL/SDL.h"
 #include "SDL/SDL_opengl.h"
 
+#include "font.hpp"
 #include "glwindow.hpp"
 #include "rect.hpp"
 #include "printable.hpp"
@@ -22,14 +23,14 @@ public:
 	void init();
 	void draw();
 	
-	void set_dl_index(int dl_index);
+	void set_font(Font::ShPtr font);
 
 	virtual void print(const std::string s);
 
 private:
 	boost::shared_array<std::string> console_;
 	int top_;
-	int dl_index_;
+	Font::ShPtr font_;
 
 	//DISALLOW_COPY_AND_ASSIGN(GlConsoleWindow);
 };
