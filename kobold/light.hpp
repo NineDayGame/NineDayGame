@@ -12,7 +12,6 @@
 class Light {
 public:
 	typedef boost::shared_ptr<Light> ShPtr;
-	//static const Light NO_LIGHT;
 	
 	Light();
 	void init();
@@ -23,6 +22,9 @@ public:
 	void set_attenuation_linear(float l);
 	const float get_attenuation_quadratic() const;
 	void set_attenuation_quadratic(float q);
+	
+	const float get_radius() const;
+	void set_radius(float r);
 	
 	const Vector3f::ShPtr get_position() const;
 	void set_position(Vector3f::ShPtr pos);
@@ -38,6 +40,8 @@ private:
 	float attenuation_constant_;
 	float attenuation_linear_;
 	float attenuation_quadratic_;
+
+	float radius_;
 
 	Vector3f::ShPtr position_;
 	Vector4f::ShPtr ambient_;

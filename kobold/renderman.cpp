@@ -11,21 +11,28 @@ void RenderMan::init() {
 	renderer_.reset(new GlRenderer());
 }
 
+void RenderMan::add_movable(const Movable::ShPtr movable) {
+	renderer_->add_movable(movable);
+}
+
+void RenderMan::add_window(const GlWindow::ShPtr window) {
+	renderer_->add_window(window);
+}
+
+void RenderMan::clear_movables() {
+	renderer_->clear_movables();
+}
+
+void RenderMan::clear_windows() {
+	renderer_->clear_movables();
+}
+
+void RenderMan::set_player(float x, float y) {
+	renderer_->set_player(x, y);
+}
+
 void RenderMan::draw_frame() {
-	/*renderer_->load_map(*(e_->known_map));
-	renderer_->load_mobs(e_->seen);
-	renderer_->set_player((float)e_->x, (float)e_->y);*/
 	renderer_->render();
-}
-
-void RenderMan::print_to_renderer(std::string output) {
-	renderer_->printgl(output);
-}
-
-void RenderMan::reload_world() {
-	renderer_->load_map(*(e_->known_map));
-	renderer_->load_mobs(e_->seen);
-	renderer_->set_player((float)e_->x, (float)e_->y);
 }
 
 void RenderMan::set_entity(Entity::ShPtr entity) {

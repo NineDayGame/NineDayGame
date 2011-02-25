@@ -4,6 +4,8 @@
 #include <boost/shared_ptr.hpp>
 #include <libtcod.hpp>
 
+#include "map.hpp"
+
 class AI
 {
 public:

@@ -1,11 +1,10 @@
 #include "light.hpp"
 
-//const Light Light::NO_LIGHT();
-
 Light::Light()
   : attenuation_constant_(1.0f),
     attenuation_linear_(0.0f),
-    attenuation_quadratic_(0.0f) {
+    attenuation_quadratic_(0.0f),
+    radius_(0.0f) {
 	init();
 }
 
@@ -24,12 +23,32 @@ const float Light::get_attenuation_constant() const {
 	return attenuation_constant_;
 }
 
+void Light::set_attenuation_constant(float c) {
+	attenuation_constant_ = c;
+}
+
 const float Light::get_attenuation_linear() const {
 	return attenuation_linear_;
 }
 
+void Light::set_attenuation_linear(float l) {
+	attenuation_linear_ = l;
+}
+
 const float Light::get_attenuation_quadratic() const {
 	return attenuation_quadratic_;
+}
+
+void Light::set_attenuation_quadratic(float q) {
+	attenuation_quadratic_ = q;
+}
+
+const float Light::get_radius() const {
+	return radius_;
+}
+
+void Light::set_radius(float r) {
+	radius_ = r;
 }
 
 const Vector3f::ShPtr Light::get_position() const {
@@ -62,16 +81,4 @@ const Vector4f::ShPtr Light::get_specular() const {
 
 void Light::set_specular(Vector4f::ShPtr spec) {
 	specular_ = spec;
-}
-
-void Light::set_attenuation_constant(float c) {
-	attenuation_constant_ = c;
-}
-
-void Light::set_attenuation_linear(float l) {
-	attenuation_linear_ = l;
-}
-
-void Light::set_attenuation_quadratic(float q) {
-	attenuation_quadratic_ = q;
 }

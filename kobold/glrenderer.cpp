@@ -64,8 +64,6 @@ void GlRenderer::init_gl() {
 	glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
     //GLfloat ambient[] = {0.0f, 0.0f, 0.0f, 1.0f};
-    GLfloat ambient[] = {0.05f, 0.05f, 0.05f, 1.0f};
-    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambient);
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -79,15 +77,15 @@ void GlRenderer::init_gl() {
         //error
     }
     
-    texman_.reset(new TextureMan());
+    /*texman_.reset(new TextureMan());
     texman_->load_textures();
     const int texid = texman_->get_texture("resources/terminal.bmp")->get_index();
     fontman_.reset(new FontMan());
     fontman_->load_fonts(*texman_);
-    const Font::ShPtr cfont = fontman_->get_font("resources/terminal.bmp");
+    const Font::ShPtr cfont = fontman_->get_font("resources/terminal.bmp");*/
     
     player_.reset(new Player());
-    player_->set_texture(texman_->get_texture("resources/default.bmp")->get_index());
+    //player_->set_texture(/*texman_->get_texture("resources/default.bmp")->get_index()*/1);
     Light::ShPtr plight = player_->get_light();
     Vector4f::ShPtr amb (new Vector4f(0.08f, 0.08f, 0.08f, 1.0f));
     plight->set_ambient(amb);
@@ -96,97 +94,22 @@ void GlRenderer::init_gl() {
     plight->set_attenuation_constant(0.5f);
     plight->set_attenuation_linear(0.01f);
     plight->set_attenuation_quadratic(0.01f);
-    
-    cwindow_.reset(new GlConsoleWindow());
-	cwindow_->set_font(cfont);
-	cwindow_->show();
-	cwindow_->print(std::string("Welcome to NineDayGame"));
-	register_printable(cwindow_);
-	add_window(cwindow_);
-	
-	ability_window_.reset(new AbilityWindow());
-	ability_window_->set_font(cfont);
-	ability_window_->set_position(SCREEN_WIDTH-160, 0, 0);
-	ability_window_->show();
-	ability_window_->set_ability(std::string("Mortal strike"), 1);
-	ability_window_->set_ability(std::string("Shield bash"), 2);
-	ability_window_->set_ability(std::string("Defend"),10);
-	add_window(ability_window_);
-	
-	/*menu_window_.reset(new MenuWindow());
-	menu_window_->set_dl_index(dl_index_);
-	menu_window_->set_texture(texture[2]);
-	menu_window_->set_position(400, 200, 0);
-	menu_window_->set_scale(200, 200, 0);
-	//menu_window_->show();
-	menu_window_->push_item(std::string("Menu item 1"));
-	menu_window_->push_item(std::string("Menu item 2"));
-	menu_window_->push_item(std::string("Menu item 3"));*/
-	
-	health_window_.reset(new HealthWindow());
-	health_window_->set_font(cfont);
-	health_window_->set_position(0, SCREEN_HEIGHT-8, 0);
-	health_window_->update_health(20, 20);
-	health_window_->show();
-	add_window(health_window_);
-	
-	//sheet_window_.reset(new GlWindow());
-	//inventory_window_.reset(new GlWindow());
 }
 
-void GlRenderer::add_window(GlWindow::ShPtr window) {
+void GlRenderer::add_window(const GlWindow::ShPtr window) {
 	windows_.push_back(window);
 }
 
-void GlRenderer::load_map(const Map& map) {
-	
-	movables_.clear();
-	const int texid = texman_->get_texture("resources/stone3.bmp")->get_index();
-	for (int x = 0; x < map.width; ++x) {
-		for (int y = 0; y < map.height; ++y) {
-			if (map.display[x+y*map.width].c == '.') {
-				Block::ShPtr blk (new Block());
-				blk->set_position((float)x, (float)y, 0.0f);
-				blk->set_texture(texid);
-				TCODColor c = map.display[x+y*map.width].color;
-				blk->set_color(Vector3f((c.r/255.0f), (c.g/255.0f), (c.b/255.0f)));
-				movables_.push_back(blk);
-			} else if ((x > 0) && (y > 0)) { 
-				if (map.display[x+y*map.width].c == '#'
-			            && (map.display[(x-1)+y*map.width].c == '.'
-			            || map.display[x+(y-1)*map.width].c == '.')) {
-				
-					for (int i = 0; i < 3; ++i) {
-						Block::ShPtr blk (new Block());
-						blk->set_position((float)x, (float)y, (float)i);
-						if (i < 2) {
-							TCODColor c = map.display[x+y*map.width].color;
-							//blk->set_texture(texture[0]);
-							blk->set_color(Vector3f((c.r/255.0f), (c.g/255.0f), (c.b/255.0f)));
-						}
-						movables_.push_back(blk);
-					}
-				}
-			}
-		}
-	}
+void GlRenderer::add_movable(const Movable::ShPtr movable) {
+	movables_.push_back(movable);
 }
 
-void GlRenderer::load_mobs(std::list<Entity::WkPtr> mobs) {
+void GlRenderer::clear_windows() {
+	windows_.clear();
+}
 
-	const int texid = texman_->get_texture("resources/default.bmp")->get_index();
-	foreach (Entity::WkPtr e, mobs) {
-		Character::ShPtr chr (new Character());
-		Entity::ShPtr m = e.lock();
-		if(m)
-		{
-			chr->set_position(m->x, m->y, 0.5f);
-			TCODColor c = m->color;
-			chr->set_texture(texid);
-			chr->set_color(Vector3f((c.r/255.0f), (c.g/255.0f), (c.b/255.0f)));
-			movables_.push_back(chr);
-		}
-	}
+void GlRenderer::clear_movables() {
+	movables_.clear();
 }
 
 void GlRenderer::render() {
@@ -244,10 +167,9 @@ void GlRenderer::render() {
 	glDisableClientState(GL_COLOR_ARRAY);
 }
 
-// TODO: Take this out of the engine
-void GlRenderer::printgl(std::string output)
-{
-	cwindow_->print(output);
+void GlRenderer::set_ambient_light(const Vector4f& light) {
+	GLfloat ambient[] = {light.w, light.x, light.y, light.z};
+    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambient);
 }
 
 void GlRenderer::set_light(int index, const Light& light) {
