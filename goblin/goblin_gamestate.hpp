@@ -4,18 +4,18 @@
 #include <boost/shared_ptr.hpp>
 #include "gamestate.hpp"
 #include "camera.hpp"
-#include "entity.hpp"
+#include "living.hpp"
 
 class GoblinGameState : public GameState
 {
 public:
 	typedef boost::shared_ptr<GoblinGameState> ShPtr;
 	
-	Entity::ShPtr player;
+	Living::ShPtr player;
 	std::list<Camera::ShPtr> cameras;
 	TextCamera::ShPtr health_indicator;
 	
-	GoblinGameState(GameState::ShPtr p, Entity::ShPtr e);
+	GoblinGameState(GameState::ShPtr p, Living::ShPtr e);
 	virtual ~GoblinGameState() {}
 
 	virtual void handle_input();

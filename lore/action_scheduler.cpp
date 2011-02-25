@@ -19,6 +19,7 @@ void ActionScheduler::tick()
 	while(ready.size() == 0 && blocked.size() > 0)
 	{
 		new_smallest = INT_MAX;
+//		cprintf("Tick! %d",smallest_tick);
 		foreach(Scheduled s, blocked)
 		{
 			Living::ShPtr l = s.get<0>();

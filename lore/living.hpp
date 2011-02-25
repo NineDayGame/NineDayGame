@@ -71,8 +71,9 @@ public:
 
 	virtual void init_stats(int str, int magic, int dex, int intel, int con, int soul, int disp, int speed);
 	
-	virtual bool move(int x, int y);
+	virtual void walk(ActionArgs args);
 	virtual void attack(ActionArgs args);
+	virtual void pickup(ActionArgs args);
 	
 	void test(ActionArgs args);
 

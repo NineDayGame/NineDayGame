@@ -3,29 +3,41 @@
 #include "item.hpp"
 #include "util.hpp"
 #include "inventory_menu.hpp"
-#include "ai.hpp"
+#include "monster.hpp"
 #include "living.hpp"
+#include "action_scheduler.hpp"
 #include <stdio.h>
 
-GoblinGameState::GoblinGameState(GameState::ShPtr p, Entity::ShPtr e) : GameState(p), player(e)
+GoblinGameState::GoblinGameState(GameState::ShPtr p, Living::ShPtr e) : GameState(p), player(e)
 {
 	
 }
 
 void GoblinGameState::handle_input()
 {
+	boost::shared_ptr<int> x(new int(player->x));
+	boost::shared_ptr<int> y(new int(player->y));
+	bool walking = false;
+	
 	TCODConsole::flush();
 	TCOD_key_t key = TCODConsole::waitForKeypress(true);
-	
+	//TCOD_key_t key = TCODConsole::checkForKeypress(true);
 	if(TCODConsole::isWindowClosed()) { GameState::running = false; return; }
-	if(key.vk == TCODK_KP8) { player->move(player->x,player->y-1); }
-	if(key.vk == TCODK_KP2) { player->move(player->x,player->y+1); }
-	if(key.vk == TCODK_KP4) { player->move(player->x-1,player->y); }
-	if(key.vk == TCODK_KP6) { player->move(player->x+1,player->y); }
-	if(key.vk == TCODK_KP7) { player->move(player->x-1,player->y-1); }
-	if(key.vk == TCODK_KP9) { player->move(player->x+1,player->y-1); }
-	if(key.vk == TCODK_KP1) { player->move(player->x-1,player->y+1); }
-	if(key.vk == TCODK_KP3) { player->move(player->x+1,player->y+1); }
+	if(key.vk == TCODK_KP8) { walking = true; --(*y); }
+	if(key.vk == TCODK_KP2) { walking = true; ++(*y); }
+	if(key.vk == TCODK_KP4) { walking = true; --(*x); }
+	if(key.vk == TCODK_KP6) { walking = true; ++(*x); }
+	if(key.vk == TCODK_KP7) { walking = true; --(*x); --(*y); }
+	if(key.vk == TCODK_KP9) { walking = true; ++(*x); --(*y); }
+	if(key.vk == TCODK_KP1) { walking = true; --(*x); ++(*y); } 
+	if(key.vk == TCODK_KP3) { walking = true; ++(*x); ++(*y); }
+	if(walking == true)
+	{
+		Living::ActionArgs args;
+		args.push_back(x);
+		args.push_back(y);
+		player->walk(args);
+	}
 	if(key.c == 'l')
 	{
 		foreach(Container::ShPtr c, player->inventory)
@@ -42,11 +54,15 @@ void GoblinGameState::handle_input()
 
 	foreach(Container::ShPtr c, player->container.lock()->inventory)
 	{
-		AI::ShPtr a = DCONVERT(AI,Container,c);
-		if(a)
+		Monster::ShPtr a = DCONVERT(Monster,Container,c);
+		if(a && !a->blocked)
 		{
 			a->ai();
 		}
+	}
+	while(player->blocked)
+	{
+		as.tick();
 	}
 }
 

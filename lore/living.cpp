@@ -13,6 +13,8 @@ Living::Living(Map::WkPtr host_map, std::string n, int x, int y, int c, TCODColo
 
 	actions["test"] = &Living::test;
 	actions["attack"] = &Living::attack;
+	actions["walk"] = &Living::walk;
+	actions["pickup"] = &Living::pickup;
 }
 
 void Living::test(ActionArgs args)
@@ -45,18 +47,21 @@ void Living::init_stats(int _str, int _magic, int _dex, int _intel, int _con, in
 	mana = max_mana;
 }
 
-bool Living::move(int x, int y)
+void Living::walk(ActionArgs args)
 {
-	if(!Entity::move(x,y))
+	SCHEDULE_ACTION(10);
+	boost::shared_ptr<int> _x = SCONVERT(int,void,args[0]);
+	boost::shared_ptr<int> _y = SCONVERT(int,void,args[1]);
+	if(!move(*_x,*_y))
 	{
 		foreach(Entity::WkPtr w, seen)
 		{
 			Living::ShPtr e = DCONVERT(Living,Entity,w.lock());
-			if(e != NULL && e->x == x && e->y == y)
+			if(e != NULL && e->x == *_x && e->y == *_y)
 			{
-				ActionArgs args;
-				args.push_back(e);
-				attack(args);
+				ActionArgs a;
+				a.push_back(e);
+				attack(a);
 			}
 		}
 	}
@@ -67,12 +72,21 @@ bool Living::move(int x, int y)
 			Item::ShPtr e = DCONVERT(Item,Entity,w.lock());
 			if(e != NULL && e->x == x && e->y == y)
 			{
-				get(e);
-				e->host_map.lock()->remove(e);
-				cprintf("%s gets %s.",name.c_str(),e->name.c_str());
+				ActionArgs a;
+				a.push_back(e);
+				pickup(a);
 			}
 		}
 	}
+}
+
+void Living::pickup(ActionArgs args)
+{
+	SCHEDULE_ACTION(10);
+	Item::ShPtr e = SCONVERT(Item,void,args[0]);
+	get(e);
+	e->host_map.lock()->remove(e);
+	cprintf("%s gets %s.",name.c_str(),e->name.c_str());
 }
 
 void Living::attack(ActionArgs args)

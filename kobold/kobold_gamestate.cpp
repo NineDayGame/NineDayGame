@@ -1,8 +1,9 @@
 #include "kobold_gamestate.hpp"
 #include "util.hpp"
-#include "ai.hpp"
+#include "monster.hpp"
+#include "action_scheduler.hpp"
 
-KoboldGameState::KoboldGameState(GameState::ShPtr p, RenderMan::ShPtr r, Entity::ShPtr e) : GameState(p), renderer(r), player(e)
+KoboldGameState::KoboldGameState(GameState::ShPtr p, RenderMan::ShPtr r, Living::ShPtr e) : GameState(p), renderer(r), player(e)
 {}
 
 void KoboldGameState::handle_input()
@@ -33,8 +34,8 @@ void KoboldGameState::handle_input()
 
 		foreach(Container::ShPtr c, player->container.lock()->inventory)
 		{
-			AI::ShPtr a = DCONVERT(AI,Container,c);
-			if(a)
+			Monster::ShPtr a = DCONVERT(Monster,Container,c);
+			if(a && !a->blocked)
 			{
 				a->ai();
 			}
@@ -43,6 +44,11 @@ void KoboldGameState::handle_input()
 		
 	if ( event_.type == SDL_QUIT ) {
 		GameState::running = false;
+	}
+
+	while(player->blocked)
+	{
+		as.tick();
 	}
 }
 void KoboldGameState::draw()
