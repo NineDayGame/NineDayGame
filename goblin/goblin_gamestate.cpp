@@ -3,6 +3,7 @@
 #include "item.hpp"
 #include "util.hpp"
 #include "inventory_menu.hpp"
+#include "action_menu.hpp"
 #include "monster.hpp"
 #include "living.hpp"
 #include "action_scheduler.hpp"
@@ -50,6 +51,12 @@ void GoblinGameState::handle_input()
 	if(key.c == 'i')
 	{
 		Menu::ShPtr c = InventoryMenu::ShPtr(new InventoryMenu(this->shared_from_this(),5,25,20,20));
+		c->init();
+		GameState::state = c;
+	}
+	if(key.c == 'a')
+	{
+		Menu::ShPtr c = ActionMenu::ShPtr(new ActionMenu(this->shared_from_this(),5,25,20,20));
 		c->init();
 		GameState::state = c;
 	}
