@@ -18,7 +18,7 @@ void GoblinTargetState::handle_input()
 	int y = camera->y;
 
 	if(TCODConsole::isWindowClosed()) { GameState::running = false; return; }
-	if(key.vk == TCODK_ESCAPE) { GameState::state = parent; }
+	if(key.vk == TCODK_ESCAPE) { GameState::state = parent; return; }
 	if(key.vk == TCODK_KP8) { --y; }
 	if(key.vk == TCODK_KP2) { ++y; }
 	if(key.vk == TCODK_KP4) { --x; }

@@ -56,24 +56,33 @@ void target_action(GameState::ShPtr m, MenuItem* me)
 {
 	Living::ShPtr player = SCONVERT(Living,void,me->args[0]);
 	boost::shared_ptr<std::string> action = SCONVERT(std::string,void,me->args[1]);
+
+	if(player->actions_info[*action].get<ACTION_TARGET>() == Living::TARGET_NONE)
+	{
+		Living::ActionArgs args;
+		((*player).*(player->actions[*action]))(args);
+		GameState::state = m->parent;
+		return;
+	}
+	
 	GoblinGameState::ShPtr gs = SCONVERT(GoblinGameState,GameState,m->get_first_parent());
 
 	int x;
 	int y;
 	int width;
 	int height;
-	// foreach(Camera::ShPtr c, gs->cameras)
-	// {
-	EntityCamera::ShPtr ec = DCONVERT(EntityCamera,Camera,gs->cameras.front());
-//		if(ec && ec->target == player)
-//		{
+	foreach(Camera::ShPtr c, gs->cameras)
+	{
+		EntityCamera::ShPtr ec = DCONVERT(EntityCamera,Camera,gs->cameras.front());
+		if(ec && ec->target == player)
+		{
 			x = ec->screen_x;
 			y = ec->screen_y;
 			width = ec->width;
 			height = ec->height;
-	// 		break;
-	// 	}
-	// }
+			break;
+		}
+	}
 
 	TargetingCamera::ShPtr tc(new TargetingCamera(player->known_map,player,player->x,player->y,x,y,width,height));
 	GoblinTargetState::ShPtr gts(new GoblinTargetState(m,tc,player,*(action.get()),&target_callback));
