@@ -15,7 +15,7 @@
 // This assumes the ActionArgs for the function is called args
 #define SCHEDULE_ACTION()	  \
 	{ \
-		int energy = actions_info[__FUNCTION__].get<1>(); \
+		int energy = actions_info[__FUNCTION__].get<ACTION_ENERGY>(); \
 		if(action_energy < energy/speed) \
 		{ \
 			last_args.push_back(args); \
@@ -37,6 +37,10 @@
 		actions[#action] = static_cast<Living::Action>(&T::action); \
 		actions_info[#action] = ActionInfo(proper_name,energy_cost,target_type); \
 	}
+
+#define ACTION_NAME 0
+#define ACTION_ENERGY 1
+#define ACTION_TARGET 2
 
 class Living : public Entity
 {

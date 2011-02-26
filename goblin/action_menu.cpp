@@ -20,7 +20,7 @@ void ActionMenu::init()
 	int i = 1;
 	foreach(Living::ActionMap::value_type v, m->player->actions)
 	{
-		std::string s = m->player->actions_info[v.first].get<0>();
+		std::string s = m->player->actions_info[v.first].get<ACTION_NAME>();
 		MenuItem::ShPtr mi(new MenuItem(screen_x+1,screen_y+i,s,TCOD_white,&foo));
 		// mi->args.push_back(e);
 		// mi->args.push_back(item);
