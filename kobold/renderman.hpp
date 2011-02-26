@@ -3,6 +3,7 @@
 
 #include <boost/shared_ptr.hpp>
 
+#include "glcamera.hpp"
 #include "entity.hpp"
 #include "glrenderer.hpp"
 #include "util.hpp"
@@ -23,9 +24,9 @@ public:
 	void add_window(GlWindow::ShPtr window);
 	void clear_movables();
 	void clear_windows();
-	
-	// TODO: This need to get out of RenderMan and in to game logic
-	void set_player(float x, float y);
+	void load_terrain(Movable::ShPtr movable);
+	void set_camera(GlCamera::ShPtr camera);
+	void set_dynamic_light(Light::ShPtr light);
 	
 	void draw_frame();
 	void set_entity(Entity::ShPtr entity);

@@ -10,9 +10,11 @@
 //----------------------------------------------
 #include "textureman.hpp"
 #include "fontman.hpp"
+#include "glcamera.hpp"
+#include "light.hpp"
 //----------------------------------------------
 
-class KoboldGameState : public GameState
+class KoboldGameState : public GameState, public FovListener
 {
 public:
 	typedef boost::shared_ptr<KoboldGameState> ShPtr;
@@ -25,6 +27,8 @@ public:
 
 	virtual void handle_input();
 	virtual void draw();
+	
+	void update_view(int x, int y, bool seen_before, char c, TCODColor color, bool transparent, bool walkable);
 
 private:
 	void init();
@@ -39,6 +43,9 @@ private:
 
 	TextureMan::ShPtr texman_;
 	FontMan::ShPtr fontman_;
+	
+	GlCamera::ShPtr camera_;
+	Light::ShPtr player_light_;
 //----------------------------------------------
 	DISALLOW_COPY_AND_ASSIGN(KoboldGameState);
 };

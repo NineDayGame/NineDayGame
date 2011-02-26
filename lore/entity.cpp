@@ -4,6 +4,7 @@
 #include "util.hpp"
 
 Entity::Entity(boost::weak_ptr<Map> _host_map, int _x, int _y, int _c, TCODColor _color)
+  : fovl_(0)
 {
 	host_map = _host_map;
 	x = _x;
@@ -12,7 +13,8 @@ Entity::Entity(boost::weak_ptr<Map> _host_map, int _x, int _y, int _c, TCODColor
 	c = _c;
 	color = _color;
 	sight_range = 7;
-	fov_cb = NULL;
+	//fov_cb = NULL;
+	//fovl();
 
 	host_map.lock()->data->setProperties(x,y,false,false);
 	known_map = Map::ShPtr(new Map(host_map.lock()->width,host_map.lock()->height));
@@ -63,7 +65,10 @@ void Entity::look()
 				host->get_data(x+i,y+j,&_c,&_color,&_transparent,&_walkable);
 				known_map->set_data(x+i,y+j,_c,_color,_transparent,_walkable);
 				
-				if(fov_cb) (*fov_cb)(x+i,y+j,seen_before,_c,_color,_transparent,_walkable);
+				//if(fov_cb) (*fov_cb)(x+i,y+j,seen_before,_c,_color,_transparent,_walkable);
+				if (fovl_) {
+					fovl_->update_view(x+i, y+j, seen_before, _c, _color, _transparent, _walkable);
+				}
 			}
 		}
 	}
@@ -78,7 +83,12 @@ void Entity::look()
 	}
 }
 
-void Entity::register_fovcb(Entity::FOVCallback cb)
+/*void Entity::register_fovcb(FovListener::ShPtr fovlistener)
 {
-	fov_cb = cb;
+	fovl = fovlistener;
+}*/
+
+void Entity::register_fovcb(FovListener* fovl)
+{
+	fovl_ = fovl;
 }

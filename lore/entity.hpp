@@ -4,9 +4,12 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
+
 #include <list>
 #include <libtcod.hpp>
+
 #include "container.hpp"
+#include "fovlistener.hpp"
 
 class Map;
 
@@ -36,10 +39,12 @@ public:
 	virtual bool move(int x, int y);
 	virtual void look();
 
-	void register_fovcb(Entity::FOVCallback cb);
+	//void register_fovcb(Entity::FOVCallback cb);
+	void register_fovcb(FovListener* fovl);
 
 protected:
-	Entity::FOVCallback fov_cb;
+	//Entity::FOVCallback fov_cb;
+	FovListener* fovl_;
 };
 
 #endif

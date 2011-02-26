@@ -11,6 +11,7 @@
 #include "SDL/SDL.h"
 #include "SDL/SDL_opengl.h"
 
+#include "glcamera.hpp"
 #include "movable.hpp"
 #include "player.hpp"
 #include "fontman.hpp"
@@ -30,11 +31,13 @@ public:
 	GlRenderer();
 	void init();
 	void init_gl();
+	void set_camera(GlCamera::ShPtr camera);
 	void set_dynamic_light(Light::ShPtr light);
 	void add_movable(Movable::ShPtr movable);
 	void add_window(GlWindow::ShPtr window);
 	void clear_movables();
 	void clear_windows();
+	void load_terrain(Movable::ShPtr movable);
 	void set_ambient_light(const Vector4f& light);
 	void set_light(int index, const Light& light);
 	void take_screenshot(std::string filename);
@@ -42,24 +45,18 @@ public:
 	void toggle_lighting();
 	void toggle_wireframes();
 	void render();
-	
-	// TODO: These need to die
-	void set_player(float x, float y);
-	void set_sight_radius(float r);
 
 private:
 	Timer::ShPtr fps_;
 	std::vector<Movable::ShPtr> movables_;
+	std::vector<Movable::ShPtr> terrain_;
 	std::list<GlWindow::ShPtr> windows_;
 	Light::ShPtr dynamic_light_;
-	
-	//Player::ShPtr player_;
+	GlCamera::ShPtr camera_;
+
 	// Required for screenshots and toggling between fullscreen and regular screen
 	SDL_Surface* sdlSurface_;
-	float cameraX_, cameraY_, cameraZ_;
-	float lightX_, lightY_, lightZ_;
 	bool lights_, wireframes_;
-	int dl_index_;
 	
 	DISALLOW_COPY_AND_ASSIGN(GlRenderer);
 };

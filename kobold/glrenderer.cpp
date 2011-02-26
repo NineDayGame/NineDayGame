@@ -21,9 +21,7 @@ const int SCREEN_BPP = 32;
 const int FRAMES_PER_SECOND = 60;
 
 GlRenderer::GlRenderer()
-  : cameraX_(0.0f), cameraY_(0.0f), cameraZ_(-60.0f),
-    lightX_(0.0f), lightY_(0.0f), lightZ_(0.0f),
-    lights_(true), wireframes_(false) {
+  : lights_(true), wireframes_(false) {
 	init();
 }
 
@@ -67,7 +65,7 @@ void GlRenderer::init_gl() {
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-	gluPerspective(45.0f, (GLfloat)SCREEN_WIDTH/(GLfloat)SCREEN_HEIGHT, 1.0f, 200.0f);
+	gluPerspective(45.0f, (GLfloat)SCREEN_WIDTH/(GLfloat)SCREEN_HEIGHT, 1.0f, 100.0f);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -76,19 +74,10 @@ void GlRenderer::init_gl() {
     {
         //error
     }
-    
-    //player_.reset(new Player());
-    //player_->set_texture(/*texman_->get_texture("resources/default.bmp")->get_index()*/1);
-    Light::ShPtr plight (new Light());//= player_->get_light();
-    Vector4f::ShPtr amb (new Vector4f(0.08f, 0.08f, 0.08f, 1.0f));
-    plight->set_ambient(amb);
-    Vector4f::ShPtr diff (new Vector4f(1.0f, 0.9f, 0.7f, 1.0f));
-    plight->set_diffuse(diff);
-    plight->set_attenuation_constant(0.5f);
-    plight->set_attenuation_linear(0.01f);
-    plight->set_attenuation_quadratic(0.01f);
-    plight->set_radius(6.0f);
-    set_dynamic_light(plight);
+}
+
+void GlRenderer::set_camera(GlCamera::ShPtr camera) {
+	camera_ = camera;
 }
 
 void GlRenderer::set_dynamic_light(Light::ShPtr light) {
@@ -111,6 +100,10 @@ void GlRenderer::clear_movables() {
 	movables_.clear();
 }
 
+void GlRenderer::load_terrain(Movable::ShPtr movable) {
+	terrain_.push_back(movable);
+}
+
 void GlRenderer::render() {
 	fps_->start();
 
@@ -123,15 +116,27 @@ void GlRenderer::render() {
 	glEnableClientState(GL_NORMAL_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY_EXT);
 
-	glTranslatef(cameraX_, cameraY_, cameraZ_);
-	glRotatef(45.0f, 0.0f, 0.0f, 1.0f);
-	glRotatef(45.0f, -1.0f, 1.0f, 0.0f);
+	camera_->setup_camera();
 
 	Movable::ShPtr mov;
 
+	for (int i = 0; i < terrain_.size(); ++i) {
+		mov = terrain_.at(i);
+		float distance = mov->get_position()->distance(*(dynamic_light_->get_position()));
+		// Do some range culling
+		if (distance < 30.0f) {
+			if (distance <= dynamic_light_->get_radius()+1) {
+				set_light(GL_LIGHT0, *dynamic_light_);
+			} else {
+				Light none; 
+				set_light(GL_LIGHT0, none);
+			}
+			terrain_.at(i)->draw();
+		}
+	}
+	
 	for (int i = 0; i < movables_.size(); ++i) {
 		mov = movables_.at(i);
-		//if (movables_.at(i)->get_position()->distance(*(player_->get_position())) <= player_->get_sight_radius()+1) {
 		if (mov->get_position()->distance(*(dynamic_light_->get_position())) <= dynamic_light_->get_radius()+1) {
 			set_light(GL_LIGHT0, *dynamic_light_);
 		} else {
@@ -208,10 +213,6 @@ void GlRenderer::set_light(int index, const Light& light) {
 	glLightf(index, GL_QUADRATIC_ATTENUATION, light.get_attenuation_quadratic());
 }
 
-void GlRenderer::set_sight_radius(float r) {
-	//player_->set_sight_radius(r);
-}
-
 void GlRenderer::take_screenshot(std::string filename) {
 
 	SDL_Surface *temp;
@@ -273,16 +274,4 @@ void GlRenderer::toggle_wireframes() {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
 	wireframes_ = !wireframes_;
-}
-
-void GlRenderer::set_player(float x, float y) {
-
-	cameraX_ = -0.7071f*x + 0.7071f*y;
-	cameraY_ = -0.5f*x + -0.5f*y;
-	cameraZ_ = -30.0f + 0.5*x + 0.5f*y;
-	
-	Vector3f::ShPtr pos (new Vector3f(x, y, 2.0f));
-	dynamic_light_->set_position(pos);
-	
-	//player_->set_position(x, y, 1.0f);
 }

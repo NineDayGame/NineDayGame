@@ -27,8 +27,16 @@ void RenderMan::clear_windows() {
 	renderer_->clear_movables();
 }
 
-void RenderMan::set_player(float x, float y) {
-	renderer_->set_player(x, y);
+void RenderMan::load_terrain(const Movable::ShPtr movable) {
+	renderer_->load_terrain(movable);
+}
+
+void RenderMan::set_camera(GlCamera::ShPtr camera) {
+	renderer_->set_camera(camera);
+}
+
+void RenderMan::set_dynamic_light(Light::ShPtr light) {
+	renderer_->set_dynamic_light(light);
 }
 
 void RenderMan::draw_frame() {
@@ -36,10 +44,7 @@ void RenderMan::draw_frame() {
 }
 
 void RenderMan::set_entity(Entity::ShPtr entity) {
-	e_ = entity;
-	//renderer_->load_map(*(e->known_map));
-	e_->look();
-	renderer_->set_sight_radius(e_->sight_range);
+	entity->look();
 }
 
 void RenderMan::take_screenshot() {
