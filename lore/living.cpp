@@ -16,7 +16,9 @@ Living::Living(Map::WkPtr host_map, std::string n, int x, int y, int c, TCODColo
 	REGISTER_ACTION(walk);
 	REGISTER_ACTION(pickup);
 	REGISTER_ACTION(wait);
-	REGISTER_ACTION(spin_attack);
+
+	init_melee();
+	init_spells();
 }
 
 void Living::test(ActionArgs args)
@@ -157,26 +159,4 @@ void Living::die(Living* killer)
 void Living::wait(ActionArgs args)
 {
 	SCHEDULE_ACTION(10);
-}
-
-void Living::spin_attack(ActionArgs args)
-{
-	SCHEDULE_ACTION(500);
-	cprintf("%s performs a spin attack!",name.c_str());
-	std::list<Living::ShPtr> to_attack;
-	foreach(Entity::WkPtr e, seen)
-	{
-		Living::ShPtr l = SCONVERT(Living,Entity,e.lock());
-		if(l && l.get() != this && l->health > 0 && distance(x,y,l->x,l->y) < 2)
-		{
-			to_attack.push_back(l);
-		}
-	}
-	action_energy += to_attack.size() * 100/speed;
-	foreach(Living::ShPtr e, to_attack)
-	{
-		ActionArgs a;
-		a.push_back(e);
-		attack(a);
-	}
 }

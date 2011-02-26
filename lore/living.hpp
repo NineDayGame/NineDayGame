@@ -40,8 +40,9 @@ public:
 	typedef boost::shared_ptr<Living> ShPtr;
 	typedef std::vector<boost::shared_ptr<void> > ActionArgs;
 	typedef void (Living::*Action)(ActionArgs args);
+	typedef boost::unordered_map<std::string, Living::Action> ActionMap;
 	
-	boost::unordered_map<std::string, Living::Action> actions;
+	ActionMap actions;
 	std::list<ActionArgs> last_args;
 
 	std::string name;
@@ -74,15 +75,32 @@ public:
 	virtual ~Living();
 
 	virtual void init_stats(int str, int magic, int dex, int intel, int con, int soul, int disp, int speed);
-	
-	virtual void walk(ActionArgs args);
-	virtual void attack(ActionArgs args);
-	virtual void pickup(ActionArgs args);
-	virtual void wait(ActionArgs args);
 
-	virtual void spin_attack(ActionArgs args);
+	// Basic abilities
+	virtual void walk(ActionArgs args); // x, y
+	virtual void attack(ActionArgs args); // Living
+	virtual void pickup(ActionArgs args); // Item
+	virtual void wait(ActionArgs args); // none
+
+	// Melee abilities
+	virtual void spin_attack(ActionArgs args); // none
+	virtual void precise_strike(ActionArgs args); // Living
+	virtual void giant_swing(ActionArgs args); // Living
+	virtual void cripple(ActionArgs args); // Living
+
+	// Ranged abilities
+
+	// Spells
+	virtual void heal(ActionArgs args); // Living
+	virtual void shield(ActionArgs args); // Living
+	virtual void haste(ActionArgs args); // Living
 	
-	void test(ActionArgs args);
+	virtual void flaming_hands(ActionArgs args); // direction
+	virtual void drain_life(ActionArgs args); // Living
+	
+
+	// Misc abilities
+	void test(ActionArgs args); // none
 
 	virtual void die(Living* killer);
 protected:
@@ -90,6 +108,12 @@ protected:
 	virtual int rand(int x) { return _rand->getInt(0,x); }
 
 	double distance(int x1, int y1, int x2, int y2);
+
+	//virtual void init_basic();
+	virtual void init_melee();
+	//virtual void init_ranged();
+	virtual void init_spells();
+	
 };
 
 #endif
