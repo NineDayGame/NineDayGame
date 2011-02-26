@@ -16,11 +16,6 @@ void Monster::foo(ActionArgs args)
 	SCHEDULE_ACTION(100);
 	cprintf("Foo!");
 }
-
-static double distance(int x1, int y1, int x2, int y2)
-{
-	return sqrt(pow(x1-x2,2)+pow(y1-y2,2));
-}
 	
 void Monster::ai()
 {
@@ -91,9 +86,9 @@ void Monster::ai()
 		path->compute(x,y,dx,dy);
 	}
 	path->walk(mx.get(),my.get(),1);
-	
+
 	ActionArgs args;
 	args.push_back(mx);
 	args.push_back(my);
-	walk(args);
+	this->walk(args);
 }
