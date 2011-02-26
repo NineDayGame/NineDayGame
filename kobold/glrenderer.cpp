@@ -129,7 +129,7 @@ void GlRenderer::render() {
 	glRotatef(45.0f, -1.0f, 1.0f, 0.0f);
 
 	for (int i = 0; i < movables_.size(); ++i) {
-		if (movables_.at(i)->get_position()->distance(*(player_->get_position())) <= player_->get_sight_radius()+1) {
+		if (movables_.at(i)->get_position()->distance(*(player_->get_position())) <= player_->get_sight_radius()) {
 			set_light(GL_LIGHT0, *(player_->get_light()));
 		} else {
 			Light none; 

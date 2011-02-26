@@ -48,7 +48,7 @@ bool Entity::move(int _x, int _y)
 void Entity::look()
 {
 	Map::ShPtr host = SCONVERT(Map,Container,container.lock());
-	host->data->computeFov(x,y,sight_range,true,FOV_PERMISSIVE_5);
+	host->data->computeFov(x,y,sight_range,true,FOV_SHADOW);
 	for(int i = -sight_range; i < sight_range; ++i)
 	{
 		for(int j = -sight_range; j < sight_range; ++j)
