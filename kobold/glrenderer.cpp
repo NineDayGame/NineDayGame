@@ -77,16 +77,9 @@ void GlRenderer::init_gl() {
         //error
     }
     
-    /*texman_.reset(new TextureMan());
-    texman_->load_textures();
-    const int texid = texman_->get_texture("resources/terminal.bmp")->get_index();
-    fontman_.reset(new FontMan());
-    fontman_->load_fonts(*texman_);
-    const Font::ShPtr cfont = fontman_->get_font("resources/terminal.bmp");*/
-    
-    player_.reset(new Player());
+    //player_.reset(new Player());
     //player_->set_texture(/*texman_->get_texture("resources/default.bmp")->get_index()*/1);
-    Light::ShPtr plight = player_->get_light();
+    Light::ShPtr plight (new Light());//= player_->get_light();
     Vector4f::ShPtr amb (new Vector4f(0.08f, 0.08f, 0.08f, 1.0f));
     plight->set_ambient(amb);
     Vector4f::ShPtr diff (new Vector4f(1.0f, 0.9f, 0.7f, 1.0f));
@@ -94,6 +87,12 @@ void GlRenderer::init_gl() {
     plight->set_attenuation_constant(0.5f);
     plight->set_attenuation_linear(0.01f);
     plight->set_attenuation_quadratic(0.01f);
+    plight->set_radius(6.0f);
+    set_dynamic_light(plight);
+}
+
+void GlRenderer::set_dynamic_light(Light::ShPtr light) {
+	dynamic_light_ = light;
 }
 
 void GlRenderer::add_window(const GlWindow::ShPtr window) {
@@ -128,9 +127,13 @@ void GlRenderer::render() {
 	glRotatef(45.0f, 0.0f, 0.0f, 1.0f);
 	glRotatef(45.0f, -1.0f, 1.0f, 0.0f);
 
+	Movable::ShPtr mov;
+
 	for (int i = 0; i < movables_.size(); ++i) {
-		if (movables_.at(i)->get_position()->distance(*(player_->get_position())) <= player_->get_sight_radius()+1) {
-			set_light(GL_LIGHT0, *(player_->get_light()));
+		mov = movables_.at(i);
+		//if (movables_.at(i)->get_position()->distance(*(player_->get_position())) <= player_->get_sight_radius()+1) {
+		if (mov->get_position()->distance(*(dynamic_light_->get_position())) <= dynamic_light_->get_radius()+1) {
+			set_light(GL_LIGHT0, *dynamic_light_);
 		} else {
 			Light none; 
 			set_light(GL_LIGHT0, none);
@@ -206,7 +209,7 @@ void GlRenderer::set_light(int index, const Light& light) {
 }
 
 void GlRenderer::set_sight_radius(float r) {
-	player_->set_sight_radius(r);
+	//player_->set_sight_radius(r);
 }
 
 void GlRenderer::take_screenshot(std::string filename) {
@@ -278,9 +281,8 @@ void GlRenderer::set_player(float x, float y) {
 	cameraY_ = -0.5f*x + -0.5f*y;
 	cameraZ_ = -30.0f + 0.5*x + 0.5f*y;
 	
-	lightX_ = x;
-	lightY_ = y;
-	lightZ_ = 2.0f;
+	Vector3f::ShPtr pos (new Vector3f(x, y, 2.0f));
+	dynamic_light_->set_position(pos);
 	
-	player_->set_position(x, y, 1.0f);
+	//player_->set_position(x, y, 1.0f);
 }
