@@ -15,7 +15,7 @@ void RenderMan::add_movable(const Movable::ShPtr movable) {
 	renderer_->add_movable(movable);
 }
 
-void RenderMan::add_window(const GlWindow::ShPtr window) {
+int RenderMan::add_window(const GlWindow::ShPtr window) {
 	renderer_->add_window(window);
 }
 
@@ -24,7 +24,11 @@ void RenderMan::clear_movables() {
 }
 
 void RenderMan::clear_windows() {
-	renderer_->clear_movables();
+	renderer_->clear_windows();
+}
+
+void RenderMan::remove_window(GlWindow::ShPtr window) {
+	renderer_->remove_window(window);
 }
 
 void RenderMan::load_terrain(const Movable::ShPtr movable) {

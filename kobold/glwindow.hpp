@@ -24,6 +24,7 @@ public:
 	void hide();
 
 protected:
+	static unsigned int id_;
 	Mesh::ShPtr mesh_;
 	unsigned int texture_index_;
 	Vector3f::ShPtr position_;
