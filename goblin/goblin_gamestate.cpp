@@ -15,6 +15,7 @@ GoblinGameState::GoblinGameState(GameState::ShPtr p, Living::ShPtr e) : GameStat
 
 void GoblinGameState::handle_input()
 {
+	Living::ActionArgs args;
 	boost::shared_ptr<int> x(new int(player->x));
 	boost::shared_ptr<int> y(new int(player->y));
 	bool walking = false;
@@ -31,9 +32,10 @@ void GoblinGameState::handle_input()
 	if(key.vk == TCODK_KP9) { walking = true; ++(*x); --(*y); }
 	if(key.vk == TCODK_KP1) { walking = true; --(*x); ++(*y); } 
 	if(key.vk == TCODK_KP3) { walking = true; ++(*x); ++(*y); }
+	if(key.vk == TCODK_KP5) { player->wait(args); }
+	if(key.vk == TCODK_SPACE) { player->spin_attack(args); }
 	if(walking == true)
 	{
-		Living::ActionArgs args;
 		args.push_back(x);
 		args.push_back(y);
 		player->walk(args);
@@ -52,16 +54,17 @@ void GoblinGameState::handle_input()
 		GameState::state = c;
 	}
 
-	foreach(Container::ShPtr c, player->container.lock()->inventory)
-	{
-		Monster::ShPtr a = DCONVERT(Monster,Container,c);
-		if(a && !a->blocked)
-		{
-			a->ai();
-		}
-	}
 	while(player->blocked)
 	{
+		foreach(Container::ShPtr c, player->container.lock()->inventory)
+		{
+			Monster::ShPtr a = DCONVERT(Monster,Container,c);
+			if(a && !a->blocked)
+			{
+				a->ai();
+			}
+		}
+	
 		as.tick();
 	}
 }
