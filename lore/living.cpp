@@ -12,10 +12,10 @@ Living::Living(Map::WkPtr host_map, std::string n, int x, int y, int c, TCODColo
 	faction = 0;
 
 	REGISTER_ACTION(test,"Test",10,TARGET_NONE);
-	REGISTER_ACTION(attack,"Attack",100,TARGET_LIVING);
-	REGISTER_ACTION(walk,"Walk",10,TARGET_PLACE);
-	REGISTER_ACTION(pickup,"Pickup",10,TARGET_ITEM);
-	REGISTER_ACTION(wait,"Wait",10,TARGET_NONE);
+	REGISTER_ACTION(attack,"Attack",150,TARGET_LIVING);
+	REGISTER_ACTION(walk,"Walk",100,TARGET_PLACE);
+	REGISTER_ACTION(pickup,"Pickup",50,TARGET_ITEM);
+	REGISTER_ACTION(wait,"Wait",100,TARGET_NONE);
 
 	init_melee();
 	init_spells();

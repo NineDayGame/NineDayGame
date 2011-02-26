@@ -4,9 +4,9 @@
 void Living::init_melee()
 {
 	REGISTER_ACTION(spin_attack,"Spin Attack",500,TARGET_NONE);
-	REGISTER_ACTION(precise_strike,"Precise Strike",500,TARGET_LIVING);
-	REGISTER_ACTION(giant_swing,"Giant Swing",500,TARGET_LIVING);
-	REGISTER_ACTION(cripple,"Cripple",500,TARGET_LIVING);
+	REGISTER_ACTION(precise_strike,"Precise Strike",300,TARGET_LIVING);
+	REGISTER_ACTION(giant_swing,"Giant Swing",300,TARGET_LIVING);
+	REGISTER_ACTION(cripple,"Cripple",400,TARGET_LIVING);
 }
 
 // none
