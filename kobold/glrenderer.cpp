@@ -65,7 +65,7 @@ void GlRenderer::init_gl() {
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-	gluPerspective(45.0f, (GLfloat)SCREEN_WIDTH/(GLfloat)SCREEN_HEIGHT, 1.0f, 200.0f);
+	gluPerspective(45.0f, (GLfloat)SCREEN_WIDTH/(GLfloat)SCREEN_HEIGHT, 1.0f, 100.0f);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -117,21 +117,22 @@ void GlRenderer::render() {
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY_EXT);
 
 	camera_->setup_camera();
-	/*glTranslatef(cameraX_, cameraY_, cameraZ_);
-	glRotatef(45.0f, 0.0f, 0.0f, 1.0f);
-	glRotatef(45.0f, -1.0f, 1.0f, 0.0f);*/
 
 	Movable::ShPtr mov;
 
 	for (int i = 0; i < terrain_.size(); ++i) {
 		mov = terrain_.at(i);
-		if (mov->get_position()->distance(*(dynamic_light_->get_position())) <= dynamic_light_->get_radius()+1) {
-			set_light(GL_LIGHT0, *dynamic_light_);
-		} else {
-			Light none; 
-			set_light(GL_LIGHT0, none);
+		float distance = mov->get_position()->distance(*(dynamic_light_->get_position()));
+		// Do some range culling
+		if (distance < 30.0f) {
+			if (distance <= dynamic_light_->get_radius()+1) {
+				set_light(GL_LIGHT0, *dynamic_light_);
+			} else {
+				Light none; 
+				set_light(GL_LIGHT0, none);
+			}
+			terrain_.at(i)->draw();
 		}
-		terrain_.at(i)->draw();
 	}
 	
 	for (int i = 0; i < movables_.size(); ++i) {
