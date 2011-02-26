@@ -13,36 +13,52 @@
 // Schedules the action to run when the Living gets enough energy.
 // *** This will only work in functions inside of a Living-derived class ***
 // This assumes the ActionArgs for the function is called args
-#define SCHEDULE_ACTION(energy)                 \
-	if(action_energy < (energy)/speed)          \
-	{                                           \
-		last_args.push_back(args);              \
-		blocked = true;                         \
-		Living::ShPtr l = SCONVERT(Living,Container,this->shared_from_this()); \
-		as.schedule_action(l,__FUNCTION__,(energy)/speed); \
-		return;                                 \
-	}                                           \
-	else                                        \
-	{                                           \
-		blocked = false;                        \
-		action_energy -= (energy)/speed;        \
+#define SCHEDULE_ACTION()	  \
+	{ \
+		int energy = actions_info[__FUNCTION__].get<1>(); \
+		if(action_energy < energy/speed) \
+		{ \
+			last_args.push_back(args); \
+			blocked = true; \
+			Living::ShPtr l = SCONVERT(Living,Container,this->shared_from_this()); \
+			as.schedule_action(l,__FUNCTION__,energy/speed); \
+			return; \
+		} \
+		else \
+		{ \
+			blocked = false; \
+			action_energy -= energy/speed; \
+		} \
 	}
 
-#define REGISTER_ACTION(action)           \
+#define REGISTER_ACTION(action,proper_name,energy_cost,target_type)	  \
 	{                                           \
 		typedef typeof(*this) T;                \
 		actions[#action] = static_cast<Living::Action>(&T::action); \
+		actions_info[#action] = ActionInfo(proper_name,energy_cost,target_type); \
 	}
 
 class Living : public Entity
 {
 public:
+	typedef enum
+	{
+		TARGET_NONE,
+		TARGET_LIVING,
+		TARGET_ITEM,
+		TARGET_PLACE,
+		TARGET_DIRECTION,
+	} ActionTargetType;
+	
 	typedef boost::shared_ptr<Living> ShPtr;
 	typedef std::vector<boost::shared_ptr<void> > ActionArgs;
 	typedef void (Living::*Action)(ActionArgs args);
+	typedef boost::tuple<std::string/*proper name*/, int/*energy cost*/, ActionTargetType> ActionInfo;
 	typedef boost::unordered_map<std::string, Living::Action> ActionMap;
+	typedef boost::unordered_map<std::string, Living::ActionInfo> ActionInfoMap;
 	
 	ActionMap actions;
+	ActionInfoMap actions_info;
 	std::list<ActionArgs> last_args;
 
 	std::string name;

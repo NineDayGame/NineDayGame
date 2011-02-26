@@ -3,16 +3,16 @@
 
 void Living::init_melee()
 {
-	REGISTER_ACTION(spin_attack);
-	REGISTER_ACTION(precise_strike);
-	REGISTER_ACTION(giant_swing);
-	REGISTER_ACTION(cripple);
+	REGISTER_ACTION(spin_attack,"Spin Attack",500,TARGET_NONE);
+	REGISTER_ACTION(precise_strike,"Precise Strike",500,TARGET_LIVING);
+	REGISTER_ACTION(giant_swing,"Giant Swing",500,TARGET_LIVING);
+	REGISTER_ACTION(cripple,"Cripple",500,TARGET_LIVING);
 }
 
 // none
 void Living::spin_attack(ActionArgs args)
 {
-	SCHEDULE_ACTION(500);
+	SCHEDULE_ACTION();
 	cprintf("%s performs a spin attack!",name.c_str());
 	std::list<Living::ShPtr> to_attack;
 	foreach(Entity::WkPtr e, seen)
@@ -35,20 +35,20 @@ void Living::spin_attack(ActionArgs args)
 // Living
 void Living::precise_strike(ActionArgs args)
 {
-	SCHEDULE_ACTION(500);
+	SCHEDULE_ACTION();
 	cprintf("%s",__FUNCTION__);
 }
 
 // Living
 void Living::giant_swing(ActionArgs args)
 {
-	SCHEDULE_ACTION(500);
+	SCHEDULE_ACTION();
 	cprintf("%s",__FUNCTION__);
 }
 
 // Living
 void Living::cripple(ActionArgs args)
 {
-	SCHEDULE_ACTION(500);
+	SCHEDULE_ACTION();
 	cprintf("%s",__FUNCTION__);
 }

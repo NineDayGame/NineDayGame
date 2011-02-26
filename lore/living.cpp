@@ -11,11 +11,11 @@ Living::Living(Map::WkPtr host_map, std::string n, int x, int y, int c, TCODColo
 	z = 1;
 	faction = 0;
 
-	REGISTER_ACTION(test);
-	REGISTER_ACTION(attack);
-	REGISTER_ACTION(walk);
-	REGISTER_ACTION(pickup);
-	REGISTER_ACTION(wait);
+	REGISTER_ACTION(test,"Test",10,TARGET_NONE);
+	REGISTER_ACTION(attack,"Attack",100,TARGET_LIVING);
+	REGISTER_ACTION(walk,"Walk",10,TARGET_PLACE);
+	REGISTER_ACTION(pickup,"Pickup",10,TARGET_ITEM);
+	REGISTER_ACTION(wait,"Wait",10,TARGET_NONE);
 
 	init_melee();
 	init_spells();
@@ -23,7 +23,7 @@ Living::Living(Map::WkPtr host_map, std::string n, int x, int y, int c, TCODColo
 
 void Living::test(ActionArgs args)
 {
-	SCHEDULE_ACTION(100);
+	SCHEDULE_ACTION();
 	Living::ShPtr s = SCONVERT(Living,void,(args[0]));
 	cprintf("%s -> %s",__FUNCTION__,s->name.c_str());
 }
@@ -58,7 +58,7 @@ void Living::init_stats(int _str, int _magic, int _dex, int _intel, int _con, in
 
 void Living::walk(ActionArgs args)
 {
-	SCHEDULE_ACTION(10);
+	SCHEDULE_ACTION();
 	boost::shared_ptr<int> _x = SCONVERT(int,void,args[0]);
 	boost::shared_ptr<int> _y = SCONVERT(int,void,args[1]);
 	if(!move(*_x,*_y))
@@ -91,7 +91,7 @@ void Living::walk(ActionArgs args)
 
 void Living::pickup(ActionArgs args)
 {
-	SCHEDULE_ACTION(10);
+	SCHEDULE_ACTION();
 	Item::ShPtr e = SCONVERT(Item,void,args[0]);
 	e->container.lock()->remove(e);
 	get(e);
@@ -100,7 +100,7 @@ void Living::pickup(ActionArgs args)
 
 void Living::attack(ActionArgs args)
 {
-	SCHEDULE_ACTION(100);
+	SCHEDULE_ACTION();
 	Living::ShPtr e = SCONVERT(Living,void,args[0]);
 	if(e)
 	{
@@ -158,5 +158,5 @@ void Living::die(Living* killer)
 
 void Living::wait(ActionArgs args)
 {
-	SCHEDULE_ACTION(10);
+	SCHEDULE_ACTION();
 }

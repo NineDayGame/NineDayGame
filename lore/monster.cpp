@@ -7,13 +7,13 @@ Monster::Monster(Map::WkPtr host_map, std::string name, int x, int y, int c, TCO
 {
 	faction = _rand->getInt(0,3);
 	
-	REGISTER_ACTION(foo);
+	REGISTER_ACTION(foo,"Foo",10,TARGET_NONE);
 }
 Monster::~Monster(){}
 
 void Monster::foo(ActionArgs args)
 {
-	SCHEDULE_ACTION(100);
+	SCHEDULE_ACTION();
 	cprintf("Foo!");
 }
 	
