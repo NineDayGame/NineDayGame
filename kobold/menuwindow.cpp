@@ -16,16 +16,16 @@ MenuWindow::~MenuWindow() {}
 void MenuWindow::init() {
 	mesh_.reset(new Rect());
 	set_color(Vector3f(1.0f, 1.0f, 1.0f));
-	push_item(std::string("Item 1"));
-	push_item(std::string("Item 2"));
+	//push_item(std::string("Item 1"));
+	//push_item(std::string("Item 2"));
 }
 
 void MenuWindow::draw() {
 	if (is_shown()) {
 		glPushMatrix();
-		glBindTexture(GL_TEXTURE_2D, texture_index_);
-		glListBase(dl_index_);
-		
+		glBindTexture(GL_TEXTURE_2D, font_->get_texture()->get_index());
+		glListBase(font_->get_displaylist());
+				
 		for (int i = 0; i < tail_; ++i) {
 			glLoadIdentity();
 			glTranslatef(position_->x, position_->y+kFONT_HEIGHT*(item_max_-(i+1)), position_->z);
@@ -58,6 +58,6 @@ void MenuWindow::push_item(std::string item) {
 	items_[tail_++] = item;
 }
 
-void MenuWindow::set_dl_index(int dl_index) {
-	dl_index_ = dl_index;
+void MenuWindow::set_font(Font::ShPtr font) {
+	font_ = font;
 }

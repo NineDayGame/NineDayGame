@@ -84,8 +84,9 @@ void GlRenderer::set_dynamic_light(Light::ShPtr light) {
 	dynamic_light_ = light;
 }
 
-void GlRenderer::add_window(const GlWindow::ShPtr window) {
+int GlRenderer::add_window(const GlWindow::ShPtr window) {
 	windows_.push_back(window);
+	return windows_.size() - 1;
 }
 
 void GlRenderer::add_movable(const Movable::ShPtr movable) {
@@ -98,6 +99,10 @@ void GlRenderer::clear_windows() {
 
 void GlRenderer::clear_movables() {
 	movables_.clear();
+}
+
+void GlRenderer::remove_window(GlWindow::ShPtr window) {
+	windows_.remove(window);
 }
 
 void GlRenderer::load_terrain(Movable::ShPtr movable) {

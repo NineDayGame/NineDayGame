@@ -9,6 +9,7 @@
 #include "SDL/SDL.h"
 #include "SDL/SDL_opengl.h"
 
+#include "font.hpp"
 #include "gamestate.hpp"
 #include "glwindow.hpp"
 #include "menu.hpp"
@@ -26,15 +27,15 @@ public:
 	virtual void draw();
 	virtual void handle_input();
 	
-	void set_dl_index(int dl_index);
 	void set_scale(float x, float y, float z);
 	void clear_items();
 	void push_item(const std::string name);
+	void set_font(Font::ShPtr font);
 
 private:
 	GameState::ShPtr gamestate_;
 	boost::shared_array<std::string> items_;
-	int dl_index_;
+	Font::ShPtr font_;
 	int item_max_;
 	int tail_;
 

@@ -12,6 +12,7 @@
 #include "fontman.hpp"
 #include "glcamera.hpp"
 #include "light.hpp"
+#include "kobold_menu.hpp"
 //----------------------------------------------
 
 class KoboldGameState : public GameState, public FovListener
@@ -21,6 +22,9 @@ public:
 
 	RenderMan::ShPtr renderer;
 	Living::ShPtr player;
+	
+	TextureMan::ShPtr texman_;
+	FontMan::ShPtr fontman_;
 	
 	KoboldGameState(GameState::ShPtr p, Living::ShPtr e);
 	virtual ~KoboldGameState() {}
@@ -40,9 +44,6 @@ private:
 	AbilityWindow::ShPtr ability_window_;
 	HealthWindow::ShPtr health_window_;
 	MenuWindow::ShPtr menu_window_;
-
-	TextureMan::ShPtr texman_;
-	FontMan::ShPtr fontman_;
 	
 	GlCamera::ShPtr camera_;
 	Light::ShPtr player_light_;

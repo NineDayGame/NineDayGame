@@ -21,9 +21,10 @@ public:
 	void init();
 	
 	void add_movable(Movable::ShPtr movable);
-	void add_window(GlWindow::ShPtr window);
+	int add_window(GlWindow::ShPtr window);
 	void clear_movables();
 	void clear_windows();
+	void remove_window(GlWindow::ShPtr window);
 	void load_terrain(Movable::ShPtr movable);
 	void set_camera(GlCamera::ShPtr camera);
 	void set_dynamic_light(Light::ShPtr light);
