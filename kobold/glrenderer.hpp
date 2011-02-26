@@ -30,6 +30,7 @@ public:
 	GlRenderer();
 	void init();
 	void init_gl();
+	void set_dynamic_light(Light::ShPtr light);
 	void add_movable(Movable::ShPtr movable);
 	void add_window(GlWindow::ShPtr window);
 	void clear_movables();
@@ -50,9 +51,9 @@ private:
 	Timer::ShPtr fps_;
 	std::vector<Movable::ShPtr> movables_;
 	std::list<GlWindow::ShPtr> windows_;
-	std::list<Light::ShPtr> dynamic_lights_;
+	Light::ShPtr dynamic_light_;
 	
-	Player::ShPtr player_;
+	//Player::ShPtr player_;
 	// Required for screenshots and toggling between fullscreen and regular screen
 	SDL_Surface* sdlSurface_;
 	float cameraX_, cameraY_, cameraZ_;
