@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "kobold_gamestate.hpp"
 #include "util.hpp"
 #include "monster.hpp"
@@ -25,6 +27,24 @@ void KoboldGameState::init()
 	
 	init_resources();
 	create_windows();
+	
+	//player->register_fovcb(&KoboldGameState::update_view);
+	
+	player_light_.reset(new Light());
+    Vector4f::ShPtr amb (new Vector4f(0.08f, 0.08f, 0.08f, 1.0f));
+    player_light_->set_ambient(amb);
+    Vector4f::ShPtr diff (new Vector4f(1.0f, 0.9f, 0.7f, 1.0f));
+    player_light_->set_diffuse(diff);
+    player_light_->set_attenuation_constant(0.5f);
+    player_light_->set_attenuation_linear(0.01f);
+    player_light_->set_attenuation_quadratic(0.01f);
+    player_light_->set_radius(6.0f);
+    renderer->set_dynamic_light(player_light_);
+    
+    camera_.reset(new GlCamera());
+    renderer->set_camera(camera_);
+    
+    player->register_fovcb(this);
 }
 
 void KoboldGameState::init_resources()
@@ -89,6 +109,10 @@ void KoboldGameState::handle_input()
 	if( event_.type == SDL_KEYDOWN ) {
 		switch( event_.key.keysym.sym )
 		{
+		case SDLK_w: camera_->set_coords(camera_->get_coords()->x+1, camera_->get_coords()->y+1); break;
+		case SDLK_a: camera_->set_coords(camera_->get_coords()->x-1, camera_->get_coords()->y+1); break;
+		case SDLK_s: camera_->set_coords(camera_->get_coords()->x-1, camera_->get_coords()->y-1); break;
+		case SDLK_d: camera_->set_coords(camera_->get_coords()->x+1, camera_->get_coords()->y-1); break;
 		case SDLK_KP1:
 		case SDLK_LEFT: walking = true; --(*x); break; 
 		case SDLK_KP2: walking = true; --(*x); --(*y); break; 
@@ -110,7 +134,7 @@ void KoboldGameState::handle_input()
 		}
 
 		if(walking == true)
-		{			
+		{					
 			args.push_back(x);
 			args.push_back(y);
 			player->walk(args);
@@ -148,10 +172,41 @@ void KoboldGameState::draw()
 	renderer->draw_frame();
 }
 
+void KoboldGameState::update_view(int x, int y, bool seen_before, char c, TCODColor color, bool transparent, bool walkable) {
+	//std::cout << "Got callback" << std::endl;
+	if (!seen_before) {
+			const int stoneid = texman_->get_texture("resources/stone3.bmp")->get_index();
+			Map::ShPtr map = player->known_map;
+
+			if (c == '.') {
+				Block::ShPtr blk (new Block());
+				blk->set_position((float)x, (float)y, 0.0f);
+				blk->set_texture(stoneid); ////////////////
+				blk->set_color(Vector3f((color.r/255.0f), (color.g/255.0f), (color.b/255.0f)));
+				renderer->load_terrain(blk);
+			} else if ((x > 0) && (y > 0)) { 
+				if (c == '#'
+						&& (map->display[(x-1)+y*map->width].c == '.'
+						|| map->display[x+(y-1)*map->width].c == '.')) {
+				
+					for (int i = 0; i < 3; ++i) {
+						Block::ShPtr blk (new Block());
+						blk->set_position((float)x, (float)y, (float)i);
+						if (i < 2) {
+							//blk->set_texture(texture[0]);
+							blk->set_color(Vector3f((color.r/255.0f), (color.g/255.0f), (color.b/255.0f)));
+						}
+						renderer->load_terrain(blk);
+					}
+				}
+			}
+		}
+}
+
 void KoboldGameState::reload_world()
 {
 	//renderer_->load_map(*(e_->known_map)); // -----
-	renderer->clear_movables();
+	/*renderer->clear_movables();
 	const int stoneid = texman_->get_texture("resources/stone3.bmp")->get_index();
 	Map::ShPtr map = player->known_map;
 	for (int x = 0; x < map->width; ++x) {
@@ -181,9 +236,10 @@ void KoboldGameState::reload_world()
 				}
 			}
 		}
-	}
+	}*/
 	// ----------------------------------------------
 	//renderer_->load_mobs(e_->seen); // ------------
+	renderer->clear_movables();
 	const int defaultid = texman_->get_texture("resources/default.bmp")->get_index();
 	foreach (Entity::WkPtr e, player->seen) {
 		Character::ShPtr chr (new Character());
@@ -197,5 +253,43 @@ void KoboldGameState::reload_world()
 		}
 	}	
 	// ---------------------------------------------
-	renderer->set_player((float)player->x, (float)player->y);
+
+	camera_->set_coords((float)player->x, (float)player->y);
+	Vector3f::ShPtr pos (new Vector3f(player->x, player->y, 2.0f));
+	player_light_->set_position(pos);
 }
+
+/*class MyFovListener : public FovListener
+{
+public:
+	void update_view(int x, int y, bool seen_before, char c, TCODColor color, bool transparent, bool walkable) {
+		
+		if (!seen_before) {
+			const int stoneid = texman_->get_texture("resources/stone3.bmp")->get_index();
+			Map::ShPtr map = player->known_map;
+
+			if (c == '.') {
+				Block::ShPtr blk (new Block());
+				blk->set_position((float)x, (float)y, 0.0f);
+				blk->set_texture(stoneid); ////////////////
+				blk->set_color(Vector3f((color.r/255.0f), (color.g/255.0f), (color.b/255.0f)));
+				renderer->add_movable(blk);
+			} else if ((x > 0) && (y > 0)) { 
+				if (c == '#'
+						&& (map->display[(x-1)+y*map->width].c == '.'
+						|| map->display[x+(y-1)*map->width].c == '.')) {
+				
+					for (int i = 0; i < 3; ++i) {
+						Block::ShPtr blk (new Block());
+						blk->set_position((float)x, (float)y, (float)i);
+						if (i < 2) {
+							//blk->set_texture(texture[0]);
+							blk->set_color(Vector3f((color.r/255.0f), (color.g/255.0f), (color.b/255.0f)));
+						}
+						renderer->add_movable(blk);
+					}
+				}
+			}
+		}
+	}
+};*/
