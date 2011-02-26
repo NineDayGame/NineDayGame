@@ -107,13 +107,18 @@ void Living::attack(ActionArgs args)
 		if(melee_tohit() > e->dodge())
 		{
 			int damage = melee_damage();
-			e->health -= damage;
 			cprintf("%s hit %s for %d damage.",name.c_str(),e->name.c_str(),damage);
-		}
-		if(e->health <= 0)
-		{
-			e->die(this);
-		}
+			e->damage(this,damage);
+		}		
+	}
+}
+
+void Living::damage(Living* attacker, int damage)
+{
+	health -= damage;
+	if(health <= 0)
+	{
+		die(attacker);
 	}
 }
 

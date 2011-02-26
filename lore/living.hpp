@@ -122,6 +122,7 @@ public:
 	// Misc abilities
 	void test(ActionArgs args); // none
 
+	virtual void damage(Living* killer, int damage);
 	virtual void die(Living* killer);
 protected:
 	TCODRandom* _rand;

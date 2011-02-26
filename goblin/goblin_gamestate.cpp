@@ -7,6 +7,7 @@
 #include "monster.hpp"
 #include "living.hpp"
 #include "action_scheduler.hpp"
+#include "goblin_targetstate.hpp"
 #include <stdio.h>
 
 GoblinGameState::GoblinGameState(GameState::ShPtr p, Living::ShPtr e) : GameState(p), player(e)
@@ -22,8 +23,12 @@ void GoblinGameState::handle_input()
 	bool walking = false;
 	
 	TCODConsole::flush();
-	TCOD_key_t key = TCODConsole::waitForKeypress(true);
-	//TCOD_key_t key = TCODConsole::checkForKeypress(true);
+	TCOD_key_t key;
+	if(!player->blocked)
+	{
+		key = TCODConsole::waitForKeypress(true);
+		//key = TCODConsole::checkForKeypress(true);
+	}
 	if(TCODConsole::isWindowClosed()) { GameState::running = false; return; }
 	if(key.vk == TCODK_KP8) { walking = true; --(*y); }
 	if(key.vk == TCODK_KP2) { walking = true; ++(*y); }
@@ -59,6 +64,26 @@ void GoblinGameState::handle_input()
 		Menu::ShPtr c = ActionMenu::ShPtr(new ActionMenu(this->shared_from_this(),5,25,20,20));
 		c->init();
 		GameState::state = c;
+	}
+	if(key.c == 't')
+	{
+		int x;
+		int y;
+		int width;
+		int height;
+		foreach(Camera::ShPtr c, cameras)
+		{
+			EntityCamera::ShPtr ec = DCONVERT(EntityCamera,Camera,c);
+			if(ec && ec->target == player)
+			{
+				x = ec->screen_x;
+				y = ec->screen_y;
+				width = ec->width;
+				height = ec->height;
+			}
+		}
+		TargetingCamera::ShPtr tc(new TargetingCamera(player->known_map,player,player->x,player->y,x,y,width,height));
+		GameState::state = GoblinTargetState::ShPtr(new GoblinTargetState(this->shared_from_this(),tc,player,"",NULL));
 	}
 
 	while(player->blocked)
