@@ -24,8 +24,7 @@ Living::Living(Map::WkPtr host_map, std::string n, int x, int y, int c, TCODColo
 void Living::test(ActionArgs args)
 {
 	SCHEDULE_ACTION();
-	Living::ShPtr s = SCONVERT(Living,void,(args[0]));
-	cprintf("%s -> %s",__FUNCTION__,s->name.c_str());
+	cprintf("%s -> %s",__FUNCTION__,name.c_str());
 }
 
 Living::~Living()

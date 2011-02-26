@@ -23,7 +23,7 @@ void Living::spin_attack(ActionArgs args)
 			to_attack.push_back(l);
 		}
 	}
-	action_energy += to_attack.size() * 100/speed;
+	action_energy += to_attack.size() * actions_info["attack"].get<ACTION_ENERGY>()/speed;
 	foreach(Living::ShPtr e, to_attack)
 	{
 		ActionArgs a;
