@@ -161,6 +161,8 @@ void KoboldGameState::handle_input()
 }
 void KoboldGameState::draw()
 {
+	health_window_->update_health(player->health, player->max_health);
+	
 	foreach(Container::ShPtr c, player->container.lock()->inventory)
 	{
 		Entity::ShPtr e = DCONVERT(Entity,Container,c);
