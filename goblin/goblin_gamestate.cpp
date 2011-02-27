@@ -10,6 +10,27 @@
 #include "goblin_targetstate.hpp"
 #include <stdio.h>
 
+void look_callback(Living::ShPtr e, std::string a, int x, int y)
+{
+	foreach(Entity::WkPtr c, e->seen)
+	{
+		Living::ShPtr l = DCONVERT(Living,Entity,c.lock());
+		if(l && l->x == x && l->y == y)
+		{				
+			cprintf("%s",l->name.c_str());
+			cprintf("Health: %d/%d  Mana: %d/%d",l->health,l->max_health,l->mana,l->max_mana);
+			break;
+		}
+		Item::ShPtr i = DCONVERT(Item,Entity,c.lock());
+		if(i && i->x == x && i->y == y)
+		{				
+			cprintf("%s : %s",i->name.c_str(),i->description.c_str());
+			break;
+		}
+	}
+}
+
+
 GoblinGameState::GoblinGameState(GameState::ShPtr p, Living::ShPtr e) : GameState(p), player(e)
 {
 	
@@ -48,10 +69,26 @@ void GoblinGameState::handle_input()
 	}
 	if(key.c == 'l')
 	{
-		foreach(Container::ShPtr c, player->inventory)
+		int x;
+		int y;
+		int width;
+		int height;
+		foreach(Camera::ShPtr c, cameras)
 		{
-			Item::ShPtr i = SCONVERT(Item,Container,c); cprintf("%s",i->name.c_str());
+			EntityCamera::ShPtr ec = DCONVERT(EntityCamera,Camera,c);
+			if(ec && ec->target == player)
+			{
+				x = ec->screen_x;
+				y = ec->screen_y;
+				width = ec->width;
+				height = ec->height;
+				break;
+			}
 		}
+
+		TargetingCamera::ShPtr tc(new TargetingCamera(player->known_map,player,player->x,player->y,x,y,width,height));
+		GoblinTargetState::ShPtr gts(new GoblinTargetState(GameState::state,tc,player,"",&look_callback));
+		GameState::state = gts;
 	}
 	if(key.c == 'i')
 	{
