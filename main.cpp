@@ -28,37 +28,13 @@ int main(int argc, char* argv[])
 {
 	int width = 120;
 	int height = 80;
-
-	Map::ShPtr m(new Map(width,height));
-	m->clear();
-	m->randomize(40);
+	GameState::generate_map(width,height);
 
 	int x,y;
-	m->random_free_spot(&x,&y);
-	Living::ShPtr l(new Living(Map::WkPtr(m),"Hero",x,y,'@',TCOD_red,30000));
-	l->init_stats(12,8,8,8,15,8,8,1);
-	m->get(l);
-
-	TCODRandom* rand = TCODRandom::getInstance();
-	for(int i = 0; i < 50; ++i)
-	{
-		char buf[32];
-		char name[32];
-		char desc[128];
-		int x,y;
-		m->random_free_spot(&x,&y);
-		sprintf(buf,"Entity %d",i);
-		sprintf(name,"health potion");
-		sprintf(desc,"a potion that restores up to 10 health");
-
-		TCODColor color(rand->getInt(0,255),rand->getInt(0,255),rand->getInt(0,255));
-		Monster::ShPtr e(new Monster(Map::WkPtr(m),buf,x,y,'g',color,3));
-		e->init_stats(8,3,5,5,6,3,3,1);
-		Item::ShPtr i(new Item(Map::WkPtr(m),name,desc,x,y,'I',TCOD_green));
-		e->get(i);
-		m->get(e);
-	}
-	Living::ShPtr e = SCONVERT(Living,Container,m->inventory.front());
+	GameState::map->random_free_spot(&x,&y);
+	Living::ShPtr e(new Living(Map::WkPtr(GameState::map),"Hero",x,y,'@',TCOD_red,30000));
+	e->init_stats(12,8,8,8,15,8,8,1);
+	GameState::map->get(e);
 	
 	if (argc==1) {		
 		//RenderMan::ShPtr renderman (new RenderMan());
@@ -69,7 +45,7 @@ int main(int argc, char* argv[])
 
 		TCODConsole::initRoot(width,height,"Test",false);
 
-		std::list<Container::ShPtr>::iterator i = m->inventory.begin();
+		std::list<Container::ShPtr>::iterator i = GameState::map->inventory.begin();
 		std::list<Entity::ShPtr> follow;
 		for(int j = 0; j < 0; ++j)
 		{

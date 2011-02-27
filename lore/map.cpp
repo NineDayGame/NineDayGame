@@ -29,10 +29,10 @@ bool Map::check_bounds(int x, int y)
 
 void Map::get_data(int x, int y, char* c, TCODColor* color, bool* transparent, bool* walkable)
 {
-	*c = display[x+y*width].c;
-	*color = display[x+y*width].color;
-	*transparent = data->isTransparent(x,y);
-	*walkable = data->isWalkable(x,y);
+	if(c) *c = display[x+y*width].c;
+	if(color) *color = display[x+y*width].color;
+	if(transparent) *transparent = data->isTransparent(x,y);
+	if(walkable) *walkable = data->isWalkable(x,y);
 }
 
 void Map::set_data(int x, int y, char c, TCODColor color, bool transparent, bool walkable)
@@ -132,11 +132,11 @@ void Map::randomize(int num_rooms)
 		{
 			if(data->isWalkable(x,y))
 			{
-				set_data(x,y,'#',TCOD_grey,false,false);
+				set_data(x,y,'#',TCOD_dark_grey,false,false);
 			}
 			else
 			{
-				set_data(x,y,'.',TCOD_white,true,true);
+				set_data(x,y,'.',TCOD_dark_green,true,true);
 			}
 		}
 	}
@@ -144,13 +144,20 @@ void Map::randomize(int num_rooms)
 	// Ensure there's a wall all the way around the map
 	for(int x = 0; x < width; ++x)
 	{
-		set_data(x,0,'#',TCOD_grey,false,false);
-		set_data(x,height-1,'#',TCOD_grey,false,false);
+		set_data(x,0,'#',TCOD_dark_grey,false,false);
+		set_data(x,height-1,'#',TCOD_dark_grey,false,false);
 	}
 	for(int y = 0; y < height; ++y)
 	{
-		set_data(0,y,'#',TCOD_grey,false,false);
-		set_data(width-1,y,'#',TCOD_grey,false,false);
+		set_data(0,y,'#',TCOD_dark_grey,false,false);
+		set_data(width-1,y,'#',TCOD_dark_grey,false,false);
+	}
+
+	for(int i = 0; i < 4; ++i)
+	{
+		int x,y;
+		random_free_spot(&x,&y);
+		set_data(x,y,'<',TCOD_white,true,true);
 	}
 }
 

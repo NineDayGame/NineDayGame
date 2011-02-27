@@ -33,7 +33,7 @@ Entity::~Entity()
 bool Entity::move(int _x, int _y)
 {
 	Map::ShPtr host = SCONVERT(Map,Container,container.lock());
-	if(_x < 0 || _x > host->width || _y < 0 || _y > host->height)
+	if(!host || _x < 0 || _x > host->width || _y < 0 || _y > host->height)
 	{
 		return false;
 	}

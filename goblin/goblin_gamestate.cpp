@@ -140,6 +140,19 @@ void GoblinGameState::handle_input()
 	
 		as.tick();
 	}
+
+	char c;
+	GameState::map->get_data(player->x,player->y,&c,NULL,NULL,NULL);
+	if(c == '<')
+	{
+		GameState::generate_map(GameState::map->width,GameState::map->height);
+		GameState::map->get(player);
+		player->known_map->clear();
+		player->host_map = GameState::map;
+		int x,y;
+		GameState::map->random_free_spot(&x,&y);
+		player->move(x,y);
+	}
 }
 
 void GoblinGameState::draw()
