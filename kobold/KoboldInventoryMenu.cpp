@@ -10,15 +10,15 @@ static void create_action_menu(GameState::ShPtr m, MenuItem* me)
 	Entity::ShPtr e = SCONVERT(Entity,void,me->args.at(0));
 	Item::ShPtr i = SCONVERT(Item,void,me->args.at(1));
 	KoboldInventoryMenu::ShPtr im = DCONVERT(KoboldInventoryMenu,GameState,m);
-	KoboldItemActionMenu::ShPtr kiam(new KoboldItemActionMenu(im,im->screen_x+im->width,im->screen_y,100,im->height));
+	KoboldItemActionMenu::ShPtr kiam(new KoboldItemActionMenu(im,im->player,im->screen_x+im->width,im->screen_y,100,im->height));
 	kiam->init(e,i);
 	kiam->set_font(im->font_);
 	kiam->set_renderman(im->renderman_);
 	GameState::state = kiam;
 }
 
-KoboldInventoryMenu::KoboldInventoryMenu(GameState::ShPtr parent, int sx, int sy, int w, int h)
-  : KoboldMenu(parent,sx,sy,w,h)
+KoboldInventoryMenu::KoboldInventoryMenu(GameState::ShPtr parent, Living::ShPtr player, int sx, int sy, int w, int h)
+	: KoboldMenu(parent,player,sx,sy,w,h)
 {
 	init();
 }

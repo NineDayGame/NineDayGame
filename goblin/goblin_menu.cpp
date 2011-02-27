@@ -1,8 +1,8 @@
 #include "goblin_menu.hpp"
 #include "util.hpp"
 
-GoblinMenu::GoblinMenu(GameState::ShPtr p, int sx, int sy, int w, int h) 
-  : Menu(p, sx, sy, w, h)//, selected_index(0), menu_offset(0)
+GoblinMenu::GoblinMenu(GameState::ShPtr p, Living::ShPtr player, int sx, int sy, int w, int h) 
+	: Menu(p, player, sx, sy, w, h)//, selected_index(0), menu_offset(0)
 {
 }
 GoblinMenu::~GoblinMenu() {}

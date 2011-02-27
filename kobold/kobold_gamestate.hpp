@@ -25,7 +25,6 @@ public:
 	typedef boost::shared_ptr<KoboldGameState> ShPtr;
 
 	RenderMan::ShPtr renderer;
-	Living::ShPtr player;
 	
 	TextureMan::ShPtr texman_;
 	FontMan::ShPtr fontman_;

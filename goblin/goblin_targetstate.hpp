@@ -18,7 +18,6 @@ public:
 
 	std::string action;
 
-	Living::WkPtr player;
 	TargetingCamera::ShPtr camera;
 
 	GoblinTargetState(GameState::ShPtr p, TargetingCamera::ShPtr c, Living::ShPtr e, std::string a, TargetCallback cb);

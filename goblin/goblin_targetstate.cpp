@@ -1,6 +1,6 @@
 #include "goblin_targetstate.hpp"
 
-GoblinTargetState::GoblinTargetState(GameState::ShPtr p, TargetingCamera::ShPtr c, Living::ShPtr e, std::string a, TargetCallback cb) : GameState(p), camera(c), player(e), callback(cb), action(a)
+GoblinTargetState::GoblinTargetState(GameState::ShPtr p, TargetingCamera::ShPtr c, Living::ShPtr e, std::string a, TargetCallback cb) : GameState(p,e), camera(c), callback(cb), action(a)
 {
 	
 }
@@ -32,9 +32,8 @@ void GoblinTargetState::handle_input()
 	if(key.vk == TCODK_ENTER || key.vk == TCODK_KPENTER)
 	{
 		if(callback)
-		{
-			Living::ShPtr p = SCONVERT(Living,Entity,player.lock());
-			(*callback)(p,action,x,y);
+		{			
+			(*callback)(player,action,x,y);
 		}
 		if(parent->parent)
 		{

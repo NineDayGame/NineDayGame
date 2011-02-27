@@ -41,7 +41,7 @@ static void use(GameState::ShPtr m, MenuItem* me)
 	GameState::state = m->parent->parent;
 }
 
-KoboldItemActionMenu::KoboldItemActionMenu(GameState::ShPtr parent, int sx, int sy, int w, int h) : KoboldInventoryMenu(parent,sx,sy,w,h)
+KoboldItemActionMenu::KoboldItemActionMenu(GameState::ShPtr parent, Living::ShPtr player, int sx, int sy, int w, int h) : KoboldInventoryMenu(parent,player,sx,sy,w,h)
 {
 	
 }

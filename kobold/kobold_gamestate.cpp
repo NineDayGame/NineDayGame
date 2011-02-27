@@ -15,7 +15,7 @@
 // ------------------------
 
 KoboldGameState::KoboldGameState(GameState::ShPtr p, Living::ShPtr e)
-  : GameState(p), player(e)
+	: GameState(p,e)
 {
 	init();
 }
@@ -91,7 +91,7 @@ void KoboldGameState::create_windows()
 void KoboldGameState::handle_input()
 {
 	SDL_Event event_;
-
+	
 	Living::ActionArgs args;
 	boost::shared_ptr<int> x(new int(player->x));
 	boost::shared_ptr<int> y(new int(player->y));
@@ -109,7 +109,7 @@ void KoboldGameState::handle_input()
 		case SDLK_d: camera_->set_coords(camera_->get_coords()->x+1, camera_->get_coords()->y-1); break;
 		case SDLK_i: {
 			//KoboldInventoryMenu::ShPtr c = KoboldInventoryMenu::ShPtr(new KoboldInventoryMenu(this->shared_from_this(),5,400,20,20));
-			KoboldInventoryMenu::ShPtr c (new KoboldInventoryMenu(this->shared_from_this(),20,400,200,80));
+			KoboldInventoryMenu::ShPtr c (new KoboldInventoryMenu(this->shared_from_this(),player,20,400,200,80));
 			c->set_font(fontman_->get_font("resources/terminal.bmp"));
 			c->set_renderman(renderer);
 			GameState::state = c;
@@ -162,6 +162,7 @@ void KoboldGameState::handle_input()
 }
 void KoboldGameState::draw()
 {
+	Living::ShPtr player = SCONVERT(Living,Entity,player);
 	health_window_->update_health(player->health, player->max_health);
 	mana_window_->update_mana(player->mana, player->max_mana);
 	

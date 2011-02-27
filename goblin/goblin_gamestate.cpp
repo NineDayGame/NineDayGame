@@ -31,7 +31,7 @@ void look_callback(Living::ShPtr e, std::string a, int x, int y)
 }
 
 
-GoblinGameState::GoblinGameState(GameState::ShPtr p, Living::ShPtr e) : GameState(p), player(e)
+GoblinGameState::GoblinGameState(GameState::ShPtr p, Living::ShPtr e) : GameState(p,e)
 {
 	
 }
@@ -92,13 +92,13 @@ void GoblinGameState::handle_input()
 	}
 	if(key.c == 'i')
 	{
-		Menu::ShPtr c = InventoryMenu::ShPtr(new InventoryMenu(this->shared_from_this(),5,25,20,20));
+		Menu::ShPtr c = InventoryMenu::ShPtr(new InventoryMenu(this->shared_from_this(),player,5,25,20,20));
 		c->init();
 		GameState::state = c;
 	}
 	if(key.c == 'a')
 	{
-		Menu::ShPtr c = ActionMenu::ShPtr(new ActionMenu(this->shared_from_this(),5,25,20,20));
+		Menu::ShPtr c = ActionMenu::ShPtr(new ActionMenu(this->shared_from_this(),player,5,25,20,20));
 		c->init();
 		GameState::state = c;
 	}
@@ -142,8 +142,7 @@ void GoblinGameState::draw()
 {
 	GameState::draw();
 	char buffer[128];
-	Living::ShPtr p = SCONVERT(Living,Entity,player);
-	sprintf(buffer,"Health: %d/%d  Mana: %d/%d",p->health,p->max_health,p->mana,p->max_mana);
+	sprintf(buffer,"Health: %d/%d  Mana: %d/%d",player->health,player->max_health,player->mana,player->max_mana);
 	health_indicator->text.clear();
 	health_indicator->print(buffer);
 	foreach(Container::ShPtr c, player->container.lock()->inventory)

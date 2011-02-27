@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
 	int x,y;
 	m->random_free_spot(&x,&y);
 	Living::ShPtr l(new Living(Map::WkPtr(m),"Hero",x,y,'@',TCOD_red,30000));
-	l->init_stats(12,8,8,8,100,8,8,1);
+	l->init_stats(12,8,8,8,15,8,8,1);
 	m->get(l);
 
 	TCODRandom* rand = TCODRandom::getInstance();

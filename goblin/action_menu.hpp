@@ -8,7 +8,7 @@ class ActionMenu : public GoblinMenu
 public:
 	typedef boost::shared_ptr<ActionMenu> ShPtr;
 
-	ActionMenu(GameState::ShPtr parent, int sx, int sy, int w, int h);
+	ActionMenu(GameState::ShPtr parent, Living::ShPtr player, int sx, int sy, int w, int h);
 	virtual ~ActionMenu();
 
 	virtual void init();

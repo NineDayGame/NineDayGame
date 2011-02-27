@@ -23,7 +23,7 @@ public:
 
 	int menu_offset;*/
 
-	GoblinMenu(GameState::ShPtr parent, int sx, int sy, int w, int h);
+	GoblinMenu(GameState::ShPtr parent, Living::ShPtr player, int sx, int sy, int w, int h);
 	virtual ~GoblinMenu();
 
 	virtual void init();

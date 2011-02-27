@@ -10,7 +10,7 @@ class KoboldItemActionMenu : public KoboldInventoryMenu
 public:
 	typedef boost::shared_ptr<KoboldItemActionMenu> ShPtr;
 
-	KoboldItemActionMenu(GameState::ShPtr parent, int sx, int sy, int w, int h);
+	KoboldItemActionMenu(GameState::ShPtr parent, Living::ShPtr player, int sx, int sy, int w, int h);
 	virtual ~KoboldItemActionMenu();
 
 	virtual void init(Entity::ShPtr e, Item::ShPtr i);
