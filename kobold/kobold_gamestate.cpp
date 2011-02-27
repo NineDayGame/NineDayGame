@@ -102,7 +102,8 @@ void KoboldGameState::handle_input()
 		case SDLK_s: camera_->set_coords(camera_->get_coords()->x-1, camera_->get_coords()->y-1); break;
 		case SDLK_d: camera_->set_coords(camera_->get_coords()->x+1, camera_->get_coords()->y-1); break;
 		case SDLK_i: {
-			KoboldMenu::ShPtr c = KoboldMenu::ShPtr(new KoboldMenu(this->shared_from_this(),5,25,20,20));
+			//KoboldInventoryMenu::ShPtr c = KoboldInventoryMenu::ShPtr(new KoboldInventoryMenu(this->shared_from_this(),5,400,20,20));
+			KoboldInventoryMenu::ShPtr c (new KoboldInventoryMenu(this->shared_from_this(),5,400,20,20));
 			c->set_font(fontman_->get_font("resources/terminal.bmp"));
 			c->set_renderman(renderer);
 			GameState::state = c;

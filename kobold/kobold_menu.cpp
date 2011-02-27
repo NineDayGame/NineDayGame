@@ -2,26 +2,15 @@
 #include "util.hpp"
 
 KoboldMenu::KoboldMenu(GameState::ShPtr p, int sx, int sy, int w, int h) 
-  : Menu(p, sx, sy, w, h)//, selected_index(0), menu_offset(0)
+  : Menu(p, sx, sy, w, h),
+    selected_(0)//, menu_offset(0)
 {
 	init();
 }
 
 KoboldMenu::~KoboldMenu() {}
 
-void KoboldMenu::init() {
-	//const Font::ShPtr cfont = p->fontman_->get_font("resources/terminal.bmp");
-	
-	menu_window_.reset(new MenuWindow());
-	//menu_window_->set_font(cfont);
-	menu_window_->set_position(400, 200, 0);
-	menu_window_->set_scale(200, 200, 0);
-	menu_window_->show();
-	menu_window_->push_item(std::string("Menu item 1"));
-	menu_window_->push_item(std::string("Menu item 2"));
-	menu_window_->push_item(std::string("Menu item 3"));
-	//parent->renderer->add_window(menu_window_);
-}
+void KoboldMenu::init() {}
 
 void KoboldMenu::draw()
 {
@@ -40,7 +29,26 @@ void KoboldMenu::handle_input()
 			renderman_->remove_window(menu_window_);
 			GameState::state = parent;
 			break;
+		case SDLK_RETURN:
+		case SDLK_KP_ENTER:
+			foreach(MenuItem::ShPtr mi, menu_items)
+			{
+				if(mi->selected) { mi->choose(this->shared_from_this()); break; }
+			}
+			break;
+		case SDLK_DOWN:
+		case SDLK_KP2:
+			menu_window_->select_next();
+			break;
+		case SDLK_UP:
+		case SDLK_KP8:
+			menu_window_->select_prev();
+			break;
 		}
+	}
+	
+	if ( event_.type == SDL_QUIT ) {
+		GameState::running = false;
 	}
 }
 

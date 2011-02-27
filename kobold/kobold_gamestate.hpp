@@ -12,7 +12,9 @@
 #include "fontman.hpp"
 #include "glcamera.hpp"
 #include "light.hpp"
-#include "kobold_menu.hpp"
+#include "fovlistener.hpp"
+//#include "kobold_menu.hpp"
+#include "KoboldInventoryMenu.hpp"
 //----------------------------------------------
 
 class KoboldGameState : public GameState, public FovListener

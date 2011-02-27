@@ -5,10 +5,11 @@
 #include <boost/shared_ptr.hpp>
 #include <vector>
 #include "gamestate.hpp"
+#include "item.hpp"
 #include "menu.hpp"
 #include "menuitem.hpp"
 #include "menuwindow.hpp"
-#include "kobold_gamestate.hpp"
+//#include "kobold_gamestate.hpp"
 #include "font.hpp"
 #include "renderman.hpp"
 
@@ -27,10 +28,12 @@ public:
 	void set_font(Font::ShPtr font);
 	void set_renderman(RenderMan::ShPtr renderman);
 	
-private:
-	MenuWindow::ShPtr menu_window_;
 	RenderMan::ShPtr renderman_;
 	Font::ShPtr font_;
+	
+protected:
+	unsigned int selected_;
+	MenuWindow::ShPtr menu_window_;
 
 };
 
