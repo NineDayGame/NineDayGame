@@ -1,4 +1,5 @@
 #include "living.hpp"
+#include "gamestate.hpp"
 #include "action_scheduler.hpp"
 
 void Living::init_spells()
@@ -24,7 +25,7 @@ void Living::heal(ActionArgs args)
 		target->health = target->max_health;
 	}
 	
-	cprintf("%s heals %d damage for %s.",name.c_str(),heal,target->name.c_str());
+	IF_IN_VIEW(cprintf("%s heals %d damage for %s.",name.c_str(),heal,target->name.c_str()));
 }
 
 void Living::shield(ActionArgs args)
@@ -49,7 +50,7 @@ void Living::flaming_hands(ActionArgs args)
 	SCHEDULE_ACTION();
 	mana -= THIS_ACTION_INFO(ACTION_MANA);
 	boost::shared_ptr<double> angle = SCONVERT(double,void,args[0]);
-	cprintf("%s casts Flaming Hands.",name.c_str());
+	IF_IN_VIEW(cprintf("%s casts Flaming Hands.",name.c_str()));
 
 	char c;
 	TCODColor color;
@@ -78,8 +79,9 @@ void Living::flaming_hands(ActionArgs args)
 	hit.unique();
 	foreach(Living::ShPtr e, hit)
 	{
-		cprintf("The flames char %s.",e->name.c_str());
-		e->damage(this,20);
+		int damage = rand(20);
+		IF_IN_VIEW(cprintf("The flames char %s for %d damage.",e->name.c_str(),damage));
+		e->damage(this,damage);
 	}
 }
 
