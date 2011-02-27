@@ -6,6 +6,8 @@ static void look(GameState::ShPtr m, MenuItem* me)
 {
 	Entity::ShPtr e = SCONVERT(Entity,void,me->args.at(0));
 	Item::ShPtr i = SCONVERT(Item,void,me->args.at(1));
+	KoboldItemActionMenu::ShPtr am = SCONVERT(KoboldItemActionMenu, void, m);
+	am->renderman_->remove_window(am->menu_window_);
 	cprintf("%s: %s",i->name.c_str(),i->description.c_str());
 	GameState::state = m->parent;
 }
@@ -18,6 +20,10 @@ static void drop(GameState::ShPtr m, MenuItem* me)
 	i->y = e->y;
 	e->remove(i);
 	e->host_map.lock()->get(i);
+	KoboldItemActionMenu::ShPtr am = SCONVERT(KoboldItemActionMenu, void, m);
+	am->renderman_->remove_window(am->menu_window_);
+	KoboldInventoryMenu::ShPtr im = SCONVERT(KoboldInventoryMenu, void, am->parent);
+	im->renderman_->remove_window(im->menu_window_);
 	cprintf("%s dropped the %s",e->name.c_str(),i->name.c_str());
 	GameState::state = m->parent->parent;
 }
@@ -28,6 +34,10 @@ static void use(GameState::ShPtr m, MenuItem* me)
 	Item::ShPtr i = SCONVERT(Item,void,me->args.at(1));
 	i->use(e);
 	e->remove(i);
+	KoboldItemActionMenu::ShPtr am = SCONVERT(KoboldItemActionMenu, void, m);
+	am->renderman_->remove_window(am->menu_window_);
+	KoboldInventoryMenu::ShPtr im = SCONVERT(KoboldInventoryMenu, void, am->parent);
+	im->renderman_->remove_window(im->menu_window_);
 	GameState::state = m->parent->parent;
 }
 
@@ -48,6 +58,8 @@ void KoboldItemActionMenu::init(Entity::ShPtr e, Item::ShPtr i)
 	menu_window_->set_position(200, 200, 0);
 	menu_window_->set_scale(40, 40, 0);
 	menu_window_->show();
+	
+	menu_items.clear();
 	
 	s = "Look";
 	mi = MenuItem::ShPtr(new MenuItem(screen_x+1,screen_y+j++,s,TCOD_white,&look));

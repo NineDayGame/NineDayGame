@@ -74,3 +74,7 @@ void MenuWindow::select_next() {
 void MenuWindow::select_prev() {
 	selected_ = (selected_ == 0) ? 0 : selected_ - 1;
 }
+
+int MenuWindow::get_selected_index() {
+	return selected_;
+}

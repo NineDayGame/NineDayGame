@@ -31,9 +31,10 @@ public:
 	RenderMan::ShPtr renderman_;
 	Font::ShPtr font_;
 	
+	MenuWindow::ShPtr menu_window_;
+	
 protected:
 	unsigned int selected_;
-	MenuWindow::ShPtr menu_window_;
 
 };
 

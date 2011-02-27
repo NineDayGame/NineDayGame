@@ -1,3 +1,4 @@
+#include <iostream>
 #include "kobold_menu.hpp"
 #include "util.hpp"
 
@@ -31,18 +32,24 @@ void KoboldMenu::handle_input()
 			break;
 		case SDLK_RETURN:
 		case SDLK_KP_ENTER:
-			foreach(MenuItem::ShPtr mi, menu_items)
+			std::cout << "Selected " << menu_items.at(menu_window_->get_selected_index())->text << std::endl;
+			menu_items.at(menu_window_->get_selected_index())->choose(this->shared_from_this()); break;
+			/*foreach(MenuItem::ShPtr mi, menu_items)
 			{
 				if(mi->selected) { mi->choose(this->shared_from_this()); break; }
-			}
+			}*/
 			break;
 		case SDLK_DOWN:
 		case SDLK_KP2:
+			menu_items.at(menu_window_->get_selected_index())->unselect();
 			menu_window_->select_next();
+			menu_items.at(menu_window_->get_selected_index())->select();
 			break;
 		case SDLK_UP:
 		case SDLK_KP8:
+			menu_items.at(menu_window_->get_selected_index())->unselect();
 			menu_window_->select_prev();
+			menu_items.at(menu_window_->get_selected_index())->select();
 			break;
 		}
 	}

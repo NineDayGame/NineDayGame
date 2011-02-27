@@ -33,6 +33,7 @@ public:
 	void set_font(Font::ShPtr font);
 	void select_next();
 	void select_prev();
+	int get_selected_index();
 
 private:
 	GameState::ShPtr gamestate_;
