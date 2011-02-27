@@ -165,6 +165,22 @@ void KoboldGameState::handle_input()
 
 		as.tick();
 	}
+
+	char c;
+	TCODColor color;
+	bool trans;
+	bool walk;
+	GameState::map->get_data(player->x,player->y,&c,&color,&trans,&walk);
+	if(c == '<')
+	{
+		GameState::generate_map(GameState::map->width,GameState::map->height);
+		GameState::map->get(player);
+		player->known_map->clear();
+		player->host_map = GameState::map;
+		int x,y;
+		GameState::map->random_free_spot(&x,&y);
+		player->move(x,y);
+	}
 }
 void KoboldGameState::draw()
 {
