@@ -1,5 +1,6 @@
 #include "living.hpp"
 #include "action_scheduler.hpp"
+#include "gamestate.hpp"
 
 void Living::init_melee()
 {
@@ -15,7 +16,9 @@ void Living::spin_attack(ActionArgs args)
 	CHECK_REQUIREMENTS();
 	SCHEDULE_ACTION();
 	mana -= THIS_ACTION_INFO(ACTION_MANA);
-	cprintf("%s performs a spin attack!",name.c_str());
+
+	IF_IN_VIEW(cprintf("%s performs a spin attack!",name.c_str()));
+	
 	std::list<Living::ShPtr> to_attack;
 	foreach(Entity::WkPtr e, seen)
 	{
