@@ -30,7 +30,6 @@ public:
 	void set_dynamic_light(Light::ShPtr light);
 	
 	void draw_frame();
-	void set_entity(Entity::ShPtr entity);
 	void take_screenshot();
 	void toggle_fullscreen();
 	void toggle_lighting();
