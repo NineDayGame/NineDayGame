@@ -79,6 +79,13 @@ void KoboldGameState::create_windows()
 	health_window_->update_health(20, 20);
 	health_window_->show();
 	renderer->add_window(health_window_);
+	
+	mana_window_.reset(new ManaWindow());
+	mana_window_->set_font(cfont);
+	mana_window_->set_position(0, 600-16, 0);
+	mana_window_->update_mana(20, 20);
+	mana_window_->show();
+	renderer->add_window(mana_window_);
 }
 
 void KoboldGameState::handle_input()
@@ -156,6 +163,7 @@ void KoboldGameState::handle_input()
 void KoboldGameState::draw()
 {
 	health_window_->update_health(player->health, player->max_health);
+	mana_window_->update_mana(player->mana, player->max_mana);
 	
 	foreach(Container::ShPtr c, player->container.lock()->inventory)
 	{
