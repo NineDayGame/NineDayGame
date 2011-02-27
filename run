@@ -1,2 +1,10 @@
 #!/bin/bash
-redo -j3 && LD_LIBRARY_PATH=./libraries/libtcod-1.5.0 ./ndg $*
+
+echo $#
+if [ $# -gt 0 ] ;  then
+	echo "hi"
+	redo -j3 && LD_LIBRARY_PATH=./libraries/libtcod-1.5.0 gdb -x gdbgoblin ./ndg
+else
+	echo "bye"
+	redo -j3 && LD_LIBRARY_PATH=./libraries/libtcod-1.5.0 gdb -x gdbkobold ./ndg
+fi
