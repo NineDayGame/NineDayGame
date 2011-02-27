@@ -66,6 +66,8 @@
 		} \
 	}
 
+// Only perform `do_this` if you're in sight of the player.
+// Probably only useful for printing messages.
 #define IF_IN_VIEW(do_this)	  \
 	foreach(Entity::WkPtr c, GameState::state->player->seen) \
 	{ \
