@@ -18,7 +18,7 @@ class KoboldMenu : public Menu
 public:
 	typedef boost::shared_ptr<KoboldMenu> ShPtr;
 
-	KoboldMenu(GameState::ShPtr parent, int sx, int sy, int w, int h);
+	KoboldMenu(GameState::ShPtr parent, Living::ShPtr player, int sx, int sy, int w, int h);
 	virtual ~KoboldMenu();
 
 	virtual void init();

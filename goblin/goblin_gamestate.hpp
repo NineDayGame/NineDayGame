@@ -11,7 +11,6 @@ class GoblinGameState : public GameState
 public:
 	typedef boost::shared_ptr<GoblinGameState> ShPtr;
 	
-	Living::ShPtr player;
 	std::list<Camera::ShPtr> cameras;
 	TextCamera::ShPtr health_indicator;
 	

@@ -2,8 +2,8 @@
 #include "kobold_menu.hpp"
 #include "util.hpp"
 
-KoboldMenu::KoboldMenu(GameState::ShPtr p, int sx, int sy, int w, int h) 
-  : Menu(p, sx, sy, w, h),
+KoboldMenu::KoboldMenu(GameState::ShPtr p, Living::ShPtr player, int sx, int sy, int w, int h) 
+	: Menu(p, player, sx, sy, w, h),
     selected_(0)//, menu_offset(0)
 {
 	init();

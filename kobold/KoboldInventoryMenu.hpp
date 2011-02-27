@@ -8,7 +8,7 @@ class KoboldInventoryMenu : public KoboldMenu
 public:
 	typedef boost::shared_ptr<KoboldInventoryMenu> ShPtr;
 
-	KoboldInventoryMenu(GameState::ShPtr parent, int sx, int sy, int w, int h);
+	KoboldInventoryMenu(GameState::ShPtr parent, Living::ShPtr player, int sx, int sy, int w, int h);
 	virtual ~KoboldInventoryMenu();
 
 	virtual void init();

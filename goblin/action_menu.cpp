@@ -91,23 +91,21 @@ void target_action(GameState::ShPtr m, MenuItem* me)
 	GameState::state = gts;
 }
 
-ActionMenu::ActionMenu(GameState::ShPtr parent, int sx, int sy, int w, int h) : GoblinMenu(parent,sx,sy,w,h)
+ActionMenu::ActionMenu(GameState::ShPtr parent, Living::ShPtr player, int sx, int sy, int w, int h) : GoblinMenu(parent,player,sx,sy,w,h)
 {
 }
 ActionMenu::~ActionMenu() {}
 
 void ActionMenu::init()
 {
-	GoblinGameState::ShPtr m = SCONVERT(GoblinGameState,GameState,get_first_parent());
-	Entity::ShPtr e = m->player;
 	int i = 1;
-	foreach(Living::ActionMap::value_type v, m->player->actions)
+	foreach(Living::ActionMap::value_type v, player->actions)
 	{
-		if(m->player->GET_ACTION_INFO(v.first,ACTION_MANA) > 0)
+		if(player->GET_ACTION_INFO(v.first,ACTION_MANA) > 0)
 		{
-			std::string s = m->player->actions_info[v.first].get<ACTION_NAME>();
+			std::string s = player->actions_info[v.first].get<ACTION_NAME>();
 			MenuItem::ShPtr mi(new MenuItem(screen_x+1,screen_y+i,s,TCOD_white,&target_action));
-			mi->args.push_back(e);
+			mi->args.push_back(player);
 			mi->args.push_back(boost::shared_ptr<std::string>(new std::string(v.first)));
 			menu_items.push_back(mi);
 			++i;

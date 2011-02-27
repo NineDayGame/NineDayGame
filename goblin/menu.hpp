@@ -22,8 +22,8 @@ public:
 
 	int menu_offset;
 
-	Menu(GameState::ShPtr p, int sx, int sy, int w, int h)
-	  : GameState(p),
+	Menu(GameState::ShPtr p, Living::ShPtr player, int sx, int sy, int w, int h)
+		: GameState(p,player),
 	    screen_x(sx), screen_y(sy),
 	    width(w), height(h),
 	    selected_index(0),

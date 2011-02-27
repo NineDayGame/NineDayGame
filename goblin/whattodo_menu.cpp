@@ -31,7 +31,7 @@ static void use(GameState::ShPtr m, MenuItem* me)
 	GameState::state = m->parent->parent;
 }
 
-WhatToDoMenu::WhatToDoMenu(GameState::ShPtr parent, int sx, int sy, int w, int h) : InventoryMenu(parent,sx,sy,w,h)
+WhatToDoMenu::WhatToDoMenu(GameState::ShPtr parent, Living::ShPtr player, int sx, int sy, int w, int h) : InventoryMenu(parent,player,sx,sy,w,h)
 {
 	
 }

@@ -5,6 +5,8 @@
 #include <boost/shared_ptr.hpp>
 #include <libtcod.hpp>
 
+#include "living.hpp"
+
 class GameState : public boost::enable_shared_from_this<GameState>
 {
 public:
@@ -15,7 +17,9 @@ public:
 	
 	GameState::ShPtr parent;
 
-	GameState(GameState::ShPtr p) : parent(p) {}
+	Living::ShPtr player;
+
+	GameState(GameState::ShPtr p, Living::ShPtr e) : parent(p), player(e) {}
 	virtual ~GameState() {}
 
 	virtual void handle_input() = 0;

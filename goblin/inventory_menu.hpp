@@ -8,7 +8,7 @@ class InventoryMenu : public GoblinMenu
 public:
 	typedef boost::shared_ptr<InventoryMenu> ShPtr;
 
-	InventoryMenu(GameState::ShPtr parent, int sx, int sy, int w, int h);
+	InventoryMenu(GameState::ShPtr parent, Living::ShPtr player, int sx, int sy, int w, int h);
 	virtual ~InventoryMenu();
 
 	virtual void init();
