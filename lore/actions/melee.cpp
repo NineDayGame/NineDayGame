@@ -47,7 +47,7 @@ void Living::precise_strike(ActionArgs args)
 
 	cprintf("%s carefully watches for an opening in %s's defence, then attacks.",name.c_str(),target->name.c_str());
 
-	action_energy += GET_ACTION_INFO(attack,ACTION_ENERGY)/speed;
+	action_energy += GET_ACTION_INFO("attack",ACTION_ENERGY)/speed;
 	dex += 10;
 	attack(args);
 	dex -= 10;
@@ -66,7 +66,7 @@ void Living::giant_swing(ActionArgs args)
 
 	cprintf("%s takes a giant swing and attacks %s",name.c_str(),target->name.c_str());
 
-	action_energy += GET_ACTION_INFO(attack,ACTION_ENERGY)/speed;
+	action_energy += GET_ACTION_INFO("attack",ACTION_ENERGY)/speed;
 	str += 10;
 	attack(args);
 	str -= 10;

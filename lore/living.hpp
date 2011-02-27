@@ -39,7 +39,7 @@
 	}
 
 #define THIS_ACTION_INFO(type) actions_info[__FUNCTION__].get<(type)>()
-#define GET_ACTION_INFO(action,type) actions_info[#action].get<(type)>()
+#define GET_ACTION_INFO(action,type) actions_info[action].get<(type)>()
 
 #define CHECK_REQUIREMENTS()	  \
 	{ \
