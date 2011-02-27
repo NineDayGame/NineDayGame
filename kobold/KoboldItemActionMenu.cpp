@@ -55,8 +55,8 @@ void KoboldItemActionMenu::init(Entity::ShPtr e, Item::ShPtr i)
 	int j = 1;
 	
 	menu_window_.reset(new MenuWindow());
-	menu_window_->set_position(200, 200, 0);
-	menu_window_->set_scale(40, 40, 0);
+	menu_window_->set_position(screen_x, screen_y, 0);
+	menu_window_->set_scale(width, height, 0);
 	menu_window_->show();
 	
 	menu_items.clear();
