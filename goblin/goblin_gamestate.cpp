@@ -19,6 +19,10 @@ void look_callback(Living::ShPtr e, std::string a, int x, int y)
 		{				
 			cprintf("%s",l->name.c_str());
 			cprintf("Health: %d/%d  Mana: %d/%d",l->health,l->max_health,l->mana,l->max_mana);
+			cprintf("Str : %02d Mag : %02d",l->str,l->magic);
+			cprintf("Dex : %02d Int : %02d",l->dex,l->intel);
+			cprintf("Con : %02d Soul: %02d",l->con,l->soul);
+			cprintf("Disp: %02d Spd : %.2f",l->disp,l->speed);
 			break;
 		}
 		Item::ShPtr i = DCONVERT(Item,Entity,c.lock());
