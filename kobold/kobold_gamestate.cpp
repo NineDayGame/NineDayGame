@@ -23,7 +23,6 @@ KoboldGameState::KoboldGameState(GameState::ShPtr p, Living::ShPtr e)
 void KoboldGameState::init()
 {
 	renderer.reset(new RenderMan());
-	renderer->set_entity(player);
 	
 	init_resources();
 	create_windows();

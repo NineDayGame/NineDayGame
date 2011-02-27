@@ -17,16 +17,16 @@ void GoblinMenu::draw()
 	for(int x = screen_x; x < screen_x+width; ++x)
 	{
 		console->setChar(x,screen_y,'#');
-		console->setFore(x,screen_y,TCOD_white);
+		console->setFore(x,screen_y,TCOD_light_blue);
 		console->setChar(x,screen_y+height-1,'#');
-		console->setFore(x,screen_y+height-1,TCOD_white);
+		console->setFore(x,screen_y+height-1,TCOD_light_blue);
 	}
 	for(int y = screen_y; y < screen_y+height; ++y)
 	{
 		console->setChar(screen_x,y,'#');
-		console->setFore(screen_x,y,TCOD_white);
+		console->setFore(screen_x,y,TCOD_light_blue);
 		console->setChar(screen_x+width-1,y,'#');
-		console->setFore(screen_x+width-1,y,TCOD_white);
+		console->setFore(screen_x+width-1,y,TCOD_light_blue);
 	}
 	foreach(MenuItem::ShPtr mi, menu_items)
 	{

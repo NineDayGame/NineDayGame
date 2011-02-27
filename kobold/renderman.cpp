@@ -47,10 +47,6 @@ void RenderMan::draw_frame() {
 	renderer_->render();
 }
 
-void RenderMan::set_entity(Entity::ShPtr entity) {
-	entity->look();
-}
-
 void RenderMan::take_screenshot() {
 	std::string filename = std::string("screenshot");
 	if (ssCount_ < 10) {

@@ -21,8 +21,9 @@ public:
 	virtual void handle_input() = 0;
 	virtual void draw() { if(parent) parent->draw(); }
 
-protected:
 	GameState::ShPtr get_first_parent() { if(parent) return parent->get_first_parent(); return this->shared_from_this(); }
+protected:
+	
 };
 
 #endif

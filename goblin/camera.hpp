@@ -55,4 +55,21 @@ public:
 	virtual void print(const std::string s);
 };
 
+class TargetingCamera : public Camera
+{
+public:
+	typedef boost::shared_ptr<TargetingCamera> ShPtr;
+	
+	Map::WkPtr map;
+	Entity::ShPtr player;
+	int x;
+	int y;
+
+	TargetingCamera(Map::WkPtr m, Entity::ShPtr e, int tx, int ty, int sx, int sy, int w, int h);
+	virtual ~TargetingCamera();
+
+	virtual void draw();
+	virtual void move(int x, int y);
+};
+
 #endif

@@ -13,35 +13,56 @@
 // Schedules the action to run when the Living gets enough energy.
 // *** This will only work in functions inside of a Living-derived class ***
 // This assumes the ActionArgs for the function is called args
-#define SCHEDULE_ACTION(energy)                 \
-	if(action_energy < (energy)/speed)          \
-	{                                           \
-		last_args.push_back(args);              \
-		blocked = true;                         \
-		Living::ShPtr l = SCONVERT(Living,Container,this->shared_from_this()); \
-		as.schedule_action(l,__FUNCTION__,(energy)/speed); \
-		return;                                 \
-	}                                           \
-	else                                        \
-	{                                           \
-		blocked = false;                        \
-		action_energy -= (energy)/speed;        \
+#define SCHEDULE_ACTION()	  \
+	{ \
+		int energy = actions_info[__FUNCTION__].get<ACTION_ENERGY>(); \
+		if(action_energy < energy/speed) \
+		{ \
+			last_args.push_back(args); \
+			blocked = true; \
+			Living::ShPtr l = SCONVERT(Living,Container,this->shared_from_this()); \
+			as.schedule_action(l,__FUNCTION__,energy/speed); \
+			return; \
+		} \
+		else \
+		{ \
+			blocked = false; \
+			action_energy -= energy/speed; \
+		} \
 	}
 
-#define REGISTER_ACTION(action)           \
+#define REGISTER_ACTION(action,proper_name,energy_cost,target_type)	  \
 	{                                           \
 		typedef typeof(*this) T;                \
 		actions[#action] = static_cast<Living::Action>(&T::action); \
+		actions_info[#action] = ActionInfo(proper_name,energy_cost,target_type); \
 	}
+
+#define ACTION_NAME 0
+#define ACTION_ENERGY 1
+#define ACTION_TARGET 2
 
 class Living : public Entity
 {
 public:
+	typedef enum
+	{
+		TARGET_NONE,
+		TARGET_LIVING,
+		TARGET_ITEM,
+		TARGET_PLACE,
+		TARGET_DIRECTION,
+	} ActionTargetType;
+	
 	typedef boost::shared_ptr<Living> ShPtr;
 	typedef std::vector<boost::shared_ptr<void> > ActionArgs;
 	typedef void (Living::*Action)(ActionArgs args);
+	typedef boost::tuple<std::string/*proper name*/, int/*energy cost*/, ActionTargetType> ActionInfo;
+	typedef boost::unordered_map<std::string, Living::Action> ActionMap;
+	typedef boost::unordered_map<std::string, Living::ActionInfo> ActionInfoMap;
 	
-	boost::unordered_map<std::string, Living::Action> actions;
+	ActionMap actions;
+	ActionInfoMap actions_info;
 	std::list<ActionArgs> last_args;
 
 	std::string name;
@@ -74,22 +95,46 @@ public:
 	virtual ~Living();
 
 	virtual void init_stats(int str, int magic, int dex, int intel, int con, int soul, int disp, int speed);
-	
-	virtual void walk(ActionArgs args);
-	virtual void attack(ActionArgs args);
-	virtual void pickup(ActionArgs args);
-	virtual void wait(ActionArgs args);
 
-	virtual void spin_attack(ActionArgs args);
-	
-	void test(ActionArgs args);
+	// Basic abilities
+	virtual void walk(ActionArgs args); // x, y
+	virtual void attack(ActionArgs args); // Living
+	virtual void pickup(ActionArgs args); // Item
+	virtual void wait(ActionArgs args); // none
 
+	// Melee abilities
+	virtual void spin_attack(ActionArgs args); // none
+	virtual void precise_strike(ActionArgs args); // Living
+	virtual void giant_swing(ActionArgs args); // Living
+	virtual void cripple(ActionArgs args); // Living
+
+	// Ranged abilities
+
+	// Spells
+	virtual void heal(ActionArgs args); // Living
+	virtual void shield(ActionArgs args); // Living
+	virtual void haste(ActionArgs args); // Living
+	
+	virtual void flaming_hands(ActionArgs args); // direction
+	virtual void drain_life(ActionArgs args); // Living
+	
+
+	// Misc abilities
+	void test(ActionArgs args); // none
+
+	virtual void damage(Living* killer, int damage);
 	virtual void die(Living* killer);
 protected:
 	TCODRandom* _rand;
 	virtual int rand(int x) { return _rand->getInt(0,x); }
 
 	double distance(int x1, int y1, int x2, int y2);
+
+	//virtual void init_basic();
+	virtual void init_melee();
+	//virtual void init_ranged();
+	virtual void init_spells();
+	
 };
 
 #endif

@@ -118,3 +118,63 @@ void TextCamera::print(const std::string s)
 		text.pop_front();
 	}
 }
+
+TargetingCamera::TargetingCamera(Map::WkPtr m, Entity::ShPtr e, int tx, int ty, int sx, int sy, int w, int h)
+	: Camera(sx,sy,w,h), player(e), map(m), x(tx), y(ty) {}
+TargetingCamera::~TargetingCamera() {}
+
+void TargetingCamera::draw()
+{
+	Camera::draw();
+	TCODConsole* console = TCODConsole::root;
+
+	Map::ShPtr m = map.lock();
+	for(int j = -height/2; j < height/2; ++j)
+	{
+		for(int i = -width/2; i < width/2; ++i)
+		{
+			int tx = i+x;
+			int ty = j+y;
+			int draw_x = i+screen_x+width/2;
+			int draw_y = j+screen_y+height/2;			
+			if(check_bounds(m,draw_x,draw_y))
+			{
+				char c = m->display[tx+ty*m->width].c;
+				TCODColor color = m->display[tx+ty*m->width].color;
+				TCODConsole::root->setChar(draw_x,draw_y,c);
+				TCODConsole::root->setFore(draw_x,draw_y,color);
+			}
+		}
+	}
+
+	player->look();
+	player->seen.sort(compare_entities);
+	foreach(Entity::WkPtr i, player->seen)
+	{
+		Entity::ShPtr e = i.lock();
+		if(e)
+		{
+			int tx = e->x-x;
+			int ty = e->y-y;
+			int draw_x = screen_x+width/2+tx;
+			int draw_y = screen_y+height/2+ty;
+			if(check_bounds(m,draw_x,draw_y))
+			{
+				char c = e->c;
+				TCODColor color = e->color;
+				TCODConsole::root->setChar(draw_x,draw_y,c);
+				TCODConsole::root->setFore(draw_x,draw_y,color);
+			}
+		}
+	}
+	
+	int draw_x = screen_x+width/2;
+	int draw_y = screen_y+height/2;	
+	console->putChar(draw_x,draw_y,'X');
+}
+
+void TargetingCamera::move(int _x, int _y)
+{	
+	x = _x;
+	y = _y;
+}
