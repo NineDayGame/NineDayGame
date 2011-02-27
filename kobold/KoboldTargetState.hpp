@@ -22,13 +22,9 @@ public:
 	
 	virtual void draw();
 	virtual void handle_input();
-	//void set_font(Font::ShPtr font);
 	void set_renderman(RenderMan::ShPtr renderman);
 	
 	RenderMan::ShPtr renderman_;
-	//Font::ShPtr font_;
-	
-	//MenuWindow::ShPtr menu_window_;
 	
 private:
 	Movable::ShPtr reticule_;
