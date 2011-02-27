@@ -36,7 +36,14 @@ void GoblinTargetState::handle_input()
 			Living::ShPtr p = SCONVERT(Living,Entity,player.lock());
 			(*callback)(p,action,x,y);
 		}
-		GameState::state = parent->parent;
+		if(parent->parent)
+		{
+			GameState::state = parent->parent;
+		}
+		else
+		{
+			GameState::state = parent;
+		}
 	}
 }
 
