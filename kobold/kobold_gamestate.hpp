@@ -14,6 +14,8 @@
 #include "light.hpp"
 #include "fovlistener.hpp"
 //#include "kobold_menu.hpp"
+#include "healthwindow.hpp"
+#include "manawindow.hpp"
 #include "KoboldInventoryMenu.hpp"
 //----------------------------------------------
 
@@ -45,6 +47,7 @@ private:
 	GlConsoleWindow::ShPtr cwindow_;
 	AbilityWindow::ShPtr ability_window_;
 	HealthWindow::ShPtr health_window_;
+	ManaWindow::ShPtr mana_window_;
 	MenuWindow::ShPtr menu_window_;
 	
 	GlCamera::ShPtr camera_;
