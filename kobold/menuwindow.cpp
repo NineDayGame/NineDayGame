@@ -7,7 +7,8 @@
 const int kFONT_HEIGHT = 8;
 
 MenuWindow::MenuWindow()
-  : tail_(0) {
+  : tail_(0),
+    selected_(0) {
 	init();
 }
 
@@ -16,8 +17,6 @@ MenuWindow::~MenuWindow() {}
 void MenuWindow::init() {
 	mesh_.reset(new Rect());
 	set_color(Vector3f(1.0f, 1.0f, 1.0f));
-	//push_item(std::string("Item 1"));
-	//push_item(std::string("Item 2"));
 }
 
 void MenuWindow::draw() {
@@ -31,6 +30,11 @@ void MenuWindow::draw() {
 			glTranslatef(position_->x, position_->y+kFONT_HEIGHT*(item_max_-(i+1)), position_->z);
 			//std::cout << "draw " << console_[i].size() << " ";
 			glCallLists(items_[i].size(), GL_BYTE, items_[i].c_str());
+			if (i == selected_) {
+				glLoadIdentity();
+				glTranslatef(position_->x, position_->y+kFONT_HEIGHT*(item_max_-(i+1)), position_->z);
+				glCallLists(1, GL_BYTE, "*");
+			}
 		}
 		
 		glPopMatrix();
@@ -54,10 +58,23 @@ void MenuWindow::push_item(std::string item) {
 		std::cout << "Item " << item << " not added - menu full" << std::endl;
 		return;
 	}
+	item.insert(0, "  ");
 
 	items_[tail_++] = item;
 }
 
 void MenuWindow::set_font(Font::ShPtr font) {
 	font_ = font;
+}
+
+void MenuWindow::select_next() {
+	selected_ = (selected_ == (tail_-1)) ? (tail_-1) : selected_ + 1;
+}
+
+void MenuWindow::select_prev() {
+	selected_ = (selected_ == 0) ? 0 : selected_ - 1;
+}
+
+int MenuWindow::get_selected_index() {
+	return selected_;
 }

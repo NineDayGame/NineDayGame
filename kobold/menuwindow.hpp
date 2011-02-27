@@ -31,6 +31,9 @@ public:
 	void clear_items();
 	void push_item(const std::string name);
 	void set_font(Font::ShPtr font);
+	void select_next();
+	void select_prev();
+	int get_selected_index();
 
 private:
 	GameState::ShPtr gamestate_;
@@ -38,6 +41,7 @@ private:
 	Font::ShPtr font_;
 	int item_max_;
 	int tail_;
+	int selected_;
 
 	//DISALLOW_COPY_AND_ASSIGN(MenuWindow);
 };
