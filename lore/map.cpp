@@ -132,7 +132,7 @@ void Map::randomize(int num_rooms)
 		{
 			if(data->isWalkable(x,y))
 			{
-				set_data(x,y,'#',TCOD_dark_grey,false,false);
+				set_data(x,y,'#',TCOD_grey,false,false);
 			}
 			else
 			{
@@ -144,13 +144,13 @@ void Map::randomize(int num_rooms)
 	// Ensure there's a wall all the way around the map
 	for(int x = 0; x < width; ++x)
 	{
-		set_data(x,0,'#',TCOD_dark_grey,false,false);
-		set_data(x,height-1,'#',TCOD_dark_grey,false,false);
+		set_data(x,0,'#',TCOD_grey,false,false);
+		set_data(x,height-1,'#',TCOD_grey,false,false);
 	}
 	for(int y = 0; y < height; ++y)
 	{
-		set_data(0,y,'#',TCOD_dark_grey,false,false);
-		set_data(width-1,y,'#',TCOD_dark_grey,false,false);
+		set_data(0,y,'#',TCOD_grey,false,false);
+		set_data(width-1,y,'#',TCOD_grey,false,false);
 	}
 
 	for(int i = 0; i < 4; ++i)
