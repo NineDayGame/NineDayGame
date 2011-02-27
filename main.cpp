@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
 	m->get(l);
 
 	TCODRandom* rand = TCODRandom::getInstance();
-	for(int i = 0; i < 300; ++i)
+	for(int i = 0; i < 50; ++i)
 	{
 		char buf[32];
 		char name[32];

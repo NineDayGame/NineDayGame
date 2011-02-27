@@ -3,11 +3,11 @@
 
 void Living::init_spells()
 {
-	REGISTER_ACTION(heal,"Heal",200,TARGET_LIVING);
-	REGISTER_ACTION(shield,"Shield",300,TARGET_LIVING);
-	REGISTER_ACTION(haste,"Haste",500,TARGET_LIVING);
-	REGISTER_ACTION(flaming_hands,"Flaming Hands",300,TARGET_DIRECTION);
-	REGISTER_ACTION(drain_life,"Drain Life",300,TARGET_LIVING);
+	REGISTER_ACTION(heal,"Heal",5,200,TARGET_LIVING);
+	REGISTER_ACTION(shield,"Shield",10,300,TARGET_LIVING);
+	REGISTER_ACTION(haste,"Haste",20,500,TARGET_LIVING);
+	REGISTER_ACTION(flaming_hands,"Flaming Hands",5,300,TARGET_DIRECTION);
+	REGISTER_ACTION(drain_life,"Drain Life",10,300,TARGET_LIVING);
 }
 
 void Living::heal(ActionArgs args)

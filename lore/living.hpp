@@ -31,16 +31,17 @@
 		} \
 	}
 
-#define REGISTER_ACTION(action,proper_name,energy_cost,target_type)	  \
+#define REGISTER_ACTION(action,proper_name,mana_cost,energy_cost,target_type) \
 	{                                           \
 		typedef typeof(*this) T;                \
 		actions[#action] = static_cast<Living::Action>(&T::action); \
-		actions_info[#action] = ActionInfo(proper_name,energy_cost,target_type); \
+		actions_info[#action] = ActionInfo(proper_name,mana_cost,energy_cost,target_type); \
 	}
 
 #define ACTION_NAME 0
-#define ACTION_ENERGY 1
-#define ACTION_TARGET 2
+#define ACTION_MANA 1
+#define ACTION_ENERGY 2
+#define ACTION_TARGET 3
 
 class Living : public Entity
 {
@@ -57,7 +58,7 @@ public:
 	typedef boost::shared_ptr<Living> ShPtr;
 	typedef std::vector<boost::shared_ptr<void> > ActionArgs;
 	typedef void (Living::*Action)(ActionArgs args);
-	typedef boost::tuple<std::string/*proper name*/, int/*energy cost*/, ActionTargetType> ActionInfo;
+	typedef boost::tuple<std::string/*proper name*/, int/*mana cost*/, int/*energy cost*/, ActionTargetType> ActionInfo;
 	typedef boost::unordered_map<std::string, Living::Action> ActionMap;
 	typedef boost::unordered_map<std::string, Living::ActionInfo> ActionInfoMap;
 	
@@ -68,6 +69,10 @@ public:
 	std::string name;
 
 	int faction;
+
+	int level;
+	int experience;
+	int next_level;
 
 	int max_health;
 	int max_mana;
