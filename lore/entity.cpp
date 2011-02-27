@@ -24,7 +24,10 @@ Entity::Entity(boost::weak_ptr<Map> _host_map, int _x, int _y, int _c, TCODColor
 Entity::~Entity()
 {
 	Map::ShPtr host = host_map.lock();
-	host->data->setProperties(x,y,true,true);
+	if(host)
+	{
+		host->data->setProperties(x,y,true,true);
+	}
 }
 
 bool Entity::move(int _x, int _y)
