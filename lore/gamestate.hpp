@@ -6,6 +6,7 @@
 #include <libtcod.hpp>
 
 #include "living.hpp"
+#include "map.hpp"
 
 class GameState : public boost::enable_shared_from_this<GameState>
 {
@@ -13,6 +14,10 @@ public:
 	typedef boost::shared_ptr<GameState> ShPtr;
 	
 	static GameState::ShPtr state;
+	
+	static Map::ShPtr map;
+	static void generate_map(int width, int height);
+	
 	static bool running;
 	
 	GameState::ShPtr parent;
@@ -26,8 +31,6 @@ public:
 	virtual void draw() { if(parent) parent->draw(); }
 
 	GameState::ShPtr get_first_parent() { if(parent) return parent->get_first_parent(); return this->shared_from_this(); }
-protected:
-	
 };
 
 #endif

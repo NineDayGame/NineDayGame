@@ -127,6 +127,10 @@ void Living::die(Living* killer)
 	IF_IN_VIEW(cprintf("%s killed %s!",killer->name.c_str(),name.c_str()));
 	
 	Map::ShPtr m = SCONVERT(Map,Container,container.lock());
+	if(!m)
+	{
+		return;
+	}
 
 	double angle = atan2((y-killer->y),(x-killer->x));
 	int radius = _rand->getInt(0,6);
