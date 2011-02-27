@@ -70,9 +70,15 @@ void KoboldGameState::create_windows()
 	ability_window_->set_font(cfont);
 	ability_window_->set_position(960-160, 0, 0);
 	ability_window_->show();
-	ability_window_->set_ability(std::string("Mortal strike"), 1);
+	/*ability_window_->set_ability(std::string("Mortal strike"), 1);
 	ability_window_->set_ability(std::string("Shield bash"), 2);
-	ability_window_->set_ability(std::string("Defend"),10);
+	ability_window_->set_ability(std::string("Defend"),10);*/
+	int i = 1;
+	foreach(Living::ActionMap::value_type v, player->actions) {
+		if (player->GET_ACTION_INFO(v.first, ACTION_MANA) > 0) {
+			ability_window_->set_ability(player->GET_ACTION_INFO(v.first, ACTION_NAME), i++);
+		}
+	} 
 	renderer->add_window(ability_window_);
 	
 	health_window_.reset(new HealthWindow());
@@ -105,10 +111,12 @@ void KoboldGameState::handle_input()
 	if( event_.type == SDL_KEYDOWN ) {
 		switch( event_.key.keysym.sym )
 		{
-		case SDLK_w: camera_->set_coords(camera_->get_coords()->x+1, camera_->get_coords()->y+1); break;
+		case SDLK_1: 
+		// These were used for testing. Probably not needed anymore	
+		/*case SDLK_w: camera_->set_coords(camera_->get_coords()->x+1, camera_->get_coords()->y+1); break;
 		case SDLK_a: camera_->set_coords(camera_->get_coords()->x-1, camera_->get_coords()->y+1); break;
 		case SDLK_s: camera_->set_coords(camera_->get_coords()->x-1, camera_->get_coords()->y-1); break;
-		case SDLK_d: camera_->set_coords(camera_->get_coords()->x+1, camera_->get_coords()->y-1); break;
+		case SDLK_d: camera_->set_coords(camera_->get_coords()->x+1, camera_->get_coords()->y-1); break;*/
 		case SDLK_i: {
 			//KoboldInventoryMenu::ShPtr c = KoboldInventoryMenu::ShPtr(new KoboldInventoryMenu(this->shared_from_this(),5,400,20,20));
 			KoboldInventoryMenu::ShPtr c (new KoboldInventoryMenu(this->shared_from_this(),player,20,400,200,80));
@@ -117,7 +125,7 @@ void KoboldGameState::handle_input()
 			GameState::state = c;
 			break; }
 		case SDLK_t: {
-			KoboldTargetState::ShPtr t (new KoboldTargetState(this->shared_from_this(), player, camera_, renderer, player->x, player->y));
+			KoboldTargetState::ShPtr t (new KoboldTargetState(this->shared_from_this(), player, camera_, renderer, 0, player->x, player->y));
 			GameState::state = t;
 			break; }
 		case SDLK_KP1:

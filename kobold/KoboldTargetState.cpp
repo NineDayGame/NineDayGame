@@ -4,10 +4,11 @@
 
 #include "targeter.hpp"
 
-KoboldTargetState::KoboldTargetState(GameState::ShPtr p, Living::ShPtr player, GlCamera::ShPtr camera, RenderMan::ShPtr renderman, int x, int y) 
+KoboldTargetState::KoboldTargetState(GameState::ShPtr p, Living::ShPtr player, GlCamera::ShPtr camera, RenderMan::ShPtr renderman, GoblinTargetState::TargetCallback callback, int x, int y) 
 	: GameState(p,player),
     camera_(camera),
     renderman_(renderman),
+    callback_(callback),
     x_(x), y_(y)
 {
 	init();
@@ -42,8 +43,12 @@ void KoboldTargetState::handle_input()
 			GameState::state = parent;
 			break;
 		case SDLK_RETURN:
-		case SDLK_KP_ENTER:
-			break;
+		case SDLK_KP_ENTER: {
+			if(callback_)
+			{			
+				(*callback_)(player, std::string("hi"), x_, y_);
+			}
+			break; }
 		case SDLK_KP1: camera_->set_coords(--x_, y_); reticule_->set_position(x_, y_-0.5f, 0.501f); break;
 		case SDLK_DOWN:
 		case SDLK_KP2: camera_->set_coords(--x_, --y_);	reticule_->set_position(x_, y_-0.5f, 0.501f); break;

@@ -39,6 +39,7 @@ void AbilityWindow::set_ability(std::string ability, int index) {
 		ability.insert(1, "  ");
 	}
 	abilities_[index-1] = ability;
+	//abilities_[1] = ability;
 }
 
 void AbilityWindow::set_font(Font::ShPtr font) {
