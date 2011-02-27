@@ -49,8 +49,10 @@ void Living::precise_strike(ActionArgs args)
 
 	action_energy += GET_ACTION_INFO("attack",ACTION_ENERGY)/speed;
 	dex += 10;
+	str -= 2;
 	attack(args);
 	dex -= 10;
+	str += 2;
 }
 
 // Living
@@ -68,8 +70,10 @@ void Living::giant_swing(ActionArgs args)
 
 	action_energy += GET_ACTION_INFO("attack",ACTION_ENERGY)/speed;
 	str += 10;
+	dex -= 2;
 	attack(args);
 	str -= 10;
+	dex += 2;
 }
 
 // Living
