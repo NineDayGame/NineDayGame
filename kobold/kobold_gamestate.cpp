@@ -12,6 +12,8 @@
 #include "character.hpp"
 #include "entity.hpp"
 #include "map.hpp"
+
+#include "KoboldTargetState.hpp"
 // ------------------------
 
 KoboldGameState::KoboldGameState(GameState::ShPtr p, Living::ShPtr e)
@@ -113,6 +115,10 @@ void KoboldGameState::handle_input()
 			c->set_font(fontman_->get_font("resources/terminal.bmp"));
 			c->set_renderman(renderer);
 			GameState::state = c;
+			break; }
+		case SDLK_t: {
+			KoboldTargetState::ShPtr t (new KoboldTargetState(this->shared_from_this(), camera_, renderer, player->x, player->y));
+			GameState::state = t;
 			break; }
 		case SDLK_KP1:
 		case SDLK_LEFT: walking = true; --(*x); break; 
