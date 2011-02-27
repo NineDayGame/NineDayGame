@@ -44,6 +44,8 @@ void target_callback(Living::ShPtr e, std::string a, int x, int y)
 		args.push_back(sy);
 		break;
 	case Living::TARGET_DIRECTION:
+		if(y == e->y && x == e->x) break;
+		
 		boost::shared_ptr<double> angle(new double(atan2(y-e->y,x-e->x)));
 		args.push_back(angle);
 		break;

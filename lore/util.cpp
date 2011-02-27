@@ -1,6 +1,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <list>
+#include <cmath>
 #include "util.hpp"
 
 std::list<Printable::ShPtr> util__printables;
@@ -24,4 +25,10 @@ void cprintf(char const* format, ...)
 	}
 
 	printf("%s\n",buffer);
+}
+
+
+double distance(int x1, int y1, int x2, int y2)
+{
+	return sqrt(pow(x1-x2,2)+pow(y1-y2,2));
 }

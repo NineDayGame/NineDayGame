@@ -38,6 +38,34 @@
 		actions_info[#action] = ActionInfo(proper_name,mana_cost,energy_cost,target_type); \
 	}
 
+#define THIS_ACTION_INFO(type) actions_info[__FUNCTION__].get<(type)>()
+#define GET_ACTION_INFO(action,type) actions_info[#action].get<(type)>()
+
+#define CHECK_REQUIREMENTS()	  \
+	{ \
+		int required_mana = actions_info[__FUNCTION__].get<ACTION_MANA>(); \
+		ActionTargetType tt = actions_info[__FUNCTION__].get<ACTION_TARGET>(); \
+		if(args.size() == 0 && tt != TARGET_NONE) \
+		{ \
+			cprintf("No target."); \
+			return; \
+		} \
+		if(mana < required_mana) \
+		{ \
+			cprintf("Not enough mana."); \
+			return; \
+		} \
+	}
+
+#define CHECK_RANGE(range)	  \
+	{ \
+		if(distance(x,y,target->x,target->y) >= (range)) \
+		{ \
+			cprintf("Target is not within range."); \
+			return; \
+		} \
+	}
+
 #define ACTION_NAME 0
 #define ACTION_MANA 1
 #define ACTION_ENERGY 2
@@ -132,8 +160,6 @@ public:
 protected:
 	TCODRandom* _rand;
 	virtual int rand(int x) { return _rand->getInt(0,x); }
-
-	double distance(int x1, int y1, int x2, int y2);
 
 	//virtual void init_basic();
 	virtual void init_melee();
