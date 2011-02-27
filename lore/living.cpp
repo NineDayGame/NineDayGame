@@ -3,6 +3,7 @@
 #include "living.hpp"
 #include "util.hpp"
 #include "item.hpp"
+#include "gamestate.hpp"
 
 #include "action_scheduler.hpp"
 
@@ -90,7 +91,8 @@ void Living::pickup(ActionArgs args)
 	Item::ShPtr e = SCONVERT(Item,void,args[0]);
 	e->container.lock()->remove(e);
 	get(e);
-	cprintf("%s gets %s.",name.c_str(),e->name.c_str());
+
+	IF_IN_VIEW(cprintf("%s gets %s.",name.c_str(),e->name.c_str()));
 }
 
 void Living::attack(ActionArgs args)
@@ -102,8 +104,10 @@ void Living::attack(ActionArgs args)
 	{
 		if(melee_tohit() > e->dodge())
 		{
-			int damage = melee_damage();			
-			cprintf("%s hit %s for %d damage.",name.c_str(),e->name.c_str(),damage);
+			int damage = melee_damage();
+
+			IF_IN_VIEW(cprintf("%s hit %s for %d damage.",name.c_str(),e->name.c_str(),damage));
+			
 			e->damage(this,damage);
 		}		
 	}
@@ -120,7 +124,7 @@ void Living::damage(Living* attacker, int damage)
 
 void Living::die(Living* killer)
 {
-	cprintf("%s killed %s!",killer->name.c_str(),name.c_str());
+	IF_IN_VIEW(cprintf("%s killed %s!",killer->name.c_str(),name.c_str()));
 	
 	Map::ShPtr m = SCONVERT(Map,Container,container.lock());
 

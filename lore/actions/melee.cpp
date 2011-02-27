@@ -1,5 +1,6 @@
 #include "living.hpp"
 #include "action_scheduler.hpp"
+#include "gamestate.hpp"
 
 void Living::init_melee()
 {
@@ -15,7 +16,9 @@ void Living::spin_attack(ActionArgs args)
 	CHECK_REQUIREMENTS();
 	SCHEDULE_ACTION();
 	mana -= THIS_ACTION_INFO(ACTION_MANA);
-	cprintf("%s performs a spin attack!",name.c_str());
+
+	IF_IN_VIEW(cprintf("%s performs a spin attack!",name.c_str()));
+	
 	std::list<Living::ShPtr> to_attack;
 	foreach(Entity::WkPtr e, seen)
 	{
@@ -45,7 +48,7 @@ void Living::precise_strike(ActionArgs args)
 	SCHEDULE_ACTION();
 	mana -= THIS_ACTION_INFO(ACTION_MANA);
 
-	cprintf("%s carefully watches for an opening in %s's defence, then attacks.",name.c_str(),target->name.c_str());
+	IF_IN_VIEW(cprintf("%s carefully watches for an opening in %s's defence, then attacks.",name.c_str(),target->name.c_str()));
 
 	action_energy += GET_ACTION_INFO("attack",ACTION_ENERGY)/speed;
 	dex += 10;
@@ -66,7 +69,7 @@ void Living::giant_swing(ActionArgs args)
 	SCHEDULE_ACTION();
 	mana -= THIS_ACTION_INFO(ACTION_MANA);
 
-	cprintf("%s takes a giant swing and attacks %s",name.c_str(),target->name.c_str());
+	IF_IN_VIEW(cprintf("%s takes a giant swing and attacks %s",name.c_str(),target->name.c_str()));
 
 	action_energy += GET_ACTION_INFO("attack",ACTION_ENERGY)/speed;
 	str += 10;
