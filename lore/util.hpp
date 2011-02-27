@@ -12,6 +12,8 @@
 void register_printable(Printable::ShPtr p);
 void cprintf(const char* fmt, ...);
 
+double distance(int x1, int y1, int x2, int y2);
+
 // A macro to disallow the copy constructor and operator= functions
 // This should be used in the private: declarations for a class
 // Sourced from Google - see also: Effective C++ by Scott Meyers

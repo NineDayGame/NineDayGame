@@ -44,6 +44,8 @@ void target_callback(Living::ShPtr e, std::string a, int x, int y)
 		args.push_back(sy);
 		break;
 	case Living::TARGET_DIRECTION:
+		if(y == e->y && x == e->x) break;
+		
 		boost::shared_ptr<double> angle(new double(atan2(y-e->y,x-e->x)));
 		args.push_back(angle);
 		break;
@@ -101,12 +103,15 @@ void ActionMenu::init()
 	int i = 1;
 	foreach(Living::ActionMap::value_type v, m->player->actions)
 	{
-		std::string s = m->player->actions_info[v.first].get<ACTION_NAME>();
-		MenuItem::ShPtr mi(new MenuItem(screen_x+1,screen_y+i,s,TCOD_white,&target_action));
-		mi->args.push_back(e);
-		mi->args.push_back(boost::shared_ptr<std::string>(new std::string(v.first)));
-		menu_items.push_back(mi);
-		++i;
+		if(m->player->GET_ACTION_INFO(v.first,ACTION_MANA) > 0)
+		{
+			std::string s = m->player->actions_info[v.first].get<ACTION_NAME>();
+			MenuItem::ShPtr mi(new MenuItem(screen_x+1,screen_y+i,s,TCOD_white,&target_action));
+			mi->args.push_back(e);
+			mi->args.push_back(boost::shared_ptr<std::string>(new std::string(v.first)));
+			menu_items.push_back(mi);
+			++i;
+		}
 	}
 	if(menu_items.size() > 0)
 	{

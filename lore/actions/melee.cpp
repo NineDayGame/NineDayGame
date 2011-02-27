@@ -12,7 +12,9 @@ void Living::init_melee()
 // none
 void Living::spin_attack(ActionArgs args)
 {
+	CHECK_REQUIREMENTS();
 	SCHEDULE_ACTION();
+	mana -= THIS_ACTION_INFO(ACTION_MANA);
 	cprintf("%s performs a spin attack!",name.c_str());
 	std::list<Living::ShPtr> to_attack;
 	foreach(Entity::WkPtr e, seen)
@@ -35,20 +37,52 @@ void Living::spin_attack(ActionArgs args)
 // Living
 void Living::precise_strike(ActionArgs args)
 {
+	CHECK_REQUIREMENTS();
+	
+	Living::ShPtr target = SCONVERT(Living,void,args[0]);
+	CHECK_RANGE(2);
+	
 	SCHEDULE_ACTION();
-	cprintf("%s",__FUNCTION__);
+	mana -= THIS_ACTION_INFO(ACTION_MANA);
+
+	cprintf("%s carefully watches for an opening in %s's defence, then attacks.",name.c_str(),target->name.c_str());
+
+	action_energy += GET_ACTION_INFO("attack",ACTION_ENERGY)/speed;
+	dex += 10;
+	attack(args);
+	dex -= 10;
 }
 
 // Living
 void Living::giant_swing(ActionArgs args)
 {
+	CHECK_REQUIREMENTS();
+	
+	Living::ShPtr target = SCONVERT(Living,void,args[0]);
+	CHECK_RANGE(2);
+	
 	SCHEDULE_ACTION();
-	cprintf("%s",__FUNCTION__);
+	mana -= THIS_ACTION_INFO(ACTION_MANA);
+
+	cprintf("%s takes a giant swing and attacks %s",name.c_str(),target->name.c_str());
+
+	action_energy += GET_ACTION_INFO("attack",ACTION_ENERGY)/speed;
+	str += 10;
+	attack(args);
+	str -= 10;
 }
 
 // Living
 void Living::cripple(ActionArgs args)
 {
+	CHECK_REQUIREMENTS();
+	Living::ShPtr l = SCONVERT(Living,void,args[0]);
+	if(distance(x,y,l->x,l->y) >= 2)
+	{
+		cprintf("Target is not within range.");
+		return;
+	}
 	SCHEDULE_ACTION();
+	mana -= THIS_ACTION_INFO(ACTION_MANA);
 	cprintf("%s",__FUNCTION__);
 }

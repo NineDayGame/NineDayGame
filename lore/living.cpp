@@ -32,11 +32,6 @@ Living::~Living()
 
 }
 
-double Living::distance(int x1, int y1, int x2, int y2)
-{
-	return sqrt(pow(x1-x2,2)+pow(y1-y2,2));
-}
-
 void Living::init_stats(int _str, int _magic, int _dex, int _intel, int _con, int _soul, int _disp, int _speed)
 {
 	str = _str;
@@ -90,6 +85,7 @@ void Living::walk(ActionArgs args)
 
 void Living::pickup(ActionArgs args)
 {
+	CHECK_REQUIREMENTS();
 	SCHEDULE_ACTION();
 	Item::ShPtr e = SCONVERT(Item,void,args[0]);
 	e->container.lock()->remove(e);
@@ -99,6 +95,7 @@ void Living::pickup(ActionArgs args)
 
 void Living::attack(ActionArgs args)
 {
+	CHECK_REQUIREMENTS();
 	SCHEDULE_ACTION();
 	Living::ShPtr e = SCONVERT(Living,void,args[0]);
 	if(e)

@@ -12,25 +12,42 @@ void Living::init_spells()
 
 void Living::heal(ActionArgs args)
 {
+	CHECK_REQUIREMENTS();
 	SCHEDULE_ACTION();
-	cprintf("%s",__FUNCTION__);
+	mana -= THIS_ACTION_INFO(ACTION_MANA);
+
+	Living::ShPtr target = SCONVERT(Living,void,args[0]);
+	int heal = rand(20);
+	target->health += heal;
+	if(target->health > target->max_health)
+	{
+		target->health = target->max_health;
+	}
+	
+	cprintf("%s heals %d damage for %s.",name.c_str(),heal,target->name.c_str());
 }
 
 void Living::shield(ActionArgs args)
 {
+	CHECK_REQUIREMENTS();
 	SCHEDULE_ACTION();
+	mana -= THIS_ACTION_INFO(ACTION_MANA);
 	cprintf("%s",__FUNCTION__);
 }
 
 void Living::haste(ActionArgs args)
 {
+	CHECK_REQUIREMENTS();
 	SCHEDULE_ACTION();
+	mana -= THIS_ACTION_INFO(ACTION_MANA);
 	cprintf("%s",__FUNCTION__);
 }
 	
 void Living::flaming_hands(ActionArgs args)
 {
+	CHECK_REQUIREMENTS();
 	SCHEDULE_ACTION();
+	mana -= THIS_ACTION_INFO(ACTION_MANA);
 	boost::shared_ptr<double> angle = SCONVERT(double,void,args[0]);
 	cprintf("%s casts Flaming Hands.",name.c_str());
 
@@ -68,6 +85,8 @@ void Living::flaming_hands(ActionArgs args)
 
 void Living::drain_life(ActionArgs args)
 {
+	CHECK_REQUIREMENTS();
 	SCHEDULE_ACTION();
+	mana -= THIS_ACTION_INFO(ACTION_MANA);
 	cprintf("%s",__FUNCTION__);
 }
