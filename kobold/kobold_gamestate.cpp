@@ -117,7 +117,7 @@ void KoboldGameState::handle_input()
 			GameState::state = c;
 			break; }
 		case SDLK_t: {
-			KoboldTargetState::ShPtr t (new KoboldTargetState(this->shared_from_this(), camera_, renderer, player->x, player->y));
+			KoboldTargetState::ShPtr t (new KoboldTargetState(this->shared_from_this(), player, camera_, renderer, player->x, player->y));
 			GameState::state = t;
 			break; }
 		case SDLK_KP1:
@@ -168,7 +168,6 @@ void KoboldGameState::handle_input()
 }
 void KoboldGameState::draw()
 {
-	Living::ShPtr player = SCONVERT(Living,Entity,player);
 	health_window_->update_health(player->health, player->max_health);
 	mana_window_->update_mana(player->mana, player->max_mana);
 	

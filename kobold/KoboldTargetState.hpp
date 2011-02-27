@@ -15,7 +15,7 @@ class KoboldTargetState : public GameState
 public:
 	typedef boost::shared_ptr<KoboldTargetState> ShPtr;
 
-	KoboldTargetState(GameState::ShPtr parent, GlCamera::ShPtr camera, RenderMan::ShPtr renderman, int x, int y);
+	KoboldTargetState(GameState::ShPtr parent, Living::ShPtr player, GlCamera::ShPtr camera, RenderMan::ShPtr renderman, int x, int y);
 	virtual ~KoboldTargetState();
 
 	virtual void init();

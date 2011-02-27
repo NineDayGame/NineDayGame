@@ -4,8 +4,8 @@
 
 #include "character.hpp"
 
-KoboldTargetState::KoboldTargetState(GameState::ShPtr p, GlCamera::ShPtr camera, RenderMan::ShPtr renderman, int x, int y) 
-  : GameState(p),
+KoboldTargetState::KoboldTargetState(GameState::ShPtr p, Living::ShPtr player, GlCamera::ShPtr camera, RenderMan::ShPtr renderman, int x, int y) 
+	: GameState(p,player),
     camera_(camera),
     renderman_(renderman),
     x_(x), y_(y)
