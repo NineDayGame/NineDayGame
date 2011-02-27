@@ -35,6 +35,10 @@ void RenderMan::load_terrain(const Movable::ShPtr movable) {
 	renderer_->load_terrain(movable);
 }
 
+void RenderMan::clear_terrain() {
+	renderer_->clear_terrain();
+}
+
 void RenderMan::set_camera(GlCamera::ShPtr camera) {
 	renderer_->set_camera(camera);
 }

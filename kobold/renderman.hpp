@@ -26,6 +26,7 @@ public:
 	void clear_windows();
 	void remove_window(GlWindow::ShPtr window);
 	void load_terrain(Movable::ShPtr movable);
+	void clear_terrain();
 	void set_camera(GlCamera::ShPtr camera);
 	void set_dynamic_light(Light::ShPtr light);
 	

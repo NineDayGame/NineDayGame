@@ -59,6 +59,9 @@ void GlRenderer::init_gl() {
     glEnable(GL_COLOR_MATERIAL);
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
+	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+
 	glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
     //GLfloat ambient[] = {0.0f, 0.0f, 0.0f, 1.0f};
@@ -107,6 +110,10 @@ void GlRenderer::remove_window(GlWindow::ShPtr window) {
 
 void GlRenderer::load_terrain(Movable::ShPtr movable) {
 	terrain_.push_back(movable);
+}
+
+void GlRenderer::clear_terrain() {
+	terrain_.clear();
 }
 
 void GlRenderer::render() {

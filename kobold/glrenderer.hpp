@@ -39,6 +39,7 @@ public:
 	void clear_windows();
 	void remove_window(GlWindow::ShPtr window);
 	void load_terrain(Movable::ShPtr movable);
+	void clear_terrain();
 	void set_ambient_light(const Vector4f& light);
 	void set_light(int index, const Light& light);
 	void take_screenshot(std::string filename);

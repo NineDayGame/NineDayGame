@@ -4,6 +4,6 @@ done
 
 redo-ifchange $DEPS
 
-LIBS="-L./libraries/libtcod-1.5.0/ -ltcod -ltcodxx -lGL -lGLU"
+LIBS="-L./libraries/libtcod-1.5.0/ -ltcod -ltcodxx -lGL -lGLU -lSDL_image"
 
 g++ $DEPS $LIBS -o $3

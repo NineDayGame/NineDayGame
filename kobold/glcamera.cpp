@@ -23,7 +23,7 @@ const Vector3f::ShPtr GlCamera::get_coords() const {
 
 void GlCamera::set_coords(float x, float y) {
 	//std::cout << "Set camera " << x << " " << y << std::endl;
-	position_.reset(new Vector3f(-0.7071f*x + 0.7071f*y, -0.5f*x + -0.5f*y, -30.0f + 0.5*x + 0.5f*y));
+	position_.reset(new Vector3f(-0.7071f*x + 0.7071f*y, -0.5f*x + -0.5f*y, -25.0f + 0.5*x + 0.5f*y));
 	coords_.reset(new Vector3f(x, y, 0.0f));
 }
 

@@ -194,6 +194,7 @@ void KoboldGameState::update_view(int x, int y, bool seen_before, char c, TCODCo
 	//std::cout << "Got callback" << std::endl;
 	if (!seen_before) {
 			const int stoneid = texman_->get_texture("resources/stone3.bmp")->get_index();
+			const int stonewall = texman_->get_texture("resources/stonewall.png")->get_index();
 			Map::ShPtr map = player->known_map;
 
 			if (c == '.') {
@@ -210,9 +211,12 @@ void KoboldGameState::update_view(int x, int y, bool seen_before, char c, TCODCo
 					for (int i = 0; i < 3; ++i) {
 						Block::ShPtr blk (new Block());
 						blk->set_position((float)x, (float)y, (float)i);
-						if (i < 2) {
-							//blk->set_texture(texture[0]);
+						blk->set_texture(stonewall);
+						if (i < 2 && color.r > 128 && color.g < 128) {
+							//blk->set_texture(stonewall);
 							blk->set_color(Vector3f((color.r/255.0f), (color.g/255.0f), (color.b/255.0f)));
+						} else {
+							blk->set_color(Vector3f(1.0f, 1.0f, 1.0f));
 						}
 						renderer->load_terrain(blk);
 					}

@@ -1,5 +1,7 @@
 #include <iostream>
 
+#include "SDL/SDL_image.h"
+
 #include "textureman.hpp"
 
 TextureMan::TextureMan() 
@@ -16,6 +18,7 @@ void TextureMan::init() {
 	tex_names_.push_back(std::string("resources/default.bmp"));
 	tex_names_.push_back(std::string("resources/terminal.bmp"));
 	tex_names_.push_back(std::string("resources/stone3.bmp"));
+	tex_names_.push_back(std::string("resources/stonewall.png"));
 }
 
 /*
@@ -35,10 +38,11 @@ void TextureMan::load_textures() {
 	glGenTextures(tex_count, tex_indicies);
 
 	for (int i = 0; i < tex_count; ++i) {
-		textureImage[i] = SDL_LoadBMP(tex_names_.at(i).c_str());
+		//textureImage[i] = SDL_LoadBMP(tex_names_.at(i).c_str());
+		textureImage[i] = IMG_Load(tex_names_.at(i).c_str());
 		if (textureImage[i]) {		
 			glBindTexture(GL_TEXTURE_2D, tex_indicies[i]);
-			glTexImage2D(GL_TEXTURE_2D, 0, 3, textureImage[i]->w, textureImage[i]->h, 0, GL_BGR,
+			glTexImage2D(GL_TEXTURE_2D, 0, 3, textureImage[i]->w, textureImage[i]->h, 0, GL_RGB,
 					GL_UNSIGNED_BYTE, textureImage[i]->pixels );
 			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
 			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
