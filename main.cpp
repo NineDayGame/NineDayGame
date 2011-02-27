@@ -53,7 +53,7 @@ int main(int argc, char* argv[])
 
 		TCODColor color(rand->getInt(0,255),rand->getInt(0,255),rand->getInt(0,255));
 		Monster::ShPtr e(new Monster(Map::WkPtr(m),buf,x,y,'g',color,3));
-		e->init_stats(1,1,1,1,1,1,1,1);
+		e->init_stats(8,3,5,5,6,3,3,1);
 		Item::ShPtr i(new Item(Map::WkPtr(m),name,desc,x,y,'I',TCOD_green));
 		e->get(i);
 		m->get(e);
