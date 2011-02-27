@@ -22,10 +22,10 @@ void GoblinGameState::handle_input()
 	boost::shared_ptr<int> y(new int(player->y));
 	bool walking = false;
 	
-	TCODConsole::flush();
 	TCOD_key_t key;
 	if(!player->blocked)
 	{
+		TCODConsole::flush();
 		key = TCODConsole::waitForKeypress(true);
 		//key = TCODConsole::checkForKeypress(true);
 	}
@@ -103,9 +103,10 @@ void GoblinGameState::handle_input()
 
 void GoblinGameState::draw()
 {
+	GameState::draw();
 	char buffer[128];
 	Living::ShPtr p = SCONVERT(Living,Entity,player);
-	sprintf(buffer,"Health: %d/%d",p->health,p->max_health);
+	sprintf(buffer,"Health: %d/%d  Mana: %d/%d",p->health,p->max_health,p->mana,p->max_mana);
 	health_indicator->text.clear();
 	health_indicator->print(buffer);
 	foreach(Container::ShPtr c, player->container.lock()->inventory)
