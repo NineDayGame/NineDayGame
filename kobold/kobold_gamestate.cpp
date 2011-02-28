@@ -198,6 +198,8 @@ void KoboldGameState::handle_input()
 		as.tick();
 	}
 
+	player_light_->set_radius(player->sight_range-1);
+
 	char c;
 	TCODColor color;
 	bool trans;

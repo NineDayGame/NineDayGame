@@ -157,7 +157,7 @@ public:
 
 	// Spells
 	virtual void heal(ActionArgs args); // Living
-	virtual void shield(ActionArgs args); // Living
+	virtual void eagle_eye(ActionArgs args); // Living
 	virtual void haste(ActionArgs args); // Living
 	
 	virtual void flaming_hands(ActionArgs args); // direction

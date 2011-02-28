@@ -5,7 +5,7 @@
 void Living::init_spells()
 {
 	REGISTER_ACTION(heal,"Heal",5,200,TARGET_LIVING);
-	REGISTER_ACTION(shield,"Shield",10,300,TARGET_LIVING);
+	REGISTER_ACTION(eagle_eye,"Eagle Eye",20,300,TARGET_LIVING);
 	REGISTER_ACTION(haste,"Haste",20,500,TARGET_LIVING);
 	REGISTER_ACTION(flaming_hands,"Flaming Hands",5,300,TARGET_DIRECTION);
 	REGISTER_ACTION(drain_life,"Drain Life",10,300,TARGET_LIVING);
@@ -28,12 +28,18 @@ void Living::heal(ActionArgs args)
 	IF_IN_VIEW(cprintf("%s heals %d damage for %s.",name.c_str(),heal,target->name.c_str()));
 }
 
-void Living::shield(ActionArgs args)
+void Living::eagle_eye(ActionArgs args)
 {
 	CHECK_REQUIREMENTS();
 	SCHEDULE_ACTION();
 	mana -= THIS_ACTION_INFO(ACTION_MANA);
-	cprintf("%s",__FUNCTION__);
+
+	Living::ShPtr target = SCONVERT(Living,void,args[0]);
+
+	float damage = rand(3)+1;
+	target->sight_range += damage;
+
+	IF_IN_VIEW(cprintf("%s's eyesight improves.",name.c_str()));
 }
 
 void Living::haste(ActionArgs args)
