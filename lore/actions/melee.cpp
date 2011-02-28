@@ -83,13 +83,16 @@ void Living::giant_swing(ActionArgs args)
 void Living::cripple(ActionArgs args)
 {
 	CHECK_REQUIREMENTS();
-	Living::ShPtr l = SCONVERT(Living,void,args[0]);
-	if(distance(x,y,l->x,l->y) >= 2)
-	{
-		cprintf("Target is not within range.");
-		return;
-	}
+	Living::ShPtr target = SCONVERT(Living,void,args[0]);
+	CHECK_RANGE(2);
+	
 	SCHEDULE_ACTION();
 	mana -= THIS_ACTION_INFO(ACTION_MANA);
-	cprintf("%s",__FUNCTION__);
+
+	IF_IN_VIEW(cprintf("%s attacks %s's knees.",name.c_str(),target->name.c_str()));
+
+	float damage = _rand->getFloat(0.1f,0.5f);
+	target->speed *= damage;
+	
+	IF_IN_VIEW(cprintf("%s's speed is reduced by %d%%.",target->name.c_str(),(int)(damage*100)));
 }
