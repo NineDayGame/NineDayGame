@@ -98,6 +98,13 @@ void KoboldGameState::create_windows()
 	mana_window_->update_mana(20, 20);
 	mana_window_->show();
 	renderer->add_window(mana_window_);
+	
+	kill_window_.reset(new KillCountWindow());
+	kill_window_->set_font(cfont);
+	kill_window_->set_position(960-100, 600-8, 0);
+	kill_window_->update_kills(0);
+	kill_window_->show();
+	renderer->add_window(kill_window_);
 }
 
 void KoboldGameState::hotkey(int index)
@@ -231,6 +238,7 @@ void KoboldGameState::draw()
 {
 	health_window_->update_health(player->health, player->max_health);
 	mana_window_->update_mana(player->mana, player->max_mana);
+	kill_window_->update_kills(player->kill_count);
 	
 	foreach(Container::ShPtr c, player->container.lock()->inventory)
 	{

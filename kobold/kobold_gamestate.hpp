@@ -16,6 +16,7 @@
 //#include "kobold_menu.hpp"
 #include "healthwindow.hpp"
 #include "manawindow.hpp"
+#include "killcountwindow.hpp"
 #include "KoboldInventoryMenu.hpp"
 //----------------------------------------------
 
@@ -51,6 +52,7 @@ private:
 	HealthWindow::ShPtr health_window_;
 	ManaWindow::ShPtr mana_window_;
 	MenuWindow::ShPtr menu_window_;
+	KillCountWindow::ShPtr kill_window_;
 	
 	GlCamera::ShPtr camera_;
 	Light::ShPtr player_light_;
