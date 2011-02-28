@@ -13,7 +13,7 @@ FontMan::FontMan()
  * hand
  */
 void FontMan::init() {
-	font_names_.push_back(std::string("resources/terminal.bmp"));
+	font_names_.push_back(std::string("resources/terminal.png"));
 }
 
 /*

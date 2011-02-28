@@ -61,8 +61,8 @@ void KoboldGameState::init_resources()
 
 void KoboldGameState::create_windows()
 {
-	const int texid = texman_->get_texture("resources/terminal.bmp")->get_index();
-	const Font::ShPtr cfont = fontman_->get_font("resources/terminal.bmp");
+	const int texid = texman_->get_texture("resources/terminal.png")->get_index();
+	const Font::ShPtr cfont = fontman_->get_font("resources/terminal.png");
 	
 	cwindow_.reset(new GlConsoleWindow());
 	cwindow_->set_font(cfont);
@@ -148,7 +148,7 @@ void KoboldGameState::handle_input()
 		case SDLK_i: {
 			//KoboldInventoryMenu::ShPtr c = KoboldInventoryMenu::ShPtr(new KoboldInventoryMenu(this->shared_from_this(),5,400,20,20));
 			KoboldInventoryMenu::ShPtr c (new KoboldInventoryMenu(this->shared_from_this(),player,20,400,200,80));
-			c->set_font(fontman_->get_font("resources/terminal.bmp"));
+			c->set_font(fontman_->get_font("resources/terminal.png"));
 			c->set_renderman(renderer);
 			GameState::state = c;
 			break; }
@@ -256,7 +256,7 @@ void KoboldGameState::draw()
 void KoboldGameState::update_view(int x, int y, bool seen_before, char c, TCODColor color, bool transparent, bool walkable) {
 	//std::cout << "Got callback" << std::endl;
 	if (!seen_before) {
-			const int stoneid = texman_->get_texture("resources/stone3.bmp")->get_index();
+			const int stoneid = texman_->get_texture("resources/stone3.png")->get_index();
 			const int stonewall = texman_->get_texture("resources/stonewall.png")->get_index();
 			Map::ShPtr map = player->known_map;
 
@@ -300,15 +300,24 @@ void KoboldGameState::update_view(int x, int y, bool seen_before, char c, TCODCo
 void KoboldGameState::reload_world()
 {
 	renderer->clear_movables();
-	const int defaultid = texman_->get_texture("resources/default.bmp")->get_index();
+	const int zombieid = texman_->get_texture("resources/zombie.png")->get_index();
+	const int playerid = texman_->get_texture("resources/player.png")->get_index();
+	const int potionid = texman_->get_texture("resources/potion.png")->get_index();
 	foreach (Entity::WkPtr e, player->seen) {
 		Character::ShPtr chr (new Character());
-		Entity::ShPtr m = e.lock();
-		if (m) {
-			chr->set_position(m->x, m->y, 0.5f);
-			TCODColor c = m->color;
-			chr->set_texture(defaultid);
-			chr->set_color(Vector3f((c.r/255.0f), (c.g/255.0f), (c.b/255.0f)));
+		Entity::ShPtr ent = e.lock();
+		Living::ShPtr l = DCONVERT(Living, Entity, ent);
+		Monster::ShPtr m = DCONVERT(Monster, Entity, ent);
+		Item::ShPtr i = DCONVERT(Item, Entity, ent);
+		
+		if (ent) {
+			chr->set_position(ent->x, ent->y, 0.5f);
+			TCODColor c = ent->color;
+			
+			if (l) { chr->set_texture(playerid); chr->set_color(Vector3f(1.0f, 1.0f, 1.0f)); }
+			if (m) { chr->set_texture(zombieid); chr->set_color(Vector3f((c.r/255.0f), (c.g/255.0f), (c.b/255.0f))); }
+			if (i) { chr->set_texture(potionid); chr->set_color(Vector3f(1.0f, 1.0f, 1.0f)); }
+			
 			renderer->add_movable(chr);
 		}
 	}	
