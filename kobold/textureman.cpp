@@ -22,6 +22,7 @@ void TextureMan::init() {
 	tex_names_.push_back(std::string("resources/player.png"));
 	tex_names_.push_back(std::string("resources/zombie.png"));
 	tex_names_.push_back(std::string("resources/potion.png"));
+	tex_names_.push_back(std::string("resources/target.png"));
 }
 
 /*
