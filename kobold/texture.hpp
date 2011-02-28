@@ -23,12 +23,17 @@ public:
 	// loaded.
 	const int get_index() const;
 	
+	const int get_gltype() const;
+	const int get_bytecount() const;
+	
 	// Set the index, AKA "OpenGL Name" of the texture - used when loading the texture.
 	void set_index(int index);
 
 private:
 	std::string name_;
 	int texture_index_;
+	int gltype_;
+	int bytecount_;
 
 	DISALLOW_COPY_AND_ASSIGN(Texture);
 };
