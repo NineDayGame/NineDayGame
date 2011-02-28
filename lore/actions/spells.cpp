@@ -51,7 +51,7 @@ void Living::haste(ActionArgs args)
 	Living::ShPtr target = SCONVERT(Living,void,args[0]);
 	
 	float damage = _rand->getFloat(0.05f,0.2f);
-	target->speed /= damage;
+	target->speed /= (1-damage);
 	
 	IF_IN_VIEW(cprintf("%s's speed is increased by %d percent.",target->name.c_str(),(int)(damage*100)));
 }
