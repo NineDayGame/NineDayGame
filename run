@@ -6,6 +6,10 @@ else
     REDO=./.do/do
 fi
 
+if [ ! -f ./terminal.png ]; then
+	ln -s libraries/libtcod-1.5.0/terminal.png
+fi
+
 if [ ! -x ./ndg ]; then
 	$REDO
 fi
