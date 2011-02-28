@@ -15,5 +15,7 @@ void Item::use(Living::ShPtr user)
 	TCODRandom* r = TCODRandom::getInstance();
 	int gain = r->getInt(1,10);
 	user->health += gain;
+	if(user->health > user->max_health) user->health = user->max_health;
+	
 	cprintf("%s uses the %s and regains %d health.",user->name.c_str(),name.c_str(),gain);
 }

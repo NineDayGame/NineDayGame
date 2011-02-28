@@ -1,4 +1,5 @@
 #include "goblin_gamestate.hpp"
+#include "goblin_deadstate.hpp"
 #include "menu.hpp"
 #include "item.hpp"
 #include "util.hpp"
@@ -139,6 +140,14 @@ void GoblinGameState::handle_input()
 		}
 	
 		as.tick();
+	}
+
+	if(player->health <= 0)
+	{
+		cprintf("You are dead. Press Escape to quit.");
+		GoblinDeadState::ShPtr kds(new GoblinDeadState(this->shared_from_this(),player));
+		GameState::state = kds;
+		return;
 	}
 
 	char c;
