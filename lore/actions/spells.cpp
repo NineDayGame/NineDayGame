@@ -100,10 +100,10 @@ void Living::flaming_hands(ActionArgs args)
 void Living::drain_life(ActionArgs args)
 {
 	CHECK_REQUIREMENTS();
+	Living::ShPtr target = SCONVERT(Living,void,args[0]);
+	CHECK_NOT_SELF();
 	SCHEDULE_ACTION();
 	mana -= THIS_ACTION_INFO(ACTION_MANA);
-
-	Living::ShPtr target = SCONVERT(Living,void,args[0]);
 
 	int damage = rand(8)+2;
 	IF_IN_VIEW(cprintf("%s drains %d health from %s.",name.c_str(),damage,target->name.c_str()));

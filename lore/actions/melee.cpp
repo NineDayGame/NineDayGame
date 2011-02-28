@@ -41,8 +41,8 @@ void Living::spin_attack(ActionArgs args)
 void Living::precise_strike(ActionArgs args)
 {
 	CHECK_REQUIREMENTS();
-	
 	Living::ShPtr target = SCONVERT(Living,void,args[0]);
+	CHECK_NOT_SELF();
 	CHECK_RANGE(2);
 	
 	SCHEDULE_ACTION();
@@ -62,8 +62,8 @@ void Living::precise_strike(ActionArgs args)
 void Living::giant_swing(ActionArgs args)
 {
 	CHECK_REQUIREMENTS();
-	
-	Living::ShPtr target = SCONVERT(Living,void,args[0]);
+   	Living::ShPtr target = SCONVERT(Living,void,args[0]);
+	CHECK_NOT_SELF();
 	CHECK_RANGE(2);
 	
 	SCHEDULE_ACTION();
@@ -84,6 +84,7 @@ void Living::cripple(ActionArgs args)
 {
 	CHECK_REQUIREMENTS();
 	Living::ShPtr target = SCONVERT(Living,void,args[0]);
+	CHECK_NOT_SELF();
 	CHECK_RANGE(2);
 	
 	SCHEDULE_ACTION();

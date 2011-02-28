@@ -29,12 +29,7 @@ int main(int argc, char* argv[])
 	int width = 120;
 	int height = 80;
 	GameState::generate_map(width,height);
-
-	int x,y;
-	GameState::map->random_free_spot(&x,&y);
-	Living::ShPtr e(new Living(Map::WkPtr(GameState::map),"Hero",x,y,'@',TCOD_red,30000));
-	e->init_stats(12,8,8,8,15,8,8,1);
-	GameState::map->get(e);
+	Living::ShPtr e = GameState::generate_player();
 	
 	if (argc==1) {		
 		//RenderMan::ShPtr renderman (new RenderMan());

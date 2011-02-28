@@ -66,6 +66,15 @@
 		} \
 	}
 
+#define CHECK_NOT_SELF()	  \
+	{ \
+		if(target.get() == this) \
+		{ \
+			cprintf("You can't target yourself!"); \
+			return; \
+		} \
+	}
+
 // Only perform `do_this` if you're in sight of the player.
 // Probably only useful for printing messages.
 #define IF_IN_VIEW(do_this)	  \
