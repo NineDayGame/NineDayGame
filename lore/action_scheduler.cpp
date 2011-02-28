@@ -16,6 +16,7 @@ static bool is_ready(const ActionScheduler::Scheduled s) { return s.get<0>()->ac
 
 void ActionScheduler::tick()
 {
+	ready.clear();
 	while(ready.size() == 0 && blocked.size() > 0)
 	{
 		new_smallest = INT_MAX;
@@ -45,5 +46,4 @@ void ActionScheduler::tick()
 		l->last_args.pop_back();
 		((*l).*(l->actions[a]))(args);
 	}
-	ready.clear();
 }
