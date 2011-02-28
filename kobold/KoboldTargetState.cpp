@@ -1,4 +1,5 @@
 #include <iostream>
+#include "kobold_gamestate.hpp"
 #include "KoboldTargetState.hpp"
 #include "util.hpp"
 
@@ -18,10 +19,14 @@ KoboldTargetState::KoboldTargetState(GameState::ShPtr p, Living::ShPtr player, G
 void KoboldTargetState::init() {
 	reticule_.reset(new Targeter());
 	reticule_->set_position(x_, y_-0.5f, 0.501f);
+	KoboldGameState::ShPtr kgs = DCONVERT(KoboldGameState, GameState, GameState::state);
 	//TCODColor c = m->color;
 	//chr->set_texture(defaultid);
 	//reticule_->set_color(Vector3f((c.r/255.0f), (c.g/255.0f), (c.b/255.0f)));
 	//reticule_->set_color(Vector3f((c.r/255.0f), (c.g/255.0f), (c.b/255.0f)));
+	if (kgs) {
+		reticule_->set_texture(kgs->texman_->get_texture("resources/target.png")->get_index());
+	}
 	renderman_->add_movable(reticule_);
 }
 

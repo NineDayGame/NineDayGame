@@ -175,7 +175,9 @@ void GlRenderer::render() {
 	
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
-	glEnable(GL_LIGHTING);
+	if (lights_) {
+		glEnable(GL_LIGHTING);
+	}
 
 	SDL_GL_SwapBuffers();
 
