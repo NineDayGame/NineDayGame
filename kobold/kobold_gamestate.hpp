@@ -44,6 +44,7 @@ private:
 	void reload_world();
 
 	void hotkey(int index);
+	void look();
 //----------------------------------------------
 	GlConsoleWindow::ShPtr cwindow_;
 	AbilityWindow::ShPtr ability_window_;

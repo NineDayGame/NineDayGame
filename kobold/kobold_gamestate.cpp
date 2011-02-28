@@ -18,6 +18,7 @@
 // ------------------------
 
 void parse_target_callback(Living::ShPtr e, std::string a, int x, int y);
+void look_callback(Living::ShPtr e, std::string a, int x, int y);
 
 KoboldGameState::KoboldGameState(GameState::ShPtr p, Living::ShPtr e)
 	: GameState(p,e)
@@ -110,6 +111,13 @@ void KoboldGameState::hotkey(int index)
 	}
 	KoboldTargetState::ShPtr t(new KoboldTargetState(this->shared_from_this(), player, camera_, renderer,
 	                                                 action, &parse_target_callback, player->x, player->y));
+	GameState::state = t;
+}
+
+void KoboldGameState::look()
+{
+	KoboldTargetState::ShPtr t(new KoboldTargetState(this->shared_from_this(), player, camera_, renderer,
+	                                                 "", &look_callback, player->x, player->y));
 	GameState::state = t;	
 }
 
@@ -153,6 +161,7 @@ void KoboldGameState::handle_input()
 		case SDLK_8: hotkey(8); break;
 		case SDLK_9: hotkey(9); break;
 		case SDLK_0: hotkey(10); break;
+		case SDLK_l: look(); break;
 		case SDLK_KP1:
 		case SDLK_LEFT: walking = true; --(*x); break; 
 		case SDLK_KP2: walking = true; --(*x); --(*y); break; 
@@ -198,6 +207,8 @@ void KoboldGameState::handle_input()
 		as.tick();
 	}
 
+	player_light_->set_radius(player->sight_range-1);
+
 	char c;
 	TCODColor color;
 	bool trans;
@@ -213,6 +224,7 @@ void KoboldGameState::handle_input()
 		int x,y;
 		GameState::map->random_free_spot(&x,&y);
 		player->move(x,y);
+		cprintf("Welcome to floor %d.",GameState::floor);
 	}
 }
 void KoboldGameState::draw()

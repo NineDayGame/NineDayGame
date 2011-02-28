@@ -120,6 +120,8 @@ public:
 	int health;
 	int mana;
 
+	unsigned int kill_count;
+
 	int str;
 	int magic;
 	int dex;
@@ -141,6 +143,8 @@ public:
 
 	virtual void init_stats(int str, int magic, int dex, int intel, int con, int soul, int disp, int speed);
 
+	virtual void gain_experience(int amount);
+
 	// Basic abilities
 	virtual void walk(ActionArgs args); // x, y
 	virtual void attack(ActionArgs args); // Living
@@ -157,7 +161,7 @@ public:
 
 	// Spells
 	virtual void heal(ActionArgs args); // Living
-	virtual void shield(ActionArgs args); // Living
+	virtual void eagle_eye(ActionArgs args); // Living
 	virtual void haste(ActionArgs args); // Living
 	
 	virtual void flaming_hands(ActionArgs args); // direction

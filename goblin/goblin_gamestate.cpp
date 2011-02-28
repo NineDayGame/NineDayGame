@@ -17,7 +17,7 @@ void look_callback(Living::ShPtr e, std::string a, int x, int y)
 		Living::ShPtr l = DCONVERT(Living,Entity,c.lock());
 		if(l && l->x == x && l->y == y)
 		{				
-			cprintf("%s",l->name.c_str());
+			cprintf("%s    Exp: %d",l->name.c_str(),l->experience);
 			cprintf("Health: %d/%d  Mana: %d/%d",l->health,l->max_health,l->mana,l->max_mana);
 			cprintf("Str : %02d Mag : %02d",l->str,l->magic);
 			cprintf("Dex : %02d Int : %02d",l->dex,l->intel);
@@ -152,6 +152,7 @@ void GoblinGameState::handle_input()
 		int x,y;
 		GameState::map->random_free_spot(&x,&y);
 		player->move(x,y);
+		cprintf("Welcome to floor %d.",GameState::floor);
 	}
 }
 
