@@ -61,6 +61,8 @@ void GlRenderer::init_gl() {
 
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
+	glAlphaFunc(GL_GREATER, 0.1);
+	glEnable(GL_ALPHA_TEST);
 
 	glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
