@@ -205,6 +205,7 @@ void KoboldGameState::handle_input()
 	GameState::map->get_data(player->x,player->y,&c,&color,&trans,&walk);
 	if(c == '<')
 	{
+		renderer->clear_terrain();
 		GameState::generate_map(GameState::map->width,GameState::map->height);
 		GameState::map->get(player);
 		player->known_map->clear();
