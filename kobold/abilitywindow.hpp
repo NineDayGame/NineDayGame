@@ -27,8 +27,8 @@ public:
 
 	void set_ability(const std::string name, int index);
 
-private:
 	boost::shared_array<std::string> abilities_;
+private:
 	Font::ShPtr font_;
 
 	//DISALLOW_COPY_AND_ASSIGN(AbilityWindow);
