@@ -79,7 +79,7 @@ void Living::flaming_hands(ActionArgs args)
 	hit.unique();
 	foreach(Living::ShPtr e, hit)
 	{
-		int damage = rand(20);
+		int damage = rand(20)+5;
 		IF_IN_VIEW(cprintf("The flames char %s for %d damage.",e->name.c_str(),damage));
 		e->damage(this,damage);
 	}
@@ -90,5 +90,12 @@ void Living::drain_life(ActionArgs args)
 	CHECK_REQUIREMENTS();
 	SCHEDULE_ACTION();
 	mana -= THIS_ACTION_INFO(ACTION_MANA);
-	cprintf("%s",__FUNCTION__);
+
+	Living::ShPtr target = SCONVERT(Living,void,args[0]);
+
+	int damage = rand(8)+2;
+	IF_IN_VIEW(cprintf("%s drains %d health from %s.",name.c_str(),damage,target->name.c_str()));
+	target->damage(this,damage);
+	health += damage;
+	if(health > max_health) health = max_health;
 }
