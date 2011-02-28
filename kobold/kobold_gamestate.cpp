@@ -12,6 +12,7 @@
 #include "character.hpp"
 #include "entity.hpp"
 #include "map.hpp"
+#include "stairway.hpp"
 
 #include "KoboldTargetState.hpp"
 // ------------------------
@@ -216,9 +217,18 @@ void KoboldGameState::update_view(int x, int y, bool seen_before, char c, TCODCo
 			if (c == '.') {
 				Block::ShPtr blk (new Block());
 				blk->set_position((float)x, (float)y, 0.0f);
-				blk->set_texture(stoneid); ////////////////
-				blk->set_color(Vector3f((color.r/255.0f), (color.g/255.0f), (color.b/255.0f)));
+				blk->set_texture(stoneid);
+				if (color.r > 128 && color.g < 128) {
+					blk->set_color(Vector3f((color.r/255.0f), (color.g/255.0f), (color.b/255.0f)));
+				} else {
+					blk->set_color(Vector3f(0.8f, 0.8f, 0.6f));
+				}
 				renderer->load_terrain(blk);
+			} else if (c == '<') {
+				Stairway::ShPtr stairs (new Stairway());
+				stairs->set_position((float)x, (float)y, 1.0f);
+				stairs->set_texture(stoneid);
+				renderer->load_terrain(stairs);
 			} else if ((x > 0) && (y > 0)) { 
 				if (c == '#'
 						&& (map->display[(x-1)+y*map->width].c == '.'
@@ -232,7 +242,7 @@ void KoboldGameState::update_view(int x, int y, bool seen_before, char c, TCODCo
 							//blk->set_texture(stonewall);
 							blk->set_color(Vector3f((color.r/255.0f), (color.g/255.0f), (color.b/255.0f)));
 						} else {
-							blk->set_color(Vector3f(1.0f, 1.0f, 1.0f));
+							blk->set_color(Vector3f(0.8f, 0.8f, 1.0f));
 						}
 						renderer->load_terrain(blk);
 					}
