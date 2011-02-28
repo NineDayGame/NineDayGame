@@ -15,10 +15,13 @@ TextureMan::TextureMan()
  * hand
  */
 void TextureMan::init() {
-	tex_names_.push_back(std::string("resources/default.bmp"));
-	tex_names_.push_back(std::string("resources/terminal.bmp"));
-	tex_names_.push_back(std::string("resources/stone3.bmp"));
+	tex_names_.push_back(std::string("resources/default.png"));
+	tex_names_.push_back(std::string("resources/terminal.png"));
+	tex_names_.push_back(std::string("resources/stone3.png"));
 	tex_names_.push_back(std::string("resources/stonewall.png"));
+	tex_names_.push_back(std::string("resources/player.png"));
+	tex_names_.push_back(std::string("resources/zombie.png"));
+	tex_names_.push_back(std::string("resources/potion.png"));
 }
 
 /*
@@ -37,7 +40,27 @@ void TextureMan::load_textures() {
 	SDL_Surface *textureImage[tex_count];
 	glGenTextures(tex_count, tex_indicies);
 
-	for (int i = 0; i < tex_count; ++i) {
+	// TODO: OMG hacks - FIXME soon!
+	for (int i = 0; i < 3; ++i) {
+		//textureImage[i] = SDL_LoadBMP(tex_names_.at(i).c_str());
+		textureImage[i] = IMG_Load(tex_names_.at(i).c_str());
+		if (textureImage[i]) {		
+			glBindTexture(GL_TEXTURE_2D, tex_indicies[i]);
+			glTexImage2D(GL_TEXTURE_2D, 0, 3, textureImage[i]->w, textureImage[i]->h, 0, GL_BGR,
+					GL_UNSIGNED_BYTE, textureImage[i]->pixels );
+			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+			
+			Texture::ShPtr tex (new Texture(tex_names_.at(i)));
+			tex->set_index(tex_indicies[i]);
+			textures_.push_back(tex);
+
+			SDL_FreeSurface(textureImage[i]);
+		} else {
+			std::cout << "TextureMan: Error loading texture " << tex_names_.at(i) << std::endl;
+		}
+	}
+	for (int i = 3; i < 4; ++i) {
 		//textureImage[i] = SDL_LoadBMP(tex_names_.at(i).c_str());
 		textureImage[i] = IMG_Load(tex_names_.at(i).c_str());
 		if (textureImage[i]) {		
@@ -56,6 +79,26 @@ void TextureMan::load_textures() {
 			std::cout << "TextureMan: Error loading texture " << tex_names_.at(i) << std::endl;
 		}
 	}
+	for (int i = 4; i < tex_count; ++i) {
+		//textureImage[i] = SDL_LoadBMP(tex_names_.at(i).c_str());
+		textureImage[i] = IMG_Load(tex_names_.at(i).c_str());
+		if (textureImage[i]) {		
+			glBindTexture(GL_TEXTURE_2D, tex_indicies[i]);
+			glTexImage2D(GL_TEXTURE_2D, 0, 4, textureImage[i]->w, textureImage[i]->h, 0, GL_RGBA,
+					GL_UNSIGNED_BYTE, textureImage[i]->pixels );
+			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+			glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+			
+			Texture::ShPtr tex (new Texture(tex_names_.at(i)));
+			tex->set_index(tex_indicies[i]);
+			textures_.push_back(tex);
+
+			SDL_FreeSurface(textureImage[i]);
+		} else {
+			std::cout << "TextureMan: Error loading texture " << tex_names_.at(i) << std::endl;
+		}
+	}
+	
 	
 	loaded_ = true;	
 }

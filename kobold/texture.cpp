@@ -16,6 +16,14 @@ const int Texture::get_index() const {
 	return texture_index_;
 }
 
+const int Texture::get_gltype() const {
+	return gltype_;
+}
+
+const int Texture::get_bytecount() const {
+	return bytecount_;
+}
+
 void Texture::set_index(int index) {
 	texture_index_ = index;
 }
