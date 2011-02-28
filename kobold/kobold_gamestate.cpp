@@ -123,7 +123,10 @@ void KoboldGameState::handle_input()
 	
 	reload_world();
 
-	SDL_WaitEvent( &event_ );
+	if(!player->blocked)
+	{
+		SDL_WaitEvent( &event_ );
+	}
 	if( event_.type == SDL_KEYDOWN ) {
 		switch( event_.key.keysym.sym )
 		{
