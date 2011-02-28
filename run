@@ -6,8 +6,12 @@ else
     REDO=./.do/do
 fi
 
+if [ ! -x ./ndg ]; then
+	$REDO
+fi
+
 if [ $# -gt 0 ] ;  then
-	$REDO && LD_LIBRARY_PATH=./libraries/libtcod-1.5.0 ./ndg 1
+	LD_LIBRARY_PATH=./libraries/libtcod-1.5.0 ./ndg 1
 else
-	$REDO && LD_LIBRARY_PATH=./libraries/libtcod-1.5.0 ./ndg
+	LD_LIBRARY_PATH=./libraries/libtcod-1.5.0 ./ndg
 fi
