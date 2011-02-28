@@ -1,11 +1,14 @@
-Use `redo` to build.
+NineDayGame
+-----------
+Created by Alex Williams and Ryan Fox.
 
-The build scripts assume that libtcod v1.5.0 is available in ./libtcod-1.5.0
+To build and run, use the ./run script in the base directory. If you have `redo`, it will use that. Otherwise, you get to suffer the the long `do` build process. ;)
 
-To run, you might need to add LD_LIBRARY_PATH=./libtcod-1.5.0 to the command.
+The build scripts assume that libtcod v1.5.0 is available in ./libraries/libtcod-1.5.0
 
 libtcod is available at: http://doryen.eptalys.net/libtcod/download/
 
+Engine Components:
 Lore - Contains all of the game data: maps, items, etc.
 Kobold - The 3D engine
 Goblin - The 2D engine
