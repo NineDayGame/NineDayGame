@@ -7,7 +7,7 @@
 
 #include "action_scheduler.hpp"
 
-Living::Living(Map::WkPtr host_map, std::string n, int x, int y, int c, TCODColor color, int _health) : Entity(host_map,x,y,c,color), health(_health), name(n),_rand(TCODRandom::getInstance()), action_energy(0), blocked(false)
+Living::Living(Map::WkPtr host_map, std::string n, int x, int y, int c, TCODColor color, int _health) : Entity(host_map,x,y,c,color), health(_health), name(n),_rand(TCODRandom::getInstance()), action_energy(0), blocked(false), kill_count(0)
 {
 	z = 1;
 	faction = 0;
@@ -49,6 +49,34 @@ void Living::init_stats(int _str, int _magic, int _dex, int _intel, int _con, in
 
 	health = max_health;
 	mana = max_mana;
+}
+
+void Living::gain_experience(int amount)
+{
+	experience += amount;
+	if(experience >= 10*pow(2,level))
+	{
+		++level;
+		IF_IN_VIEW(cprintf("%s gains a new level!",name.c_str()));
+		str += rand(3);
+		int _magic = rand(3);
+		dex += rand(3);
+		intel += rand(3);
+		int _con = rand(3);
+		int _soul = rand(3);
+		disp += rand(3);
+		if(_rand->getFloat(0,1) > 0.8f) speed += 0.01;
+
+		max_health += _rand->getInt(_con,_con*4);
+		max_mana += _rand->getInt(_magic+_soul,_magic*2+_soul*2);
+
+		health = max_health;
+		mana = max_mana;
+
+		magic += _magic;
+		con += _con;
+		soul += _soul;
+	}
 }
 
 void Living::walk(ActionArgs args)
@@ -159,6 +187,9 @@ void Living::die(Living* killer)
 		i->y = y;
 		m->get(i);
 	}
+
+	++killer->kill_count;
+	killer->gain_experience((10*max_health/killer->max_health));
 
 	m->get_data(x,y,&c,&color,&trans,&walk);
 	m->set_data(x,y,c,TCOD_red,true,true);

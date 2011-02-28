@@ -224,6 +224,7 @@ void KoboldGameState::handle_input()
 		int x,y;
 		GameState::map->random_free_spot(&x,&y);
 		player->move(x,y);
+		cprintf("Welcome to floor %d.",GameState::floor);
 	}
 }
 void KoboldGameState::draw()

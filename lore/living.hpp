@@ -120,6 +120,8 @@ public:
 	int health;
 	int mana;
 
+	unsigned int kill_count;
+
 	int str;
 	int magic;
 	int dex;
@@ -140,6 +142,8 @@ public:
 	virtual ~Living();
 
 	virtual void init_stats(int str, int magic, int dex, int intel, int con, int soul, int disp, int speed);
+
+	virtual void gain_experience(int amount);
 
 	// Basic abilities
 	virtual void walk(ActionArgs args); // x, y

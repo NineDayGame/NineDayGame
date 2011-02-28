@@ -14,7 +14,8 @@ public:
 	typedef boost::shared_ptr<GameState> ShPtr;
 	
 	static GameState::ShPtr state;
-	
+
+	static int floor;
 	static Map::ShPtr map;
 	static void generate_map(int width, int height);
 	

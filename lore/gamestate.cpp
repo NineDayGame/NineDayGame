@@ -6,11 +6,13 @@
 
 GameState::ShPtr GameState::state = GameState::ShPtr();
 Map::ShPtr GameState::map = Map::ShPtr();
+int GameState::floor = 0;
 
 bool GameState::running = true;
 
 void GameState::generate_map(int width, int height)
 {
+	++GameState::floor;
 	map = Map::ShPtr(new Map(width,height));
 	map->clear();
 	map->randomize(40);
@@ -29,7 +31,14 @@ void GameState::generate_map(int width, int height)
 
 		TCODColor color(rand->getInt(0,255),rand->getInt(0,255),rand->getInt(0,255));
 		Monster::ShPtr e(new Monster(Map::WkPtr(map),buf,x,y,1,color,3));
-		e->init_stats(8,3,5,5,6,3,3,1);
+		e->init_stats(8+rand->getInt(0,GameState::floor),
+		              3+rand->getInt(0,GameState::floor),
+		              5+rand->getInt(0,GameState::floor),
+		              5+rand->getInt(0,GameState::floor),
+		              6+rand->getInt(0,GameState::floor),
+		              3+rand->getInt(0,GameState::floor),
+		              3+rand->getInt(0,GameState::floor),
+		              1);
 		Item::ShPtr i(new Item(Map::WkPtr(map),name,desc,x,y,'I',TCOD_green));
 		e->get(i);
 		map->get(e);
