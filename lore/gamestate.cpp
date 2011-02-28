@@ -39,8 +39,12 @@ void GameState::generate_map(int width, int height)
 		              3+rand->getInt(0,GameState::floor),
 		              3+rand->getInt(0,GameState::floor),
 		              1);
-		Item::ShPtr i(new Item(Map::WkPtr(map),name,desc,x,y,'I',TCOD_green));
-		e->get(i);
+		if(rand->getFloat(0.0,1.0) > 0.85f)
+		{
+			TCODColor color_item(rand->getInt(0,255),rand->getInt(0,255),rand->getInt(0,255));
+			Item::ShPtr i(new Item(Map::WkPtr(map),name,desc,x,y,'I',color_item));
+			e->get(i);
+		}
 		map->get(e);
 	}
 }
