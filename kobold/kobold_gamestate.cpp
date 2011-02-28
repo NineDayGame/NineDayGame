@@ -16,6 +16,8 @@
 #include "KoboldTargetState.hpp"
 // ------------------------
 
+void parse_target_callback(Living::ShPtr e, std::string a, int x, int y);
+
 KoboldGameState::KoboldGameState(GameState::ShPtr p, Living::ShPtr e)
 	: GameState(p,e)
 {
@@ -76,7 +78,7 @@ void KoboldGameState::create_windows()
 	int i = 1;
 	foreach(Living::ActionMap::value_type v, player->actions) {
 		if (player->GET_ACTION_INFO(v.first, ACTION_MANA) > 0) {
-			ability_window_->set_ability(player->GET_ACTION_INFO(v.first, ACTION_NAME), i++);
+			ability_window_->set_ability(v.first, i++);
 		}
 	} 
 	renderer->add_window(ability_window_);
@@ -96,6 +98,20 @@ void KoboldGameState::create_windows()
 	renderer->add_window(mana_window_);
 }
 
+void KoboldGameState::hotkey(int index)
+{
+	std::string action = ability_window_->abilities_[index-1];
+	if(player->GET_ACTION_INFO(action,ACTION_TARGET) == Living::TARGET_NONE)
+	{
+		Living::ActionArgs args;
+		((*player).*(player->actions[action]))(args);
+		return;
+	}
+	KoboldTargetState::ShPtr t(new KoboldTargetState(this->shared_from_this(), player, camera_, renderer,
+	                                                 action, &parse_target_callback, player->x, player->y));
+	GameState::state = t;	
+}
+
 void KoboldGameState::handle_input()
 {
 	SDL_Event event_;
@@ -111,7 +127,6 @@ void KoboldGameState::handle_input()
 	if( event_.type == SDL_KEYDOWN ) {
 		switch( event_.key.keysym.sym )
 		{
-		case SDLK_1: 
 		// These were used for testing. Probably not needed anymore	
 		/*case SDLK_w: camera_->set_coords(camera_->get_coords()->x+1, camera_->get_coords()->y+1); break;
 		case SDLK_a: camera_->set_coords(camera_->get_coords()->x-1, camera_->get_coords()->y+1); break;
@@ -124,10 +139,16 @@ void KoboldGameState::handle_input()
 			c->set_renderman(renderer);
 			GameState::state = c;
 			break; }
-		case SDLK_t: {
-			KoboldTargetState::ShPtr t (new KoboldTargetState(this->shared_from_this(), player, camera_, renderer, 0, player->x, player->y));
-			GameState::state = t;
-			break; }
+		case SDLK_1: hotkey(1); break;
+		case SDLK_2: hotkey(2); break;
+		case SDLK_3: hotkey(3); break;
+		case SDLK_4: hotkey(4); break;
+		case SDLK_5: hotkey(5); break;
+		case SDLK_6: hotkey(6); break;
+		case SDLK_7: hotkey(7); break;
+		case SDLK_8: hotkey(8); break;
+		case SDLK_9: hotkey(9); break;
+		case SDLK_0: hotkey(10); break;
 		case SDLK_KP1:
 		case SDLK_LEFT: walking = true; --(*x); break; 
 		case SDLK_KP2: walking = true; --(*x); --(*y); break; 
@@ -153,7 +174,7 @@ void KoboldGameState::handle_input()
 			args.push_back(x);
 			args.push_back(y);
 			player->walk(args);
-		}
+		}		
 	}
 		
 	if ( event_.type == SDL_QUIT ) {
@@ -170,7 +191,6 @@ void KoboldGameState::handle_input()
 				a->ai();
 			}
 		}
-
 		as.tick();
 	}
 

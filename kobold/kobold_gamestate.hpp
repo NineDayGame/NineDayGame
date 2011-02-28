@@ -42,6 +42,8 @@ private:
 	void init_resources();
 	void create_windows();
 	void reload_world();
+
+	void hotkey(int index);
 //----------------------------------------------
 	GlConsoleWindow::ShPtr cwindow_;
 	AbilityWindow::ShPtr ability_window_;

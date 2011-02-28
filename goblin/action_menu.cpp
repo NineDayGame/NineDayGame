@@ -6,7 +6,7 @@
 #include "goblin_gamestate.hpp"
 #include "goblin_targetstate.hpp"
 
-void target_callback(Living::ShPtr e, std::string a, int x, int y)
+void parse_target_callback(Living::ShPtr e, std::string a, int x, int y)
 {
 	Living::ActionInfo i = e->actions_info[a];
 	boost::shared_ptr<int> sx(new int(x));
@@ -87,7 +87,7 @@ void target_action(GameState::ShPtr m, MenuItem* me)
 	}
 
 	TargetingCamera::ShPtr tc(new TargetingCamera(player->known_map,player,player->x,player->y,x,y,width,height));
-	GoblinTargetState::ShPtr gts(new GoblinTargetState(m,tc,player,*(action.get()),&target_callback));
+	GoblinTargetState::ShPtr gts(new GoblinTargetState(m,tc,player,*(action.get()),&parse_target_callback));
 	GameState::state = gts;
 }
 
