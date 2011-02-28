@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "kobold_gamestate.hpp"
+#include "kobold_deadstate.hpp"
 #include "util.hpp"
 #include "monster.hpp"
 #include "action_scheduler.hpp"
@@ -212,6 +213,15 @@ void KoboldGameState::handle_input()
 			}
 		}
 		as.tick();
+	}
+
+	if(player->health <= 0)
+	{
+		renderer->clear_terrain();
+		cprintf("You are dead. Press Escape to quit.");
+		KoboldDeadState::ShPtr kds(new KoboldDeadState(this->shared_from_this(),player));
+		GameState::state = kds;
+		return;
 	}
 
 	player_light_->set_radius(player->sight_range-1);

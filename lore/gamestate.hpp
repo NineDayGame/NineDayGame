@@ -18,6 +18,7 @@ public:
 	static int floor;
 	static Map::ShPtr map;
 	static void generate_map(int width, int height);
+	static Living::ShPtr generate_player();
 	
 	static bool running;
 	
