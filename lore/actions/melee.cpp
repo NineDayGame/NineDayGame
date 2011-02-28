@@ -92,7 +92,7 @@ void Living::cripple(ActionArgs args)
 	IF_IN_VIEW(cprintf("%s attacks %s's knees.",name.c_str(),target->name.c_str()));
 
 	float damage = _rand->getFloat(0.1f,0.5f);
-	target->speed *= damage;
+	target->speed *= (1-damage);
 	
-	IF_IN_VIEW(cprintf("%s's speed is reduced by %d%%.",target->name.c_str(),(int)(damage*100)));
+	IF_IN_VIEW(cprintf("%s's speed is reduced by %d%%%%.",target->name.c_str(),(int)(damage*100)));
 }
