@@ -41,7 +41,13 @@ void Living::haste(ActionArgs args)
 	CHECK_REQUIREMENTS();
 	SCHEDULE_ACTION();
 	mana -= THIS_ACTION_INFO(ACTION_MANA);
-	cprintf("%s",__FUNCTION__);
+
+	Living::ShPtr target = SCONVERT(Living,void,args[0]);
+	
+	float damage = _rand->getFloat(0.05f,0.2f);
+	target->speed /= damage;
+	
+	IF_IN_VIEW(cprintf("%s's speed is increased by %d percent.",target->name.c_str(),(int)(damage*100)));
 }
 	
 void Living::flaming_hands(ActionArgs args)
